@@ -15,7 +15,7 @@
     * { -webkit-tap-highlight-color: transparent; }
     body { font-family: 'Lato', system-ui, sans-serif; background-color: #faf8f5; scroll-behavior: smooth; overflow-x: hidden; }
     h1, h2, h3, .serif { font-family: 'Playfair Display', Georgia, serif; }
-    .logo-img-header { width: 50px; height: 50px; object-fit: contain; border-radius: 14px; flex-shrink: 0; }
+    .logo-img-header { width: 44px; height: 44px; object-fit: contain; border-radius: 12px; flex-shrink: 0; }
     .logo-img-hero { width: 90px; height: 90px; object-fit: contain; border-radius: 18px; flex-shrink: 0; }
     .logo-img-auth { width: 75px; height: 75px; object-fit: contain; border-radius: 16px; margin: 0 auto; display: block; }
     .logo-img-sm { width: 44px; height: 44px; object-fit: contain; border-radius: 12px; flex-shrink: 0; }
@@ -76,7 +76,7 @@
     @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     .timeline-dot { width: 10px; height: 10px; border-radius: 50%; background: #5e4b3c; display: inline-block; margin-right: 8px; }
     .timeline-dot.active { background: #059669; animation: pulse 2s infinite; }
-    @media (max-width: 480px) { .logo-img-header { width: 40px; height: 40px; } .brand-text-header { font-size: 0.9rem; } .logo-img-hero { width: 70px; height: 70px; } }
+    @media (max-width: 480px) { .logo-img-header { width: 36px; height: 36px; } .brand-text-header { font-size: 0.9rem; } .logo-img-hero { width: 70px; height: 70px; } }
     @media (max-width: 768px) { .admin-sidebar { display: none; } }
     @media (min-width: 769px) { .admin-mobile-nav { display: none; } }
     .scrollbar-hide::-webkit-scrollbar { display: none; }
@@ -87,6 +87,12 @@
     .fade-in-up { animation: fadeInUp 0.7s ease forwards; opacity: 0; }
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     .hero-pattern { background-image: radial-gradient(#d9ccbb 1px, transparent 1px); background-size: 30px 30px; }
+    .nav-item { transition: all 0.3s ease; color: #6b5e4f; position: relative; font-size: 0.875rem; letter-spacing: 0.02em; }
+    .nav-item:hover { color: #5e4b3c; }
+    .nav-item::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1.5px; background: #b8977e; transition: width 0.3s ease; }
+    .nav-item:hover::after { width: 100%; }
+    .nav-item-active { color: #5e4b3c; font-weight: 500; }
+    .nav-item-active::after { width: 100%; }
   </style>
 </head>
 <body class="min-h-screen text-gray-800" x-data="app()" x-init="initApp()">
@@ -120,29 +126,60 @@
     </div>
   </div>
 
-  <!-- ==================== HEADER ==================== -->
-  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#e0d5c7] shadow-sm">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-      <div class="flex items-center gap-2">
+  <!-- ==================== HEADER (ELEGANT MINIMALISTIC) ==================== -->
+  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-lg border-b border-[#e0d5c7]/60 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+      <!-- Logo & Brand -->
+      <div class="flex items-center gap-2 sm:gap-3">
         <img src="jcayelogo1.png" alt="JCaye's Sip Society" class="logo-img-header" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <div class="logo-img-header logo-placeholder" style="display:none;">Logo</div>
-        <span class="brand-text brand-text-header">JCaye's Sip Society</span>
+        <span class="brand-text brand-text-header hidden sm:inline">JCaye's Sip Society</span>
       </div>
-      <div class="flex items-center gap-1 sm:gap-4">
-        <template x-if="!currentUser"><button @click="showAuth = true; authMode = 'login'; authRedirectMessage = ''" class="text-xs sm:text-sm font-medium text-gray-600 hover:text-amber-800 transition px-2 sm:px-3 py-2 rounded-lg hover:bg-gray-100">Sign In</button></template>
-        <template x-if="currentUser">
+
+      <!-- Navigation Items (Elegant & Minimal) -->
+      <div class="flex items-center gap-0.5 sm:gap-2">
+        <!-- Customer Links -->
+        <template x-if="!currentUser">
+          <button @click="showAuth = true; authMode = 'login'; authRedirectMessage = ''" class="nav-item px-2 sm:px-3 py-2 rounded-lg hidden sm:inline-flex items-center gap-1.5">
+            <i data-lucide="log-in" class="w-4 h-4"></i>
+            <span>Sign In</span>
+          </button>
+        </template>
+
+        <template x-if="currentUser && currentUser.role === 'customer'">
           <div class="flex items-center gap-1 sm:gap-3">
-            <span class="text-xs sm:text-sm text-gray-700 font-medium hidden sm:inline" x-text="currentUser.name"></span>
-            <span x-show="currentUser.role === 'admin'" class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full hidden sm:inline">Admin</span>
-            <span x-show="currentUser.role === 'customer'" class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full hidden sm:inline">Customer</span>
-            <button @click="logout" class="text-xs text-red-600 hover:underline px-2 py-1">Logout</button>
+            <button @click="customerTab = 'profile'; showProfileEdit = false" class="nav-item px-2 sm:px-3 py-2 rounded-lg flex items-center gap-1.5" :class="customerTab === 'profile' ? 'nav-item-active' : ''">
+              <i data-lucide="user" class="w-4 h-4"></i>
+              <span class="hidden sm:inline">Profile</span>
+            </button>
+            <button @click="customerTab = 'orders'" class="nav-item px-2 sm:px-3 py-2 rounded-lg flex items-center gap-1.5" :class="customerTab === 'orders' ? 'nav-item-active' : ''">
+              <i data-lucide="package" class="w-4 h-4"></i>
+              <span class="hidden sm:inline">Orders</span>
+            </button>
+            <span class="hidden sm:block text-xs text-gray-400 mx-1">|</span>
+            <span class="hidden sm:inline text-xs text-gray-500 font-light" x-text="currentUser.name"></span>
+            <button @click="logout" class="nav-item px-2 py-2 rounded-lg flex items-center gap-1 text-rose-700/80 hover:text-rose-800">
+              <i data-lucide="log-out" class="w-4 h-4"></i>
+              <span class="hidden sm:inline text-xs">Logout</span>
+            </button>
           </div>
         </template>
-        <button x-show="currentUser && currentUser.role === 'customer'" @click="customerTab = 'profile'; showProfileEdit = false" class="text-xs sm:text-sm font-medium text-gray-600 hover:text-amber-800 transition px-2 sm:px-3 py-2 rounded-lg hover:bg-gray-100">👤 Profile</button>
-        <button x-show="currentUser && currentUser.role === 'customer'" @click="customerTab = 'orders'" class="text-xs sm:text-sm font-medium text-gray-600 hover:text-amber-800 transition px-2 sm:px-3 py-2 rounded-lg hover:bg-gray-100">📋 My Orders</button>
-        <button x-show="!currentUser || currentUser.role !== 'admin'" @click="cartOpen = !cartOpen" class="relative p-2 hover:bg-gray-100 rounded-lg transition">
-          <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-          <span x-show="cart.length > 0" class="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold" x-text="cartItemCount"></span>
+
+        <template x-if="currentUser && currentUser.role === 'admin'">
+          <div class="flex items-center gap-1 sm:gap-3">
+            <span class="hidden sm:inline text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full font-medium">Admin</span>
+            <span class="hidden sm:inline text-xs text-gray-500 font-light" x-text="currentUser.name"></span>
+            <button @click="logout" class="nav-item px-2 py-2 rounded-lg flex items-center gap-1 text-rose-700/80 hover:text-rose-800">
+              <i data-lucide="log-out" class="w-4 h-4"></i>
+              <span class="hidden sm:inline text-xs">Logout</span>
+            </button>
+          </div>
+        </template>
+
+        <!-- Cart Icon (Always visible for non-admin or guests) -->
+        <button x-show="!currentUser || currentUser.role !== 'admin'" @click="cartOpen = !cartOpen" class="relative p-2 hover:bg-gray-100/80 rounded-lg transition ml-1">
+          <i data-lucide="shopping-cart" class="w-5 h-5 text-[#5e4b3c]"></i>
+          <span x-show="cart.length > 0" class="absolute -top-1 -right-1 bg-rose-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold shadow-sm" x-text="cartItemCount"></span>
         </button>
       </div>
     </div>
