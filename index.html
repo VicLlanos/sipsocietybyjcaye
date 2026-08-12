@@ -129,14 +129,6 @@
     }
     .quantity-btn:hover { background: #f3ede7; border-color: #5e4b3c; }
     .quantity-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
-    /* Profile Section Styles */
-    .profile-avatar {
-      width: 80px; height: 80px; border-radius: 50%;
-      background: #f3ede7; border: 2px solid #c9b99a;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2rem; color: #5e4b3c;
-    }
     
     @media (max-width: 480px) {
       .logo-img-header { width: 40px; height: 40px; }
@@ -159,74 +151,35 @@
 </head>
 <body class="min-h-screen text-gray-800" x-data="app()" x-init="initApp()">
 
-  <!-- ==================== AUTH OVERLAY (Login & Enhanced Register) ==================== -->
+  <!-- AUTH OVERLAY -->
   <div x-show="showAuth" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" x-cloak>
-    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full rustic-card border-0 fade-in-up max-h-[90vh] overflow-y-auto" @click.outside="showAuth = false">
-      <div class="p-5 sm:p-8">
-        <div class="flex flex-col items-center mb-4 sm:mb-6">
-          <img src="jcayelogo.png" alt="JCaye's Sip Society" class="logo-img-auth" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="logo-img-auth logo-placeholder" style="display:none;">Logo</div>
-          <p class="brand-text brand-text-hero mt-2 text-center">JCaye's Sip Society</p>
-        </div>
-        
-        <h2 class="text-xl sm:text-2xl serif font-bold text-gray-800 mb-1 text-center" x-text="authMode === 'login' ? 'Welcome Back' : 'Create Your Account'"></h2>
-        <p class="text-xs sm:text-sm text-gray-500 mb-5 sm:mb-6 text-center">
-          <span x-show="authRedirectMessage === '' && authMode === 'login'">Sign in to track orders & enjoy member perks.</span>
-          <span x-show="authRedirectMessage === '' && authMode === 'register'">Join our community of mug enthusiasts.</span>
-          <span x-show="authRedirectMessage !== ''" class="text-amber-700 font-medium" x-text="authRedirectMessage"></span>
-        </p>
-
-        <!-- Login Form -->
-        <form x-show="authMode === 'login'" @submit.prevent="handleAuth" class="space-y-3 sm:space-y-4">
-          <div><label class="input-label">Email *</label><input type="email" x-model="authForm.email" placeholder="your@email.com" class="input-field text-sm" required></div>
-          <div><label class="input-label">Password *</label><input type="password" x-model="authForm.password" placeholder="••••••••" class="input-field text-sm" required></div>
-          <button type="submit" class="w-full btn-primary py-3 font-semibold tracking-wide text-sm">Sign In</button>
-        </form>
-
-        <!-- Enhanced Register Form -->
-        <form x-show="authMode === 'register'" @submit.prevent="handleRegister" class="space-y-3 sm:space-y-4">
-          <div>
-            <label class="input-label">Full Name *</label>
-            <input type="text" x-model="registerForm.name" placeholder="Juan Dela Cruz" class="input-field text-sm" required>
-          </div>
-          <div>
-            <label class="input-label">Email Address *</label>
-            <input type="email" x-model="registerForm.email" placeholder="juan@example.com" class="input-field text-sm" required>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label class="input-label">Password *</label>
-              <input type="password" x-model="registerForm.password" placeholder="Min. 6 characters" class="input-field text-sm" required minlength="6">
-            </div>
-            <div>
-              <label class="input-label">Confirm Password *</label>
-              <input type="password" x-model="registerForm.confirmPassword" placeholder="Re-enter password" class="input-field text-sm" required>
-            </div>
-          </div>
-          <div>
-            <label class="input-label">Phone Number *</label>
-            <input type="tel" x-model="registerForm.phone" placeholder="09123456789" class="input-field text-sm" required pattern="[0-9]{10,}">
-          </div>
-          <div>
-            <label class="input-label">Complete Address *</label>
-            <textarea x-model="registerForm.address" placeholder="House/Unit No., Street, Barangay, City, Province, Zip Code" class="input-field text-sm" rows="2" required></textarea>
-          </div>
-          <div class="bg-[#f3ede7] p-3 rounded-xl text-xs text-gray-600">
-            <p class="font-semibold mb-1">🔒 Your Privacy Matters</p>
-            <p>Your information is securely stored and only used for order delivery and account management.</p>
-          </div>
-          <button type="submit" class="w-full btn-primary py-3 font-semibold tracking-wide text-sm">Create Account</button>
-        </form>
-
-        <p class="mt-4 text-center text-xs sm:text-sm text-gray-500">
-          <span x-text="authMode === 'login' ? 'New here?' : 'Already a member?'"></span>
-          <button @click="switchAuthMode" class="text-amber-700 underline font-medium ml-1">Switch</button>
-        </p>
-        <p class="mt-2 text-center text-xs text-gray-400" x-show="authMode === 'login'">
-          Demo: admin@sip.com / admin | customer@sip.com / customer
-        </p>
-        <button @click="closeAuth" class="mt-2 text-xs text-gray-400 w-full hover:text-gray-600">Cancel</button>
+    <div class="bg-white rounded-2xl shadow-2xl p-5 sm:p-8 max-w-md w-full rustic-card border-0 fade-in-up" @click.outside="showAuth = false">
+      <div class="flex flex-col items-center mb-4 sm:mb-6">
+        <img src="jcayelogo.png" alt="JCaye's Sip Society" class="logo-img-auth" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="logo-img-auth logo-placeholder" style="display:none;">Logo</div>
+        <p class="brand-text brand-text-hero mt-2 text-center">JCaye's Sip Society</p>
       </div>
+      <h2 class="text-xl sm:text-2xl serif font-bold text-gray-800 mb-1 text-center" x-text="authMode === 'login' ? 'Welcome Back' : 'Join the Society'"></h2>
+      <p class="text-xs sm:text-sm text-gray-500 mb-5 sm:mb-6 text-center">
+        <span x-show="authRedirectMessage === ''">Sign in to track orders & enjoy member perks.</span>
+        <span x-show="authRedirectMessage !== ''" class="text-amber-700 font-medium" x-text="authRedirectMessage"></span>
+      </p>
+      <form @submit.prevent="handleAuth">
+        <div class="space-y-3 sm:space-y-4">
+          <div x-show="authMode === 'register'">
+            <input type="text" x-model="authForm.name" placeholder="Full Name" class="input-field text-sm" x-bind:required="authMode === 'register'">
+          </div>
+          <div><input type="email" x-model="authForm.email" placeholder="Email" class="input-field text-sm" required></div>
+          <div><input type="password" x-model="authForm.password" placeholder="Password" class="input-field text-sm" required></div>
+          <button type="submit" class="w-full btn-primary py-3 font-semibold tracking-wide text-sm">Continue</button>
+        </div>
+      </form>
+      <p class="mt-3 text-center text-xs text-gray-500">
+        <span x-text="authMode === 'login' ? 'New here?' : 'Already a member?'"></span>
+        <button @click="authMode = authMode === 'login' ? 'register' : 'login'" class="text-amber-700 underline font-medium ml-1">Switch</button>
+      </p>
+      <p class="mt-2 text-center text-xs text-gray-400">Demo: admin@sip.com / admin | customer@sip.com / customer</p>
+      <button @click="showAuth = false; authRedirectMessage = ''" class="mt-2 text-xs text-gray-400 w-full hover:text-gray-600">Cancel</button>
     </div>
   </div>
 
@@ -240,39 +193,14 @@
       </div>
       <div class="flex items-center gap-1 sm:gap-4">
         <template x-if="!currentUser">
-          <button @click="openAuth('login')" class="text-xs sm:text-sm font-medium text-gray-600 hover:text-amber-800 transition px-2 sm:px-3 py-2 rounded-lg hover:bg-gray-100">Sign In</button>
+          <button @click="showAuth = true; authMode = 'login'; authRedirectMessage = ''" class="text-xs sm:text-sm font-medium text-gray-600 hover:text-amber-800 transition px-2 sm:px-3 py-2 rounded-lg hover:bg-gray-100">Sign In</button>
         </template>
         <template x-if="currentUser">
           <div class="flex items-center gap-1 sm:gap-3">
-            <!-- Profile Dropdown -->
-            <div class="relative" x-data="{ profileOpen: false }">
-              <button @click="profileOpen = !profileOpen" class="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-gray-100 transition">
-                <div class="w-8 h-8 rounded-full bg-[#f3ede7] border border-[#c9b99a] flex items-center justify-center text-sm font-bold text-[#5e4b3c]">
-                  <span x-text="currentUser.name.charAt(0).toUpperCase()"></span>
-                </div>
-                <span class="text-xs sm:text-sm text-gray-700 font-medium hidden sm:inline" x-text="currentUser.name"></span>
-                <span x-show="currentUser.role === 'admin'" class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full hidden sm:inline">Admin</span>
-              </button>
-              <!-- Dropdown Menu -->
-              <div x-show="profileOpen" @click.outside="profileOpen = false" class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
-                <div class="px-4 py-2 border-b">
-                  <p class="font-semibold text-sm" x-text="currentUser.name"></p>
-                  <p class="text-xs text-gray-500" x-text="currentUser.email"></p>
-                </div>
-                <button @click="profileOpen = false; showProfile = true" class="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2">
-                  <i data-lucide="user" class="w-4 h-4"></i> My Profile
-                </button>
-                <button @click="profileOpen = false; showMyOrders = true" class="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 flex items-center gap-2">
-                  <i data-lucide="package" class="w-4 h-4"></i> My Orders
-                </button>
-                <div class="border-t mt-1 pt-1">
-                  <button @click="logout" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2">
-                    <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
-                  </button>
-                </div>
-              </div>
-            </div>
-            <button @click="logout" class="text-xs text-red-600 hover:underline px-2 py-1 sm:hidden">Logout</button>
+            <span class="text-xs sm:text-sm text-gray-700 font-medium hidden sm:inline" x-text="currentUser.name"></span>
+            <span x-show="currentUser.role === 'admin'" class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full hidden sm:inline">Admin</span>
+            <span x-show="currentUser.role === 'customer'" class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full hidden sm:inline">Customer</span>
+            <button @click="logout" class="text-xs text-red-600 hover:underline px-2 py-1">Logout</button>
           </div>
         </template>
         <button x-show="!currentUser || currentUser.role !== 'admin'" @click="cartOpen = !cartOpen" class="relative p-2 hover:bg-gray-100 rounded-lg transition">
@@ -283,79 +211,9 @@
     </div>
   </header>
 
-  <!-- ==================== PROFILE MODAL ==================== -->
-  <div x-show="showProfile" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" x-cloak>
-    <div class="bg-white rounded-2xl max-w-lg w-full p-5 sm:p-8 rustic-card max-h-[90vh] overflow-y-auto" @click.outside="showProfile = false">
-      <div class="text-center mb-6">
-        <div class="profile-avatar mx-auto mb-3">
-          <span x-text="currentUser?.name?.charAt(0).toUpperCase()"></span>
-        </div>
-        <h2 class="text-xl font-bold serif" x-text="currentUser?.name"></h2>
-        <p class="text-sm text-gray-500" x-text="currentUser?.email"></p>
-        <span x-show="currentUser?.role === 'admin'" class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full mt-1 inline-block">Admin</span>
-      </div>
-      
-      <div class="space-y-4">
-        <div class="bg-[#f3ede7] p-4 rounded-xl">
-          <h3 class="font-semibold text-sm mb-3">Account Details</h3>
-          <div class="space-y-2 text-sm">
-            <div class="flex justify-between"><span class="text-gray-500">Full Name</span><span class="font-medium" x-text="currentUser?.name"></span></div>
-            <div class="flex justify-between"><span class="text-gray-500">Email</span><span class="font-medium" x-text="currentUser?.email"></span></div>
-            <div class="flex justify-between"><span class="text-gray-500">Phone</span><span class="font-medium" x-text="currentUser?.phone || 'Not provided'"></span></div>
-            <div class="flex justify-between"><span class="text-gray-500">Address</span><span class="font-medium text-right max-w-[200px]" x-text="currentUser?.address || 'Not provided'"></span></div>
-            <div class="flex justify-between"><span class="text-gray-500">Member Since</span><span class="font-medium" x-text="currentUser?.createdAt ? new Date(currentUser.createdAt).toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric'}) : 'N/A'"></span></div>
-          </div>
-        </div>
-        
-        <div class="bg-[#f3ede7] p-4 rounded-xl">
-          <h3 class="font-semibold text-sm mb-3">Update Profile</h3>
-          <form @submit.prevent="updateProfile" class="space-y-3">
-            <div><label class="input-label">Phone Number</label><input type="tel" x-model="profileForm.phone" class="input-field text-sm" placeholder="09123456789"></div>
-            <div><label class="input-label">Address</label><textarea x-model="profileForm.address" class="input-field text-sm" rows="2" placeholder="Update your delivery address"></textarea></div>
-            <button type="submit" class="btn-primary px-4 py-2 rounded-xl text-sm w-full">Update Profile</button>
-          </form>
-        </div>
-      </div>
-      
-      <button @click="showProfile = false" class="mt-4 text-sm text-gray-500 w-full hover:text-gray-700">Close</button>
-    </div>
-  </div>
-
-  <!-- ==================== MY ORDERS MODAL ==================== -->
-  <div x-show="showMyOrders" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" x-cloak>
-    <div class="bg-white rounded-2xl max-w-2xl w-full p-5 sm:p-8 rustic-card max-h-[90vh] overflow-y-auto" @click.outside="showMyOrders = false">
-      <h2 class="text-xl sm:text-2xl font-bold serif mb-4">My Orders</h2>
-      <div class="space-y-3">
-        <template x-for="o in myOrders" :key="o.id">
-          <div class="border rounded-xl p-4">
-            <div class="flex justify-between items-start mb-2">
-              <div>
-                <p class="font-semibold text-sm">Order #<span x-text="o.id.toString().slice(-6)"></span></p>
-                <p class="text-xs text-gray-500" x-text="o.date ? new Date(o.date).toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric'}) : ''"></p>
-              </div>
-              <span class="status-badge" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span>
-            </div>
-            <div class="bg-gray-50 p-2 rounded-lg mb-2">
-              <p class="text-xs text-gray-600">📍 <span x-text="o.address"></span></p>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-gray-500"><span x-text="o.items?.length || 0"></span> item(s)</span>
-              <span class="font-bold text-[#5e4b3c]">₱<span x-text="o.total?.toLocaleString()"></span></span>
-            </div>
-          </div>
-        </template>
-        <div x-show="myOrders.length === 0" class="text-center text-gray-400 py-8">
-          <i data-lucide="package" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
-          <p>No orders yet</p>
-        </div>
-      </div>
-      <button @click="showMyOrders = false" class="mt-4 text-sm text-gray-500 w-full hover:text-gray-700">Close</button>
-    </div>
-  </div>
-
   <!-- CUSTOMER VIEW -->
   <div x-show="!currentUser || currentUser.role !== 'admin'" x-cloak class="w-full">
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="relative hero-pattern bg-gradient-to-b from-[#faf7f2] to-[#f2ebe1] py-8 sm:py-12 md:py-16 px-4 text-center border-b border-[#d9ccbb]">
       <div class="fade-in-up max-w-4xl mx-auto">
         <div class="flex flex-col items-center mb-2 sm:mb-4">
@@ -444,37 +302,61 @@
       </div>
     </div>
 
-    <!-- Enhanced Cart Drawer (same as before) -->
+    <!-- ==================== ENHANCED CART DRAWER ==================== -->
     <div x-show="cartOpen" class="fixed inset-0 z-40 flex justify-end" x-cloak>
       <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="cartOpen = false"></div>
       <div class="relative w-full max-w-lg bg-white h-full shadow-2xl flex flex-col rustic-card border-l animate-slide-in">
+        <!-- Cart Header -->
         <div class="flex justify-between items-center p-4 sm:p-6 border-b">
-          <div><h3 class="text-lg sm:text-xl font-bold serif">Your Cart</h3><p class="text-xs text-gray-500 mt-0.5"><span x-text="cartItemCount"></span> item(s)</p></div>
-          <button @click="cartOpen = false" class="text-gray-500 hover:text-gray-700 p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
+          <div>
+            <h3 class="text-lg sm:text-xl font-bold serif">Your Cart</h3>
+            <p class="text-xs text-gray-500 mt-0.5"><span x-text="cartItemCount"></span> item(s)</p>
+          </div>
+          <button @click="cartOpen = false" class="text-gray-500 hover:text-gray-700 p-1">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
         </div>
-        <div x-show="cartTotal < 1500 && cart.length > 0" class="bg-amber-50 border-b border-amber-200 px-4 sm:px-6 py-2.5 text-xs text-amber-800">🚚 Add ₱<span x-text="(1500 - cartTotal).toLocaleString()"></span> more for free shipping!</div>
-        <div x-show="cartTotal >= 1500 && cart.length > 0" class="bg-green-50 border-b border-green-200 px-4 sm:px-6 py-2.5 text-xs text-green-800">✅ You've qualified for free shipping!</div>
+
+        <!-- Free Shipping Banner -->
+        <div x-show="cartTotal < 1500 && cart.length > 0" class="bg-amber-50 border-b border-amber-200 px-4 sm:px-6 py-2.5 text-xs text-amber-800">
+          🚚 Add ₱<span x-text="(1500 - cartTotal).toLocaleString()"></span> more for free shipping!
+        </div>
+        <div x-show="cartTotal >= 1500 && cart.length > 0" class="bg-green-50 border-b border-green-200 px-4 sm:px-6 py-2.5 text-xs text-green-800">
+          ✅ You've qualified for free shipping!
+        </div>
+
+        <!-- Cart Items -->
         <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
           <template x-for="(item, idx) in cart" :key="item.cartId">
             <div class="cart-item-enter flex gap-3 sm:gap-4 border-b pb-4">
+              <!-- Product Image -->
               <img :src="item.image" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover flex-shrink-0" onerror="this.style.display='none'">
               <div class="flex-1 min-w-0">
                 <div class="flex justify-between items-start">
-                  <div class="min-w-0 flex-1"><p class="font-semibold text-sm sm:text-base truncate" x-text="item.name"></p><p class="text-xs text-gray-500 mt-0.5" x-text="item.categoryShort"></p></div>
-                  <button @click="removeFromCart(idx)" class="text-gray-400 hover:text-red-500 p-1 flex-shrink-0 ml-2"><i data-lucide="x-circle" class="w-4 h-4"></i></button>
+                  <div class="min-w-0 flex-1">
+                    <p class="font-semibold text-sm sm:text-base truncate" x-text="item.name"></p>
+                    <p class="text-xs text-gray-500 mt-0.5" x-text="item.categoryShort"></p>
+                  </div>
+                  <button @click="removeFromCart(idx)" class="text-gray-400 hover:text-red-500 p-1 flex-shrink-0 ml-2">
+                    <i data-lucide="x-circle" class="w-4 h-4"></i>
+                  </button>
                 </div>
                 <div class="flex items-center justify-between mt-2">
+                  <!-- Quantity Controls -->
                   <div class="flex items-center gap-2">
                     <button @click="decrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity <= 1">−</button>
                     <span class="text-sm font-semibold w-6 text-center" x-text="item.quantity"></span>
                     <button @click="incrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity >= getProductStock(item.id)">+</button>
                   </div>
+                  <!-- Item Total -->
                   <p class="font-bold text-sm sm:text-base text-[#5e4b3c]">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></p>
                 </div>
                 <p class="text-xs text-gray-400 mt-1">₱<span x-text="item.price.toLocaleString()"></span> each</p>
               </div>
             </div>
           </template>
+          
+          <!-- Empty Cart -->
           <div x-show="cart.length === 0" class="text-center text-gray-400 py-16">
             <i data-lucide="shopping-bag" class="w-16 h-16 mx-auto mb-4 opacity-30"></i>
             <p class="text-lg font-medium mb-1">Your cart is empty</p>
@@ -482,13 +364,25 @@
             <button @click="cartOpen = false" class="btn-outline px-6 py-2 rounded-xl text-sm mt-4">Browse Collection</button>
           </div>
         </div>
+
+        <!-- Cart Footer -->
         <div class="border-t p-4 sm:p-6 space-y-3" x-show="cart.length > 0">
+          <!-- Order Summary -->
           <div class="space-y-2 text-sm">
             <div class="flex justify-between"><span class="text-gray-500">Subtotal</span><span>₱<span x-text="cartSubtotal.toLocaleString()"></span></span></div>
             <div class="flex justify-between"><span class="text-gray-500">Shipping</span><span x-text="cartTotal >= 1500 ? 'Free' : '₱' + shippingFee.toLocaleString()"></span></div>
-            <div class="flex justify-between text-base font-bold pt-2 border-t"><span>Total</span><span class="text-[#5e4b3c]">₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div>
+            <div class="flex justify-between text-base font-bold pt-2 border-t">
+              <span>Total</span>
+              <span class="text-[#5e4b3c]">₱<span x-text="cartGrandTotal.toLocaleString()"></span></span>
+            </div>
           </div>
-          <button @click="proceedToCheckout" class="w-full btn-primary py-3 rounded-xl text-sm font-semibold">Proceed to Checkout</button>
+          
+          <!-- Checkout Button -->
+          <button @click="proceedToCheckout" class="w-full btn-primary py-3 rounded-xl text-sm font-semibold">
+            Proceed to Checkout
+          </button>
+          
+          <!-- Clear Cart -->
           <button @click="clearCart" class="w-full text-xs text-gray-400 hover:text-red-500 transition py-1">Clear Cart</button>
         </div>
       </div>
@@ -499,18 +393,27 @@
       <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showCheckout = false"></div>
       <div class="relative bg-white rounded-2xl max-w-lg w-full p-5 sm:p-8 rustic-card fade-in-up max-h-[90vh] overflow-y-auto">
         <h2 class="text-xl sm:text-2xl font-bold serif mb-4">Checkout</h2>
+        
+        <!-- Order Items Summary -->
         <div class="bg-[#f3ede7] p-4 rounded-xl mb-4">
           <p class="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Order Items</p>
           <template x-for="item in cart" :key="item.cartId">
-            <div class="flex justify-between text-sm py-1"><span x-text="item.name + ' ×' + item.quantity"></span><span class="font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div>
+            <div class="flex justify-between text-sm py-1">
+              <span x-text="item.name + ' ×' + item.quantity"></span>
+              <span class="font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span>
+            </div>
           </template>
-          <div class="border-t pt-2 mt-2 flex justify-between font-bold"><span>Total</span><span>₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div>
+          <div class="border-t pt-2 mt-2 flex justify-between font-bold">
+            <span>Total</span>
+            <span>₱<span x-text="cartGrandTotal.toLocaleString()"></span></span>
+          </div>
         </div>
+
         <form @submit.prevent="processOrder" class="space-y-3">
-          <div><label class="input-label">Full Name *</label><input type="text" required x-model="checkoutForm.name" class="input-field text-sm" :value="currentUser?.name"></div>
-          <div><label class="input-label">Email *</label><input type="email" required x-model="checkoutForm.email" class="input-field text-sm" :value="currentUser?.email"></div>
-          <div><label class="input-label">Phone Number *</label><input type="tel" required x-model="checkoutForm.phone" class="input-field text-sm" :value="currentUser?.phone"></div>
-          <div><label class="input-label">Complete Delivery Address *</label><textarea required x-model="checkoutForm.address" class="input-field text-sm" rows="3" x-text="currentUser?.address"></textarea></div>
+          <div><label class="input-label">Full Name *</label><input type="text" required x-model="checkoutForm.name" class="input-field text-sm" placeholder="Juan Dela Cruz"></div>
+          <div><label class="input-label">Email *</label><input type="email" required x-model="checkoutForm.email" class="input-field text-sm" placeholder="juan@example.com"></div>
+          <div><label class="input-label">Phone Number *</label><input type="tel" required x-model="checkoutForm.phone" class="input-field text-sm" placeholder="09123456789"></div>
+          <div><label class="input-label">Complete Delivery Address *</label><textarea required x-model="checkoutForm.address" class="input-field text-sm" placeholder="House/Unit No., Street, Barangay, City, Province, Zip Code" rows="3"></textarea></div>
           <div><label class="input-label">Payment Method *</label><select x-model="checkoutForm.paymentMethod" class="input-field text-sm" required><option value="">Select payment method</option><option value="cod">Cash on Delivery</option><option value="gcash">GCash</option></select></div>
           <div x-show="checkoutForm.paymentMethod === 'gcash'" class="bg-gray-50 p-4 rounded-xl text-center"><p class="text-sm font-semibold mb-2">📱 Send payment to: 0912-345-6789</p><p class="text-xs text-amber-700">Order pending until admin verifies payment.</p></div>
           <button type="submit" class="w-full btn-primary py-3 rounded-xl font-semibold text-sm">Place Order</button>
@@ -520,7 +423,7 @@
     </div>
   </div>
 
-  <!-- ADMIN VIEW (same as before, truncated for brevity) -->
+  <!-- ==================== ADMIN VIEW ==================== -->
   <div x-show="currentUser && currentUser.role === 'admin'" x-cloak class="flex flex-col md:flex-row min-h-screen bg-gray-50">
     <div class="admin-mobile-nav md:hidden flex overflow-x-auto bg-[#f5efe8] border-b border-[#ddd2c4] scrollbar-hide sticky top-16 z-20">
       <button @click="adminTab = 'dashboard'" :class="adminTab === 'dashboard' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">📊 Dashboard</button>
@@ -528,8 +431,13 @@
       <button @click="adminTab = 'orders'" :class="adminTab === 'orders' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">📋 Orders</button>
       <button @click="adminTab = 'users'" :class="adminTab === 'users' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">👥 Users</button>
     </div>
+
     <div class="admin-sidebar w-64 p-6 flex-shrink-0 hidden md:block min-h-screen">
-      <div class="flex items-center gap-3 mb-8"><img src="jcayelogo.png" alt="JCaye's Sip Society" class="logo-img-sm" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="logo-img-sm logo-placeholder" style="display:none;">Logo</div><span class="brand-text text-sm">Admin Panel</span></div>
+      <div class="flex items-center gap-3 mb-8">
+        <img src="jcayelogo.png" alt="JCaye's Sip Society" class="logo-img-sm" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="logo-img-sm logo-placeholder" style="display:none;">Logo</div>
+        <span class="brand-text text-sm">Admin Panel</span>
+      </div>
       <nav class="space-y-1 text-sm">
         <button @click="adminTab = 'dashboard'" :class="adminTab === 'dashboard' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-lg transition flex items-center gap-3"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
         <button @click="adminTab = 'products'" :class="adminTab === 'products' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-lg transition flex items-center gap-3"><i data-lucide="package" class="w-4 h-4"></i> Products</button>
@@ -537,49 +445,136 @@
         <button @click="adminTab = 'users'" :class="adminTab === 'users' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-lg transition flex items-center gap-3"><i data-lucide="users" class="w-4 h-4"></i> Users</button>
       </nav>
     </div>
+
     <div class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto pb-20 md:pb-8">
+      <!-- Dashboard Tab -->
       <div x-show="adminTab === 'dashboard'" class="space-y-6">
-        <div class="flex items-center justify-between"><div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Dashboard</h2><p class="text-sm text-gray-500 mt-1">Welcome back, <span x-text="currentUser?.name"></span></p></div><span class="text-xs text-gray-400" x-text="new Date().toLocaleDateString('en-PH', {weekday:'long', year:'numeric', month:'long', day:'numeric'})"></span></div>
+        <div class="flex items-center justify-between">
+          <div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Dashboard</h2><p class="text-sm text-gray-500 mt-1">Welcome back, <span x-text="currentUser?.name"></span></p></div>
+          <span class="text-xs text-gray-400" x-text="new Date().toLocaleDateString('en-PH', {weekday:'long', year:'numeric', month:'long', day:'numeric'})"></span>
+        </div>
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Revenue</span><i data-lucide="trending-up" class="w-4 h-4 text-green-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800">₱<span x-text="financials.grossRevenue.toLocaleString()"></span></p></div>
-          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Orders</span><i data-lucide="shopping-bag" class="w-4 h-4 text-blue-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="orders.length"></p></div>
-          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Profit</span><i data-lucide="dollar-sign" class="w-4 h-4" :class="financials.netProfit >= 0 ? 'text-green-600' : 'text-red-600'"></i></div><p class="text-xl sm:text-2xl font-bold" :class="financials.netProfit >= 0 ? 'text-green-700' : 'text-red-700'">₱<span x-text="financials.netProfit.toLocaleString()"></span></p></div>
-          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Users</span><i data-lucide="users" class="w-4 h-4 text-purple-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="users.length"></p></div>
+          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Revenue</span><i data-lucide="trending-up" class="w-4 h-4 text-green-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800">₱<span x-text="financials.grossRevenue.toLocaleString()"></span></p><p class="text-xs text-gray-400 mt-1">Total gross revenue</p></div>
+          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Orders</span><i data-lucide="shopping-bag" class="w-4 h-4 text-blue-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="orders.length"></p><p class="text-xs text-gray-400 mt-1">Total orders placed</p></div>
+          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Profit</span><i data-lucide="dollar-sign" class="w-4 h-4" :class="financials.netProfit >= 0 ? 'text-green-600' : 'text-red-600'"></i></div><p class="text-xl sm:text-2xl font-bold" :class="financials.netProfit >= 0 ? 'text-green-700' : 'text-red-700'">₱<span x-text="financials.netProfit.toLocaleString()"></span></p><p class="text-xs text-gray-400 mt-1">Net profit/loss</p></div>
+          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Products</span><i data-lucide="package" class="w-4 h-4 text-amber-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="products.length"></p><p class="text-xs text-gray-400 mt-1">Active listings</p></div>
         </div>
         <div class="stat-card" x-show="lowStockProducts.length > 0">
-          <div class="flex items-center gap-2 mb-4"><span class="alert-dot bg-red-500"></span><h3 class="text-lg font-bold text-gray-800">Low Stock Alerts</h3></div>
+          <div class="flex items-center gap-2 mb-4"><span class="alert-dot bg-red-500"></span><h3 class="text-lg font-bold text-gray-800">Low Stock Alerts</h3><span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full" x-text="lowStockProducts.length + ' item(s)'"></span></div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            <template x-for="p in lowStockProducts"><div class="flex items-center gap-3 bg-red-50 p-3 rounded-xl border border-red-200"><img :src="p.image" class="w-12 h-12 rounded-lg object-cover"><div class="flex-1"><p class="font-semibold text-sm" x-text="p.name"></p><p class="text-xs text-red-700">Only <span x-text="p.stock"></span> left</p></div></div></template>
+            <template x-for="p in lowStockProducts" :key="p.id">
+              <div class="flex items-center gap-3 bg-red-50 p-3 rounded-xl border border-red-200">
+                <img :src="p.image" class="w-12 h-12 rounded-lg object-cover" onerror="this.style.display='none'">
+                <div class="flex-1 min-w-0"><p class="font-semibold text-sm truncate" x-text="p.name"></p><p class="text-xs text-red-700 font-bold">Only <span x-text="p.stock"></span> left</p></div>
+                <button @click="adminTab='products'" class="text-xs btn-outline px-2 py-1 rounded-lg whitespace-nowrap">Manage</button>
+              </div>
+            </template>
           </div>
         </div>
       </div>
-      <!-- Products, Orders, Users tabs omitted for brevity - same as previous version -->
+
+      <!-- Products Tab -->
+      <div x-show="adminTab === 'products'" class="space-y-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Product Inventory</h2><p class="text-sm text-gray-500 mt-1">Manage your mug collection</p></div>
+          <button @click="openAddProductModal" class="btn-primary px-5 py-2.5 rounded-xl text-sm flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Add New Mug</button>
+        </div>
+        <div class="hidden lg:block overflow-x-auto">
+          <table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 font-semibold">Product</th><th class="pb-3 font-semibold">Category</th><th class="pb-3 font-semibold">Price</th><th class="pb-3 font-semibold">Stock</th><th class="pb-3 font-semibold">Status</th><th class="pb-3 font-semibold text-right">Actions</th></tr></thead>
+            <tbody>
+              <template x-for="(p, idx) in products" :key="p.id">
+                <tr class="border-b hover:bg-gray-50/50 transition">
+                  <td class="py-3"><div class="flex items-center gap-3"><img :src="p.image" class="product-image-preview" onerror="this.style.display='none'"><div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-xs text-gray-400" style="display:none;">No img</div><div><p class="font-semibold text-gray-800" x-text="p.name"></p><p class="text-xs text-gray-400 line-clamp-1" x-text="p.description"></p></div></div></td>
+                  <td class="py-3"><span class="text-xs bg-gray-100 px-2 py-1 rounded-full" x-text="p.categoryShort"></span></td>
+                  <td class="py-3 font-semibold">₱<span x-text="p.price.toLocaleString()"></span></td>
+                  <td class="py-3"><span :class="p.stock <= 3 ? 'text-red-600 font-bold' : 'text-gray-700'" x-text="p.stock"></span><span x-show="p.stock <= 3" class="alert-dot bg-red-500 ml-1 inline-block align-middle"></span></td>
+                  <td class="py-3"><span x-show="p.stock > 3" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">In Stock</span><span x-show="p.stock > 0 && p.stock <= 3" class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">Low Stock</span><span x-show="p.stock === 0" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Out of Stock</span></td>
+                  <td class="py-3 text-right"><button @click="editProduct(idx)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="deleteProduct(idx)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+        <div class="lg:hidden space-y-3">
+          <template x-for="(p, idx) in products" :key="p.id">
+            <div class="bg-white p-4 rounded-xl rustic-card">
+              <div class="flex gap-3 mb-3"><img :src="p.image" class="product-image-preview flex-shrink-0" onerror="this.style.display='none'"><div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-xs text-gray-400 flex-shrink-0" style="display:none;">No img</div><div class="flex-1 min-w-0"><p class="font-semibold text-sm" x-text="p.name"></p><p class="text-xs text-gray-400 line-clamp-2" x-text="p.description"></p><div class="flex items-center gap-2 mt-1"><span class="text-xs bg-gray-100 px-2 py-0.5 rounded-full" x-text="p.categoryShort"></span><span x-show="p.stock <= 3" class="alert-dot bg-red-500"></span></div></div></div>
+              <div class="flex items-center justify-between"><div><p class="font-bold text-[#5e4b3c]">₱<span x-text="p.price.toLocaleString()"></span></p><p class="text-xs" :class="p.stock <= 3 ? 'text-red-600' : 'text-gray-500'">Stock: <span x-text="p.stock"></span></p></div><div class="flex gap-2"><button @click="editProduct(idx)" class="btn-outline px-3 py-1.5 rounded-lg text-xs">Edit</button><button @click="deleteProduct(idx)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></div></div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Orders Tab -->
+      <div x-show="adminTab === 'orders'" class="space-y-6">
+        <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Order Management</h2>
+        <div class="space-y-4">
+          <template x-for="o in orders" :key="o.id">
+            <div class="bg-white p-4 sm:p-6 rounded-xl rustic-card">
+              <div class="flex flex-col sm:flex-row justify-between gap-4 mb-4">
+                <div><p class="font-semibold text-lg" x-text="o.customerName"></p><p class="text-sm text-gray-500" x-text="o.email"></p><p class="text-sm text-gray-500" x-text="o.phone"></p><p class="text-xs text-gray-400 mt-1">📅 <span x-text="o.date ? new Date(o.date).toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric'}) : ''"></span></p></div>
+                <div class="text-left sm:text-right"><p class="text-2xl font-bold text-[#5e4b3c]">₱<span x-text="o.total?.toLocaleString() || 0"></span></p><span class="text-xs px-2 py-0.5 rounded-full" :class="o.paymentMethod === 'gcash' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'" x-text="o.paymentMethod?.toUpperCase()"></span><p class="text-xs text-gray-500 mt-1" x-text="o.paymentStatus"></p></div>
+              </div>
+              <div class="bg-gray-50 p-3 rounded-lg mb-4"><p class="text-xs font-semibold text-gray-600 mb-1">📍 Delivery Address:</p><p class="text-sm text-gray-700" x-text="o.address"></p></div>
+              <div class="border-t pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-2"><span class="text-sm font-medium text-gray-600">Status:</span><span class="status-badge" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span></div>
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                  <select @change="updateDeliveryStatus(o.id, $event.target.value)" class="input-field w-full sm:w-48 text-sm py-2"><option value="">Update Status</option><option value="Pending">📝 Pending</option><option value="Processing">⚙️ Processing</option><option value="To Ship">📦 To Ship</option><option value="Out for Delivery">🚚 Out for Delivery</option><option value="Delivered">✅ Delivered</option><option value="Cancelled">❌ Cancelled</option></select>
+                  <button x-show="o.paymentMethod === 'gcash' && o.paymentStatus === 'Pending'" @click="approvePayment(o.id)" class="btn-outline text-xs px-3 py-2 rounded-lg whitespace-nowrap">✅ Approve GCash</button>
+                </div>
+              </div>
+            </div>
+          </template>
+          <div x-show="orders.length === 0" class="text-center text-gray-400 py-12">No orders yet</div>
+        </div>
+      </div>
+
+      <!-- Users Tab -->
+      <div x-show="adminTab === 'users'" class="space-y-6">
+        <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">User Management</h2>
+        <div class="space-y-3">
+          <template x-for="u in users" :key="u.id">
+            <div class="bg-white p-4 rounded-xl rustic-card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div><p class="font-semibold" x-text="u.name"></p><p class="text-sm text-gray-500" x-text="u.email"></p><div class="flex gap-1 mt-1"><span x-show="u.role === 'admin'" class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">Admin</span><span x-show="u.role === 'customer'" class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">Customer</span><span x-show="u.blocked" class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">Blocked</span></div></div>
+              <div class="flex items-center gap-2"><button @click="toggleUserRole(u.id)" class="btn-outline text-xs px-3 py-2 rounded-lg"><span x-text="u.role === 'admin' ? 'Demote' : 'Promote'"></span></button><button @click="toggleBlockUser(u.id)" class="btn-danger text-xs px-3 py-2 rounded-lg"><span x-text="u.blocked ? 'Unblock' : 'Block'"></span></button></div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Product Modal -->
+      <div x-show="showProductModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" x-cloak>
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 rustic-card max-h-[90vh] overflow-y-auto" @click.outside="showProductModal = false">
+          <h2 class="text-xl sm:text-2xl font-bold serif mb-6" x-text="editingProductIndex === null ? 'Add New Mug' : 'Edit Mug'"></h2>
+          <form @submit.prevent="saveProductForm" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div><label class="input-label">Product Name *</label><input type="text" required x-model="productForm.name" class="input-field text-sm"></div>
+              <div><label class="input-label">Price (₱) *</label><input type="number" required x-model="productForm.price" class="input-field text-sm" min="0"></div>
+              <div><label class="input-label">Stock Quantity *</label><input type="number" required x-model="productForm.stock" class="input-field text-sm" min="0"></div>
+              <div><label class="input-label">Category *</label><select x-model="productForm.category" class="input-field text-sm" required><option value="">Select</option><template x-for="cat in categories"><option :value="cat" x-text="cat"></option></template></select></div>
+              <div><label class="input-label">Short Label</label><input type="text" x-model="productForm.categoryShort" class="input-field text-sm"></div>
+              <div><label class="input-label">Image URL *</label><input type="url" required x-model="productForm.image" class="input-field text-sm"></div>
+            </div>
+            <div><label class="input-label">Description *</label><textarea required x-model="productForm.description" class="input-field text-sm" rows="3"></textarea></div>
+            <div class="bg-gray-50 p-4 rounded-xl"><p class="text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wider">Image Preview</p><div class="flex items-center gap-4"><img :src="productForm.image" class="w-24 h-24 rounded-xl object-cover border" onerror="this.style.display='none'"><div class="w-24 h-24 bg-gray-200 rounded-xl flex items-center justify-center text-xs text-gray-400 border-2 border-dashed">No preview</div></div></div>
+            <div class="flex gap-3 pt-2"><button type="submit" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1">💾 Save</button><button type="button" @click="showProductModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
     function app() {
       return {
-        // Auth state
-        showAuth: false, authMode: 'login', authRedirectMessage: '', pendingCheckout: false,
-        authForm: { email: '', password: '' },
-        registerForm: { name: '', email: '', password: '', confirmPassword: '', phone: '', address: '' },
+        showAuth: false, authMode: 'login', authRedirectMessage: '',
+        authForm: { name: '', email: '', password: '' },
         currentUser: null,
-
-        // Profile
-        showProfile: false, showMyOrders: false,
-        profileForm: { phone: '', address: '' },
-
-        // Cart
         cartOpen: false, showCheckout: false, cart: [],
         checkoutForm: { name: '', email: '', phone: '', address: '', paymentMethod: '' },
         newsletterEmail: '', newsletterSubscribed: false,
-
-        // Admin
         adminTab: 'dashboard', showProductModal: false, editingProductIndex: null,
         productForm: { name: '', price: '', stock: '', category: '', categoryShort: '', description: '', image: '' },
-
-        // Product data
         selectedCategory: 'All', activeMug: null,
         categories: ['Slow Mornings', 'Tea Rituals', 'Artisan Glaze', 'Stoneware', 'Limited Batch'],
         products: [
@@ -591,21 +586,19 @@
           { id: 6, name: 'Rustic Pewter', price: 1700, stock: 0, category: 'Slow Mornings', categoryShort: 'Morning', description: 'Matte metallic finish reminiscent of aged pewter.', image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d26b6?w=400' }
         ],
         users: [
-          { id: 1, name: 'Alice Johnson', email: 'customer@sip.com', password: 'customer', phone: '09171234567', address: '123 Rizal St., Makati City, Metro Manila', blocked: false, role: 'customer', createdAt: '2024-01-15' },
-          { id: 2, name: 'Admin User', email: 'admin@sip.com', password: 'admin', phone: '09181234567', address: '456 Admin Ave., Quezon City, Metro Manila', blocked: false, role: 'admin', createdAt: '2024-01-01' }
+          { id: 1, name: 'Alice Johnson', email: 'customer@sip.com', password: 'customer', blocked: false, role: 'customer' },
+          { id: 2, name: 'Admin User', email: 'admin@sip.com', password: 'admin', blocked: false, role: 'admin' }
         ],
         orders: [],
         financials: { grossRevenue: 0, cogs: 800, opex: 400, netProfit: 0 },
         shippingFee: 99,
 
-        // Computed
         get filteredProducts() { return this.selectedCategory === 'All' ? this.products : this.products.filter(p => p.category === this.selectedCategory); },
         get cartItemCount() { return this.cart.reduce((sum, item) => sum + item.quantity, 0); },
         get cartSubtotal() { return this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0); },
         get cartTotal() { return this.cartSubtotal; },
         get cartGrandTotal() { return this.cartTotal >= 1500 ? this.cartTotal : this.cartTotal + this.shippingFee; },
         get lowStockProducts() { return this.products.filter(p => p.stock <= 3); },
-        get myOrders() { return this.currentUser ? this.orders.filter(o => o.email === this.currentUser.email) : []; },
 
         getStatusClass(status) {
           const map = { 'Pending': 'status-pending', 'Processing': 'status-processing', 'To Ship': 'status-shipping', 'Out for Delivery': 'status-shipping', 'Delivered': 'status-delivered', 'Cancelled': 'status-cancelled' };
@@ -615,7 +608,6 @@
         isInCart(productId) { return this.cart.some(item => item.id === productId); },
         getProductStock(productId) { const p = this.products.find(p => p.id === productId); return p ? p.stock + (this.cart.find(i => i.id === productId)?.quantity || 0) : 0; },
 
-        // Init
         initApp() {
           const sp = localStorage.getItem('sip_products'); if (sp) { try { this.products = JSON.parse(sp); } catch(e) {} }
           const su = localStorage.getItem('sip_users'); if (su) { try { this.users = JSON.parse(su); } catch(e) {} } else { localStorage.setItem('sip_users', JSON.stringify(this.users)); }
@@ -625,121 +617,135 @@
           this.$nextTick(() => { lucide.createIcons(); });
         },
 
-        // Auth methods
-        openAuth(mode) { this.authMode = mode; this.authRedirectMessage = ''; this.registerForm = { name: '', email: '', password: '', confirmPassword: '', phone: '', address: '' }; this.showAuth = true; },
-        closeAuth() { this.showAuth = false; this.authRedirectMessage = ''; },
-        switchAuthMode() { 
-          this.authMode = this.authMode === 'login' ? 'register' : 'login'; 
-          this.authRedirectMessage = ''; 
-          this.registerForm = { name: '', email: '', password: '', confirmPassword: '', phone: '', address: '' };
-        },
-
         handleAuth() {
-          const found = this.users.find(u => u.email === this.authForm.email && u.password === this.authForm.password);
-          if (found && !found.blocked) {
-            this.currentUser = found; this.showAuth = false; this.authRedirectMessage = '';
-            this.authForm = { email: '', password: '' };
-            if (this.pendingCheckout) { this.pendingCheckout = false; this.showCheckout = true; this.preFillCheckout(); }
-          } else { alert('Invalid credentials or account blocked.'); }
-        },
-
-        handleRegister() {
-          if (!this.registerForm.name || !this.registerForm.email || !this.registerForm.password || !this.registerForm.phone || !this.registerForm.address) { alert('Please fill in all required fields.'); return; }
-          if (this.registerForm.password !== this.registerForm.confirmPassword) { alert('Passwords do not match.'); return; }
-          if (this.registerForm.password.length < 6) { alert('Password must be at least 6 characters.'); return; }
-          if (this.users.find(u => u.email === this.registerForm.email)) { alert('Email already registered. Please sign in instead.'); return; }
-          
-          const newUser = {
-            id: Date.now(),
-            name: this.registerForm.name,
-            email: this.registerForm.email,
-            password: this.registerForm.password,
-            phone: this.registerForm.phone,
-            address: this.registerForm.address,
-            blocked: false,
-            role: 'customer',
-            createdAt: new Date().toISOString()
-          };
-          
-          this.users.push(newUser);
-          localStorage.setItem('sip_users', JSON.stringify(this.users));
-          this.currentUser = newUser;
-          this.showAuth = false;
-          this.registerForm = { name: '', email: '', password: '', confirmPassword: '', phone: '', address: '' };
-          
-          if (this.pendingCheckout) { 
-            this.pendingCheckout = false; 
-            this.showCheckout = true; 
-            this.preFillCheckout(); 
+          if (this.authMode === 'register') {
+            if (!this.authForm.name || !this.authForm.email || !this.authForm.password) { alert('Fill all fields.'); return; }
+            if (this.users.find(u => u.email === this.authForm.email)) { alert('Email exists.'); return; }
+            const nu = { id: Date.now(), name: this.authForm.name, email: this.authForm.email, password: this.authForm.password, blocked: false, role: 'customer' };
+            this.users.push(nu); localStorage.setItem('sip_users', JSON.stringify(this.users));
+            this.currentUser = nu; this.showAuth = false; this.authRedirectMessage = '';
+            this.authForm = { name: '', email: '', password: '' };
+            if (this.pendingCheckout) { this.pendingCheckout = false; this.showCheckout = true; }
+          } else {
+            const f = this.users.find(u => u.email === this.authForm.email && u.password === this.authForm.password);
+            if (f && !f.blocked) {
+              this.currentUser = f; this.showAuth = false; this.authRedirectMessage = '';
+              this.authForm = { name: '', email: '', password: '' };
+              if (this.pendingCheckout) { this.pendingCheckout = false; this.showCheckout = true; }
+            } else { alert('Invalid or blocked.'); }
           }
         },
 
-        logout() { this.currentUser = null; this.adminTab = 'dashboard'; this.cartOpen = false; this.showCheckout = false; this.showProfile = false; },
+        logout() { this.currentUser = null; this.adminTab = 'dashboard'; this.cartOpen = false; this.showCheckout = false; },
 
-        // Profile
-        updateProfile() {
-          if (this.currentUser) {
-            if (this.profileForm.phone) this.currentUser.phone = this.profileForm.phone;
-            if (this.profileForm.address) this.currentUser.address = this.profileForm.address;
-            const idx = this.users.findIndex(u => u.id === this.currentUser.id);
-            if (idx !== -1) { this.users[idx] = this.currentUser; localStorage.setItem('sip_users', JSON.stringify(this.users)); }
-            this.showProfile = false;
-            alert('Profile updated!');
-          }
-        },
-
-        preFillCheckout() {
-          if (this.currentUser) {
-            this.checkoutForm.name = this.currentUser.name || '';
-            this.checkoutForm.email = this.currentUser.email || '';
-            this.checkoutForm.phone = this.currentUser.phone || '';
-            this.checkoutForm.address = this.currentUser.address || '';
-          }
-        },
-
-        // Cart
+        // Cart Management
         addToCart(product) {
           if (product.stock <= 0) return;
           const existing = this.cart.find(item => item.id === product.id);
           if (existing) {
-            if (existing.quantity < product.stock + existing.quantity) { existing.quantity++; }
-            else { alert('Stock limit reached.'); return; }
+            if (existing.quantity < product.stock + existing.quantity) {
+              existing.quantity++;
+            } else {
+              alert('Cannot add more. Stock limit reached.');
+              return;
+            }
           } else {
             this.cart.push({ ...product, quantity: 1, cartId: Date.now() + Math.random() });
           }
           product.stock--;
-          this.saveCart(); this.saveProducts();
+          this.saveCart();
+          this.saveProducts();
         },
-        removeFromCart(idx) { const item = this.cart[idx]; const product = this.products.find(p => p.id === item.id); if (product) product.stock += item.quantity; this.cart.splice(idx, 1); this.saveCart(); this.saveProducts(); },
-        incrementQuantity(idx) { const item = this.cart[idx]; const product = this.products.find(p => p.id === item.id); if (product && product.stock > 0) { item.quantity++; product.stock--; this.saveCart(); this.saveProducts(); } },
-        decrementQuantity(idx) { const item = this.cart[idx]; if (item.quantity > 1) { const product = this.products.find(p => p.id === item.id); if (product) product.stock++; item.quantity--; this.saveCart(); this.saveProducts(); } },
-        clearCart() { if (confirm('Remove all items?')) { this.cart.forEach(item => { const product = this.products.find(p => p.id === item.id); if (product) product.stock += item.quantity; }); this.cart = []; this.saveCart(); this.saveProducts(); } },
+
+        removeFromCart(idx) {
+          const item = this.cart[idx];
+          const product = this.products.find(p => p.id === item.id);
+          if (product) product.stock += item.quantity;
+          this.cart.splice(idx, 1);
+          this.saveCart();
+          this.saveProducts();
+        },
+
+        incrementQuantity(idx) {
+          const item = this.cart[idx];
+          const product = this.products.find(p => p.id === item.id);
+          if (product && product.stock > 0) {
+            item.quantity++;
+            product.stock--;
+            this.saveCart();
+            this.saveProducts();
+          }
+        },
+
+        decrementQuantity(idx) {
+          const item = this.cart[idx];
+          if (item.quantity > 1) {
+            const product = this.products.find(p => p.id === item.id);
+            if (product) product.stock++;
+            item.quantity--;
+            this.saveCart();
+            this.saveProducts();
+          }
+        },
+
+        clearCart() {
+          if (confirm('Remove all items from cart?')) {
+            this.cart.forEach(item => {
+              const product = this.products.find(p => p.id === item.id);
+              if (product) product.stock += item.quantity;
+            });
+            this.cart = [];
+            this.saveCart();
+            this.saveProducts();
+          }
+        },
+
         saveCart() { localStorage.setItem('sip_cart', JSON.stringify(this.cart)); },
 
         proceedToCheckout() {
           if (!this.currentUser) {
-            this.cartOpen = false; this.authRedirectMessage = 'Please sign in or create an account to checkout.'; this.authMode = 'login'; this.pendingCheckout = true; this.showAuth = true; return;
+            this.cartOpen = false;
+            this.authRedirectMessage = 'Please sign in to continue with checkout.';
+            this.authMode = 'login';
+            this.pendingCheckout = true;
+            this.showAuth = true;
+            return;
           }
           if (this.cart.length === 0) return;
-          this.cartOpen = false; this.showCheckout = true; this.preFillCheckout();
+          this.cartOpen = false;
+          this.showCheckout = true;
         },
-        initiateCheckout() { this.proceedToCheckout(); },
+
+        initiateCheckout() {
+          this.proceedToCheckout();
+        },
 
         processOrder() {
           if (!this.checkoutForm.name || !this.checkoutForm.email || !this.checkoutForm.phone || !this.checkoutForm.address || !this.checkoutForm.paymentMethod) { alert('Fill all fields.'); return; }
-          const order = { id: Date.now(), customerName: this.checkoutForm.name, email: this.checkoutForm.email, phone: this.checkoutForm.phone, address: this.checkoutForm.address, paymentMethod: this.checkoutForm.paymentMethod, paymentStatus: this.checkoutForm.paymentMethod === 'cod' ? 'Paid' : 'Pending', deliveryStatus: 'Pending', items: [...this.cart], total: this.cartGrandTotal, date: new Date().toISOString() };
+          const order = {
+            id: Date.now(), customerName: this.checkoutForm.name, email: this.checkoutForm.email,
+            phone: this.checkoutForm.phone, address: this.checkoutForm.address,
+            paymentMethod: this.checkoutForm.paymentMethod,
+            paymentStatus: this.checkoutForm.paymentMethod === 'cod' ? 'Paid' : 'Pending',
+            deliveryStatus: 'Pending', items: [...this.cart], total: this.cartGrandTotal, date: new Date().toISOString()
+          };
           this.orders.push(order); localStorage.setItem('sip_orders', JSON.stringify(this.orders));
-          this.cart = []; this.saveCart(); this.showCheckout = false; this.recalculateFinancials();
+          this.cart = []; this.saveCart();
+          this.showCheckout = false;
+          this.checkoutForm = { name: '', email: '', phone: '', address: '', paymentMethod: '' };
+          this.recalculateFinancials();
+          alert('Order placed successfully!');
         },
 
-        // Newsletter
         subscribeNewsletter() { if (this.newsletterEmail) { this.newsletterSubscribed = true; this.newsletterEmail = ''; setTimeout(() => this.newsletterSubscribed = false, 5000); } },
-
-        // Admin
         saveProducts() { localStorage.setItem('sip_products', JSON.stringify(this.products)); },
         openAddProductModal() { this.editingProductIndex = null; this.productForm = { name: '', price: '', stock: '', category: this.categories[0], categoryShort: '', description: '', image: '' }; this.showProductModal = true; },
         editProduct(idx) { this.editingProductIndex = idx; const p = this.products[idx]; this.productForm = { name: p.name, price: p.price, stock: p.stock, category: p.category, categoryShort: p.categoryShort, description: p.description, image: p.image }; this.showProductModal = true; },
-        saveProductForm() { const data = { id: this.editingProductIndex !== null ? this.products[this.editingProductIndex].id : Date.now(), name: this.productForm.name, price: Number(this.productForm.price), stock: Number(this.productForm.stock), category: this.productForm.category, categoryShort: this.productForm.categoryShort || this.productForm.category.split(' ')[0], description: this.productForm.description, image: this.productForm.image }; if (this.editingProductIndex !== null) { this.products[this.editingProductIndex] = data; } else { this.products.push(data); } this.saveProducts(); this.showProductModal = false; },
+        saveProductForm() {
+          const data = { id: this.editingProductIndex !== null ? this.products[this.editingProductIndex].id : Date.now(), name: this.productForm.name, price: Number(this.productForm.price), stock: Number(this.productForm.stock), category: this.productForm.category, categoryShort: this.productForm.categoryShort || this.productForm.category.split(' ')[0], description: this.productForm.description, image: this.productForm.image };
+          if (this.editingProductIndex !== null) { this.products[this.editingProductIndex] = data; } else { this.products.push(data); }
+          this.saveProducts(); this.showProductModal = false; this.$nextTick(() => lucide.createIcons());
+        },
         deleteProduct(idx) { if (confirm('Delete permanently?')) { this.products.splice(idx, 1); this.saveProducts(); } },
         recalculateFinancials() { const r = this.orders.reduce((s, o) => s + (o.total || 0), 0); this.financials.grossRevenue = r; this.financials.cogs = Math.round(r * 0.4); this.financials.netProfit = this.financials.grossRevenue - this.financials.cogs - this.financials.opex; },
         approvePayment(id) { const o = this.orders.find(o => o.id === id); if (o) { o.paymentStatus = 'Paid'; localStorage.setItem('sip_orders', JSON.stringify(this.orders)); } },
