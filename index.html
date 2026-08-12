@@ -15,12 +15,12 @@
     * { -webkit-tap-highlight-color: transparent; }
     body { font-family: 'Lato', system-ui, sans-serif; background-color: #faf8f5; scroll-behavior: smooth; overflow-x: hidden; }
     h1, h2, h3, .serif { font-family: 'Playfair Display', Georgia, serif; }
-    .logo-img-header { width: 44px; height: 44px; object-fit: contain; border-radius: 12px; flex-shrink: 0; }
+    .logo-img-header { width: 36px; height: 36px; object-fit: contain; border-radius: 10px; flex-shrink: 0; }
     .logo-img-hero { width: 90px; height: 90px; object-fit: contain; border-radius: 18px; flex-shrink: 0; }
     .logo-img-auth { width: 75px; height: 75px; object-fit: contain; border-radius: 16px; margin: 0 auto; display: block; }
-    .logo-img-sm { width: 44px; height: 44px; object-fit: contain; border-radius: 12px; flex-shrink: 0; }
+    .logo-img-sm { width: 40px; height: 40px; object-fit: contain; border-radius: 10px; flex-shrink: 0; }
     .brand-text { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; color: #5e4b3c; letter-spacing: -0.01em; line-height: 1.1; }
-    .brand-text-header { font-size: 1.1rem; }
+    .brand-text-header { font-size: 0.85rem; }
     .brand-text-hero { font-size: 1.2rem; margin-top: 0.25rem; }
     .logo-placeholder { background: #f3ede7; border: 2px dashed #c9b99a; display: flex; align-items: center; justify-content: center; color: #8b7355; font-size: 0.6rem; text-align: center; flex-shrink: 0; }
     .rustic-card { background: #fefcf8; border: 1px solid #e7dfd4; box-shadow: 0 4px 20px rgba(0,0,0,0.03); transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
@@ -78,7 +78,8 @@
     @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     .timeline-dot { width: 10px; height: 10px; border-radius: 50%; background: #5e4b3c; display: inline-block; margin-right: 8px; }
     .timeline-dot.active { background: #059669; animation: pulse 2s infinite; }
-    @media (max-width: 480px) { .logo-img-header { width: 36px; height: 36px; } .brand-text-header { font-size: 0.9rem; } .logo-img-hero { width: 70px; height: 70px; } }
+    @media (min-width: 640px) { .logo-img-header { width: 44px; height: 44px; border-radius: 12px; } .brand-text-header { font-size: 1.1rem; } .logo-img-sm { width: 44px; height: 44px; border-radius: 12px; } }
+    @media (max-width: 480px) { .logo-img-hero { width: 70px; height: 70px; } }
     @media (max-width: 768px) { .admin-sidebar { display: none; } }
     @media (min-width: 769px) { .admin-mobile-nav { display: none; } }
     .scrollbar-hide::-webkit-scrollbar { display: none; }
@@ -89,12 +90,13 @@
     .fade-in-up { animation: fadeInUp 0.7s ease forwards; opacity: 0; }
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     .hero-pattern { background-image: radial-gradient(#d9ccbb 1px, transparent 1px); background-size: 30px 30px; }
-    .nav-item { transition: all 0.3s ease; color: #6b5e4f; position: relative; font-size: 0.875rem; letter-spacing: 0.02em; }
+    .nav-item { transition: all 0.3s ease; color: #6b5e4f; position: relative; font-size: 0.8rem; letter-spacing: 0.02em; white-space: nowrap; }
     .nav-item:hover { color: #5e4b3c; }
     .nav-item::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1.5px; background: #b8977e; transition: width 0.3s ease; }
     .nav-item:hover::after { width: 100%; }
     .nav-item-active { color: #5e4b3c; font-weight: 500; }
     .nav-item-active::after { width: 100%; }
+    @media (min-width: 640px) { .nav-item { font-size: 0.875rem; } }
     .sale-badge { background: #dc2626; color: white; font-size: 0.65rem; padding: 0.2rem 0.6rem; border-radius: 999px; font-weight: 700; }
     .set-badge { background: #7c3aed; color: white; font-size: 0.65rem; padding: 0.2rem 0.6rem; border-radius: 999px; font-weight: 700; }
   </style>
@@ -130,35 +132,53 @@
     </div>
   </div>
 
-  <!-- ==================== HEADER ==================== -->
+  <!-- ==================== HEADER (FIXED FOR SMALL SCREENS) ==================== -->
   <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-lg border-b border-[#e0d5c7]/60 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-      <div class="flex items-center gap-2 sm:gap-3">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 h-14 sm:h-20 flex items-center justify-between">
+      <div class="flex items-center gap-1.5 sm:gap-3">
         <img src="jcayelogo1.png" alt="JCaye's Sip Society" class="logo-img-header" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <div class="logo-img-header logo-placeholder" style="display:none;">Logo</div>
-        <span class="brand-text brand-text-header hidden sm:inline">JCaye's Sip Society</span>
+        <span class="brand-text brand-text-header">JCaye's Sip Society</span>
       </div>
       <div class="flex items-center gap-0.5 sm:gap-2">
-        <template x-if="!currentUser"><button @click="showAuth = true; authMode = 'login'; authRedirectMessage = ''" class="nav-item px-2 sm:px-3 py-2 rounded-lg hidden sm:inline-flex items-center gap-1.5"><i data-lucide="log-in" class="w-4 h-4"></i><span>Sign In</span></button></template>
+        <!-- Sign In button - NOW VISIBLE ON ALL SCREEN SIZES -->
+        <template x-if="!currentUser">
+          <button @click="showAuth = true; authMode = 'login'; authRedirectMessage = ''" class="nav-item px-1.5 sm:px-3 py-2 rounded-lg inline-flex items-center gap-1">
+            <i data-lucide="log-in" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+            <span class="text-xs sm:text-sm">Sign In</span>
+          </button>
+        </template>
         <template x-if="currentUser && currentUser.role === 'customer'">
-          <div class="flex items-center gap-1 sm:gap-3">
-            <button @click="customerTab = 'profile'; showProfileEdit = false" class="nav-item px-2 sm:px-3 py-2 rounded-lg flex items-center gap-1.5" :class="customerTab === 'profile' ? 'nav-item-active' : ''"><i data-lucide="user" class="w-4 h-4"></i><span class="hidden sm:inline">Profile</span></button>
-            <button @click="customerTab = 'orders'" class="nav-item px-2 sm:px-3 py-2 rounded-lg flex items-center gap-1.5" :class="customerTab === 'orders' ? 'nav-item-active' : ''"><i data-lucide="package" class="w-4 h-4"></i><span class="hidden sm:inline">Orders</span></button>
-            <span class="hidden sm:block text-xs text-gray-400 mx-1">|</span>
-            <span class="hidden sm:inline text-xs text-gray-500 font-light" x-text="currentUser.name"></span>
-            <button @click="logout" class="nav-item px-2 py-2 rounded-lg flex items-center gap-1 text-rose-700/80 hover:text-rose-800"><i data-lucide="log-out" class="w-4 h-4"></i><span class="hidden sm:inline text-xs">Logout</span></button>
+          <div class="flex items-center gap-0.5 sm:gap-3">
+            <button @click="customerTab = 'profile'; showProfileEdit = false" class="nav-item px-1.5 sm:px-3 py-2 rounded-lg flex items-center gap-1" :class="customerTab === 'profile' ? 'nav-item-active' : ''">
+              <i data-lucide="user" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+              <span class="hidden sm:inline text-xs sm:text-sm">Profile</span>
+            </button>
+            <button @click="customerTab = 'orders'" class="nav-item px-1.5 sm:px-3 py-2 rounded-lg flex items-center gap-1" :class="customerTab === 'orders' ? 'nav-item-active' : ''">
+              <i data-lucide="package" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+              <span class="hidden sm:inline text-xs sm:text-sm">Orders</span>
+            </button>
+            <span class="hidden lg:block text-xs text-gray-400 mx-1">|</span>
+            <span class="hidden lg:inline text-xs text-gray-500 font-light" x-text="currentUser.name"></span>
+            <button @click="logout" class="nav-item px-1.5 sm:px-2 py-2 rounded-lg flex items-center gap-1 text-rose-700/80 hover:text-rose-800">
+              <i data-lucide="log-out" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+              <span class="hidden sm:inline text-xs">Logout</span>
+            </button>
           </div>
         </template>
         <template x-if="currentUser && currentUser.role === 'admin'">
-          <div class="flex items-center gap-1 sm:gap-3">
-            <span class="hidden sm:inline text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full font-medium">Admin</span>
-            <span class="hidden sm:inline text-xs text-gray-500 font-light" x-text="currentUser.name"></span>
-            <button @click="logout" class="nav-item px-2 py-2 rounded-lg flex items-center gap-1 text-rose-700/80 hover:text-rose-800"><i data-lucide="log-out" class="w-4 h-4"></i><span class="hidden sm:inline text-xs">Logout</span></button>
+          <div class="flex items-center gap-0.5 sm:gap-3">
+            <span class="hidden sm:inline text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-medium">Admin</span>
+            <span class="hidden lg:inline text-xs text-gray-500 font-light" x-text="currentUser.name"></span>
+            <button @click="logout" class="nav-item px-1.5 sm:px-2 py-2 rounded-lg flex items-center gap-1 text-rose-700/80 hover:text-rose-800">
+              <i data-lucide="log-out" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+              <span class="hidden sm:inline text-xs">Logout</span>
+            </button>
           </div>
         </template>
-        <button x-show="!currentUser || currentUser.role !== 'admin'" @click="cartOpen = !cartOpen" class="relative p-2 hover:bg-gray-100/80 rounded-lg transition ml-1">
-          <i data-lucide="shopping-cart" class="w-5 h-5 text-[#5e4b3c]"></i>
-          <span x-show="cart.length > 0" class="absolute -top-1 -right-1 bg-rose-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold shadow-sm" x-text="cartItemCount"></span>
+        <button x-show="!currentUser || currentUser.role !== 'admin'" @click="cartOpen = !cartOpen" class="relative p-2 hover:bg-gray-100/80 rounded-lg transition ml-0.5">
+          <i data-lucide="shopping-cart" class="w-4 h-4 sm:w-5 sm:h-5 text-[#5e4b3c]"></i>
+          <span x-show="cart.length > 0" class="absolute -top-1 -right-1 bg-rose-600 text-white text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center font-bold shadow-sm" x-text="cartItemCount"></span>
         </button>
       </div>
     </div>
@@ -166,7 +186,8 @@
 
   <!-- ==================== CUSTOMER VIEW ==================== -->
   <div x-show="!currentUser || currentUser.role !== 'admin'" x-cloak class="w-full">
-    <!-- PROFILE -->
+
+    <!-- CUSTOMER PROFILE PAGE -->
     <div x-show="currentUser && currentUser.role === 'customer' && customerTab === 'profile'" class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800 mb-6">My Profile</h2>
       <div class="bg-white p-6 sm:p-8 rounded-2xl rustic-card">
@@ -193,20 +214,118 @@
       </div>
       <button @click="customerTab = 'shop'" class="mt-6 btn-outline px-6 py-2 rounded-xl text-sm">← Back to Shop</button>
     </div>
-    <!-- ORDERS -->
+
+    <!-- CUSTOMER ORDERS PAGE -->
     <div x-show="currentUser && currentUser.role === 'customer' && customerTab === 'orders'" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="flex items-center justify-between mb-6"><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">My Orders</h2><span class="text-xs text-gray-400" x-text="customerOrders.length + ' order(s)'"></span></div>
-      <div class="space-y-4"><template x-for="o in customerOrders" :key="o.id"><div class="bg-white p-4 sm:p-6 rounded-2xl rustic-card"><div class="flex flex-col sm:flex-row justify-between gap-4 mb-4"><div><p class="text-xs text-gray-400">Order #<span x-text="o.id"></span></p><p class="text-xs text-gray-400 mt-1">📅 <span x-text="new Date(o.date).toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'})"></span></p></div><div class="text-left sm:text-right"><p class="text-2xl font-bold text-[#5e4b3c]">₱<span x-text="o.total?.toLocaleString() || 0"></span></p><span class="status-badge" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span></div></div><div class="bg-gray-50 p-4 rounded-xl mb-3"><p class="text-xs font-semibold text-gray-600 mb-2">📦 Order Items:</p><template x-for="item in o.items" :key="item.cartId || item.id"><div class="flex justify-between text-sm py-1.5 border-b border-gray-100 last:border-0"><span x-text="item.name + ' ×' + item.quantity"></span><span class="text-gray-600 font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template></div><div class="flex items-center gap-3 text-xs text-gray-500 mb-3"><span class="flex items-center gap-1">💳 Payment: <span class="font-semibold text-gray-700" x-text="o.paymentMethod?.toUpperCase()"></span></span><span class="px-2 py-0.5 rounded-full text-xs font-medium" :class="o.paymentStatus === 'Paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'" x-text="o.paymentStatus"></span></div><div class="flex flex-wrap gap-2 pt-3 border-t border-gray-100"><button x-show="canCancelOrder(o)" @click="cancelOrder(o.id)" class="btn-danger px-4 py-2 rounded-lg text-xs">✕ Cancel Order</button><button x-show="o.deliveryStatus === 'Delivered' && !hasReviewed(o.id)" @click="openReviewModal(o)" class="btn-accent px-4 py-2 rounded-lg text-xs">⭐ Write a Review</button><span x-show="o.deliveryStatus === 'Delivered' && hasReviewed(o.id)" class="text-xs text-green-600 font-medium flex items-center gap-1">✅ Reviewed</span></div></div></template><div x-show="customerOrders.length === 0" class="text-center text-gray-400 py-16 bg-white rounded-2xl rustic-card"><i data-lucide="package-open" class="w-16 h-16 mx-auto mb-4 opacity-30"></i><p class="text-lg font-medium mb-1">No orders yet</p><p class="text-sm">Start shopping to see your orders here.</p></div></div>
+      <div class="space-y-4">
+        <template x-for="o in customerOrders" :key="o.id">
+          <div class="bg-white p-4 sm:p-6 rounded-2xl rustic-card">
+            <div class="flex flex-col sm:flex-row justify-between gap-4 mb-4">
+              <div><p class="text-xs text-gray-400">Order #<span x-text="o.id"></span></p><p class="text-xs text-gray-400 mt-1">📅 <span x-text="new Date(o.date).toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'})"></span></p></div>
+              <div class="text-left sm:text-right"><p class="text-2xl font-bold text-[#5e4b3c]">₱<span x-text="o.total?.toLocaleString() || 0"></span></p><span class="status-badge" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span></div>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-xl mb-3"><p class="text-xs font-semibold text-gray-600 mb-2">📦 Order Items:</p>
+              <template x-for="item in o.items" :key="item.cartId || item.id"><div class="flex justify-between text-sm py-1.5 border-b border-gray-100 last:border-0"><span x-text="item.name + ' ×' + item.quantity"></span><span class="text-gray-600 font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template>
+            </div>
+            <div class="flex items-center gap-3 text-xs text-gray-500 mb-3"><span class="flex items-center gap-1">💳 Payment: <span class="font-semibold text-gray-700" x-text="o.paymentMethod?.toUpperCase()"></span></span><span class="px-2 py-0.5 rounded-full text-xs font-medium" :class="o.paymentStatus === 'Paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'" x-text="o.paymentStatus"></span></div>
+            <div class="flex flex-wrap gap-2 pt-3 border-t border-gray-100">
+              <button x-show="canCancelOrder(o)" @click="cancelOrder(o.id)" class="btn-danger px-4 py-2 rounded-lg text-xs">✕ Cancel Order</button>
+              <button x-show="o.deliveryStatus === 'Delivered' && !hasReviewed(o.id)" @click="openReviewModal(o)" class="btn-accent px-4 py-2 rounded-lg text-xs">⭐ Write a Review</button>
+              <span x-show="o.deliveryStatus === 'Delivered' && hasReviewed(o.id)" class="text-xs text-green-600 font-medium flex items-center gap-1">✅ Reviewed</span>
+            </div>
+          </div>
+        </template>
+        <div x-show="customerOrders.length === 0" class="text-center text-gray-400 py-16 bg-white rounded-2xl rustic-card">
+          <i data-lucide="package-open" class="w-16 h-16 mx-auto mb-4 opacity-30"></i>
+          <p class="text-lg font-medium mb-1">No orders yet</p>
+          <p class="text-sm">Start shopping to see your orders here.</p>
+        </div>
+      </div>
       <button @click="customerTab = 'shop'" class="mt-6 btn-outline px-6 py-2 rounded-xl text-sm">← Back to Shop</button>
     </div>
+
     <!-- REVIEW MODAL -->
-    <div x-show="showReviewModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" x-cloak><div class="bg-white rounded-2xl max-w-md w-full p-6 rustic-card modal-enter"><h3 class="text-xl font-bold serif mb-4">Write a Review</h3><p class="text-sm text-gray-600 mb-3">Order #<span x-text="reviewOrder?.id"></span></p><div class="mb-4"><label class="input-label">Rating</label><div class="flex gap-1 text-3xl"><template x-for="i in 5"><button @click="reviewRating = i" :class="i <= reviewRating ? 'text-yellow-500' : 'text-gray-300'" class="transition hover:scale-110">★</button></template></div></div><div class="mb-4"><label class="input-label">Your Review</label><textarea x-model="reviewText" class="input-field text-sm" rows="3" placeholder="Share your experience..."></textarea></div><div class="flex gap-3"><button @click="submitReview" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1">Submit Review</button><button @click="showReviewModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div></div></div>
-    <!-- SHOP -->
+    <div x-show="showReviewModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" x-cloak>
+      <div class="bg-white rounded-2xl max-w-md w-full p-6 rustic-card modal-enter">
+        <h3 class="text-xl font-bold serif mb-4">Write a Review</h3>
+        <p class="text-sm text-gray-600 mb-3">Order #<span x-text="reviewOrder?.id"></span></p>
+        <div class="mb-4"><label class="input-label">Rating</label><div class="flex gap-1 text-3xl"><template x-for="i in 5"><button @click="reviewRating = i" :class="i <= reviewRating ? 'text-yellow-500' : 'text-gray-300'" class="transition hover:scale-110">★</button></template></div></div>
+        <div class="mb-4"><label class="input-label">Your Review</label><textarea x-model="reviewText" class="input-field text-sm" rows="3" placeholder="Share your experience..."></textarea></div>
+        <div class="flex gap-3"><button @click="submitReview" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1">Submit Review</button><button @click="showReviewModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div>
+      </div>
+    </div>
+
+    <!-- MAIN SHOP VIEW -->
     <div x-show="!currentUser || currentUser.role !== 'customer' || customerTab === 'shop'">
-      <section class="relative hero-pattern bg-gradient-to-b from-[#faf7f2] to-[#f2ebe1] py-10 sm:py-14 md:py-20 px-4 text-center border-b border-[#d9ccbb]"><div class="fade-in-up max-w-4xl mx-auto"><div class="flex flex-col items-center mb-3 sm:mb-4"><img src="jcayelogo1.png" alt="JCaye's Sip Society" class="logo-img-hero" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><p class="brand-text brand-text-hero mt-2">JCaye's Sip Society</p></div><h1 class="text-2xl sm:text-3xl md:text-5xl font-bold serif text-[#4a3728] leading-tight mt-1">Mugs That Tell Your Story</h1><p class="mt-3 sm:mt-4 text-sm sm:text-base text-gray-500 max-w-xl mx-auto px-2 font-light">Handcrafted ceramic companions for slow mornings, deep conversations, and creative spirits.</p><div class="mt-5 sm:mt-7 flex justify-center gap-3 sm:gap-4 flex-wrap"><a href="#collection" class="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 font-semibold tracking-wide inline-block text-sm shadow-lg shadow-[#5e4b3c]/20">Explore Collection</a><a href="#reviews" class="border-2 border-[#5e4b3c] text-[#5e4b3c] px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-semibold hover:bg-[#5e4b3c] hover:text-white transition text-sm">Customer Reviews</a></div></div></section>
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8"><div class="flex flex-wrap items-center justify-center gap-1 sm:gap-2 overflow-x-auto scrollbar-hide pb-1"><span class="text-xs text-gray-400 uppercase tracking-widest mr-2 sm:mr-4 font-light hidden sm:inline">Filter</span><template x-for="(cat, index) in categories" :key="cat"><div class="flex items-center"><button @click="selectedCategory = cat" class="category-pill" :class="selectedCategory === cat ? 'active' : ''" x-text="cat"></button><span class="category-divider mx-1 sm:mx-2" x-show="index < categories.length - 1">·</span></div></template><span class="category-divider mx-1 sm:mx-2">·</span><button @click="selectedCategory = 'All'" class="category-pill" :class="selectedCategory === 'All' ? 'active' : ''">All Mugs</button></div></div>
-      <div id="collection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8"><h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-gray-800 mb-2 sm:mb-4">The Curated Workshop</h2><p class="text-xs sm:text-sm text-gray-400 mb-4 sm:mb-8 font-light tracking-wide uppercase" x-text="selectedCategory === 'All' ? 'All Collections' : selectedCategory"></p><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8"><template x-for="(product, index) in filteredProducts" :key="product.id"><div class="rustic-card rounded-2xl flex flex-col fade-in-up mug-card cursor-pointer group overflow-hidden" :style="'animation-delay: ' + (index * 0.1) + 's'" @click="openProductModal(product)"><div class="relative h-56 sm:h-64 lg:h-72 bg-gray-100 overflow-hidden"><img :src="product.image" alt="mug" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"><div class="mug-overlay"><div class="mug-description text-white"><p class="text-sm sm:text-base font-semibold mb-1" x-text="product.name"></p><p class="text-xs sm:text-sm opacity-90 leading-relaxed line-clamp-2" x-text="product.description"></p><p class="text-xs mt-2 opacity-75">Click for details</p></div></div><span x-show="product.stock === 0" class="absolute top-3 left-3 bg-red-500 text-white text-xs px-2.5 py-1 rounded-full z-10 shadow">Out of stock</span><span x-show="product.stock > 0 && product.stock <= 3" class="absolute top-3 left-3 bg-amber-500 text-white text-xs px-2.5 py-1 rounded-full z-10 shadow">Only <span x-text="product.stock"></span> left</span><span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-xs px-2.5 py-1 rounded-full text-gray-600 z-10 shadow font-light tracking-wide uppercase" x-text="product.categoryShort"></span><span x-show="product.onSale && product.salePercent > 0" class="sale-badge absolute bottom-3 left-3 z-10 shadow">-<span x-text="product.salePercent"></span>% SALE</span><span x-show="product.isSet && product.setPrice > 0" class="set-badge absolute bottom-3 right-3 z-10 shadow">SET</span></div><div class="p-4 sm:p-5 flex flex-col flex-1"><h3 class="font-semibold text-base sm:text-lg text-gray-800" x-text="product.name"></h3><p class="text-xs sm:text-sm text-gray-400 mt-1 mb-3 flex-1 line-clamp-2 font-light" x-text="product.description"></p><div class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100"><div><div class="flex items-center gap-2"><p class="text-lg sm:text-xl font-bold text-[#5e4b3c]">₱<span x-text="getEffectivePrice(product).toLocaleString()"></span></p><span x-show="product.onSale && product.salePercent > 0" class="text-xs text-gray-400 line-through">₱<span x-text="product.price.toLocaleString()"></span></span></div><p class="text-xs text-gray-400">Stock: <span x-text="product.stock"></span></p><p x-show="product.isSet && product.setPrice > 0" class="text-xs text-purple-600 font-medium">Set price: ₱<span x-text="product.setPrice.toLocaleString()"></span></p></div><button @click.stop="addToCart(product)" :disabled="product.stock === 0" class="btn-accent px-4 sm:px-5 py-2 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#b8977e]/30"><span x-show="!isInCart(product.id)">Add to cart</span><span x-show="isInCart(product.id)" class="flex items-center gap-1">✓ In Cart</span></button></div></div></div></template></div></div>
-      <div x-show="selectedProduct" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" x-cloak @click.self="selectedProduct = null"><div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto rustic-card modal-enter" @click.stop><div class="relative"><button @click="selectedProduct = null" class="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition"><i data-lucide="x" class="w-5 h-5 text-gray-700"></i></button><div class="grid grid-cols-1 md:grid-cols-2"><div class="bg-gray-50 flex items-center justify-center p-8 md:p-12 rounded-l-2xl relative"><img :src="selectedProduct.image" :alt="selectedProduct.name" class="w-full h-auto max-h-96 object-contain"><span x-show="selectedProduct.onSale && selectedProduct.salePercent > 0" class="sale-badge absolute top-4 left-4 text-sm px-3 py-1">-<span x-text="selectedProduct.salePercent"></span>% OFF</span></div><div class="p-6 md:p-8 flex flex-col"><div class="flex-1"><div class="flex items-center gap-2 mb-3 flex-wrap"><span class="text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-medium" x-text="selectedProduct.categoryShort"></span><span x-show="selectedProduct.stock > 0 && selectedProduct.stock <= 3" class="text-xs bg-red-100 text-red-800 px-3 py-1 rounded-full font-medium">Only <span x-text="selectedProduct.stock"></span> left</span><span x-show="selectedProduct.stock === 0" class="text-xs bg-red-500 text-white px-3 py-1 rounded-full font-medium">Out of Stock</span><span x-show="selectedProduct.stock > 3" class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-medium">In Stock</span><span x-show="selectedProduct.isSet" class="set-badge text-xs px-3 py-1">MUG SET</span></div><h2 class="text-2xl md:text-3xl font-bold serif text-gray-800 mb-2" x-text="selectedProduct.name"></h2><div class="flex items-center gap-3 mb-4"><p class="text-3xl font-bold text-[#5e4b3c]">₱<span x-text="getEffectivePrice(selectedProduct).toLocaleString()"></span></p><span x-show="selectedProduct.onSale && selectedProduct.salePercent > 0" class="text-lg text-gray-400 line-through">₱<span x-text="selectedProduct.price.toLocaleString()"></span></span></div><div x-show="selectedProduct.isSet && selectedProduct.setPrice > 0" class="bg-purple-50 p-3 rounded-xl mb-4 border border-purple-200"><p class="text-sm font-semibold text-purple-800">📦 Mug Set Price: ₱<span x-text="selectedProduct.setPrice.toLocaleString()"></span></p><p class="text-xs text-purple-600 mt-1">Individual price: ₱<span x-text="selectedProduct.price.toLocaleString()"></span></p></div><div class="border-t border-gray-100 pt-4 mb-4"><h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Description</h3><p class="text-gray-600 leading-relaxed" x-text="selectedProduct.description"></p></div><div class="border-t border-gray-100 pt-4 mb-6"><h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Product Details</h3><ul class="space-y-2.5 text-sm text-gray-500"><li class="flex items-center gap-2"><i data-lucide="tag" class="w-4 h-4 text-[#b8977e]"></i>Category: <span class="text-gray-700 font-medium" x-text="selectedProduct.category"></span></li><li class="flex items-center gap-2"><i data-lucide="package" class="w-4 h-4 text-[#b8977e]"></i>Stock Available: <span class="text-gray-700 font-medium" x-text="selectedProduct.stock"></span></li><li class="flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4 text-[#b8977e]"></i>Free Shipping: <span class="text-green-600 font-medium">On orders over ₱1,500</span></li></ul></div></div><div class="border-t border-gray-100 pt-6"><div class="flex items-center gap-3"><button @click="addToCartFromModal(selectedProduct)" :disabled="selectedProduct.stock === 0" class="flex-1 btn-primary py-3.5 rounded-xl font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#5e4b3c]/20"><span x-show="!isInCart(selectedProduct.id)">🛒 Add to Cart</span><span x-show="isInCart(selectedProduct.id)">✓ Already in Cart</span></button><button @click="selectedProduct = null" class="btn-outline px-6 py-3.5 rounded-xl text-sm font-medium">Continue Shopping</button></div></div></div></div></div></div></div>
+      <section class="relative hero-pattern bg-gradient-to-b from-[#faf7f2] to-[#f2ebe1] py-10 sm:py-14 md:py-20 px-4 text-center border-b border-[#d9ccbb]">
+        <div class="fade-in-up max-w-4xl mx-auto">
+          <div class="flex flex-col items-center mb-3 sm:mb-4">
+            <img src="jcayelogo1.png" alt="JCaye's Sip Society" class="logo-img-hero" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <p class="brand-text brand-text-hero mt-2">JCaye's Sip Society</p>
+          </div>
+          <h1 class="text-2xl sm:text-3xl md:text-5xl font-bold serif text-[#4a3728] leading-tight mt-1">Mugs That Tell Your Story</h1>
+          <p class="mt-3 sm:mt-4 text-sm sm:text-base text-gray-500 max-w-xl mx-auto px-2 font-light">Handcrafted ceramic companions for slow mornings, deep conversations, and creative spirits.</p>
+          <div class="mt-5 sm:mt-7 flex justify-center gap-3 sm:gap-4 flex-wrap">
+            <a href="#collection" class="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 font-semibold tracking-wide inline-block text-sm shadow-lg shadow-[#5e4b3c]/20">Explore Collection</a>
+            <a href="#reviews" class="border-2 border-[#5e4b3c] text-[#5e4b3c] px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-semibold hover:bg-[#5e4b3c] hover:text-white transition text-sm">Customer Reviews</a>
+          </div>
+        </div>
+      </section>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div class="flex flex-wrap items-center justify-center gap-1 sm:gap-2 overflow-x-auto scrollbar-hide pb-1">
+          <span class="text-xs text-gray-400 uppercase tracking-widest mr-2 sm:mr-4 font-light hidden sm:inline">Filter</span>
+          <template x-for="(cat, index) in categories" :key="cat"><div class="flex items-center"><button @click="selectedCategory = cat" class="category-pill" :class="selectedCategory === cat ? 'active' : ''" x-text="cat"></button><span class="category-divider mx-1 sm:mx-2" x-show="index < categories.length - 1">·</span></div></template>
+          <span class="category-divider mx-1 sm:mx-2">·</span><button @click="selectedCategory = 'All'" class="category-pill" :class="selectedCategory === 'All' ? 'active' : ''">All Mugs</button>
+        </div>
+      </div>
+      <div id="collection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+        <h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-gray-800 mb-2 sm:mb-4">The Curated Workshop</h2>
+        <p class="text-xs sm:text-sm text-gray-400 mb-4 sm:mb-8 font-light tracking-wide uppercase" x-text="selectedCategory === 'All' ? 'All Collections' : selectedCategory"></p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
+          <template x-for="(product, index) in filteredProducts" :key="product.id">
+            <div class="rustic-card rounded-2xl flex flex-col fade-in-up mug-card cursor-pointer group overflow-hidden" :style="'animation-delay: ' + (index * 0.1) + 's'" @click="openProductModal(product)">
+              <div class="relative h-56 sm:h-64 lg:h-72 bg-gray-100 overflow-hidden">
+                <img :src="product.image" alt="mug" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105">
+                <div class="mug-overlay"><div class="mug-description text-white"><p class="text-sm sm:text-base font-semibold mb-1" x-text="product.name"></p><p class="text-xs sm:text-sm opacity-90 leading-relaxed line-clamp-2" x-text="product.description"></p><p class="text-xs mt-2 opacity-75">Click for details</p></div></div>
+                <span x-show="product.stock === 0" class="absolute top-3 left-3 bg-red-500 text-white text-xs px-2.5 py-1 rounded-full z-10 shadow">Out of stock</span>
+                <span x-show="product.stock > 0 && product.stock <= 3" class="absolute top-3 left-3 bg-amber-500 text-white text-xs px-2.5 py-1 rounded-full z-10 shadow">Only <span x-text="product.stock"></span> left</span>
+                <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-xs px-2.5 py-1 rounded-full text-gray-600 z-10 shadow font-light tracking-wide uppercase" x-text="product.categoryShort"></span>
+                <span x-show="product.onSale && product.salePercent > 0" class="sale-badge absolute bottom-3 left-3 z-10 shadow">-<span x-text="product.salePercent"></span>% SALE</span>
+                <span x-show="product.isSet && product.setPrice > 0" class="set-badge absolute bottom-3 right-3 z-10 shadow">SET</span>
+              </div>
+              <div class="p-4 sm:p-5 flex flex-col flex-1">
+                <h3 class="font-semibold text-base sm:text-lg text-gray-800" x-text="product.name"></h3>
+                <p class="text-xs sm:text-sm text-gray-400 mt-1 mb-3 flex-1 line-clamp-2 font-light" x-text="product.description"></p>
+                <div class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100">
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <p class="text-lg sm:text-xl font-bold text-[#5e4b3c]">₱<span x-text="getEffectivePrice(product).toLocaleString()"></span></p>
+                      <span x-show="product.onSale && product.salePercent > 0" class="text-xs text-gray-400 line-through">₱<span x-text="product.price.toLocaleString()"></span></span>
+                    </div>
+                    <p class="text-xs text-gray-400">Stock: <span x-text="product.stock"></span></p>
+                    <p x-show="product.isSet && product.setPrice > 0" class="text-xs text-purple-600 font-medium">Set price: ₱<span x-text="product.setPrice.toLocaleString()"></span></p>
+                  </div>
+                  <button @click.stop="addToCart(product)" :disabled="product.stock === 0" class="btn-accent px-4 sm:px-5 py-2 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#b8977e]/30"><span x-show="!isInCart(product.id)">Add to cart</span><span x-show="isInCart(product.id)" class="flex items-center gap-1">✓ In Cart</span></button>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+      <div x-show="selectedProduct" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" x-cloak @click.self="selectedProduct = null">
+        <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto rustic-card modal-enter" @click.stop>
+          <div class="relative"><button @click="selectedProduct = null" class="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition"><i data-lucide="x" class="w-5 h-5 text-gray-700"></i></button>
+            <div class="grid grid-cols-1 md:grid-cols-2">
+              <div class="bg-gray-50 flex items-center justify-center p-8 md:p-12 rounded-l-2xl relative">
+                <img :src="selectedProduct.image" :alt="selectedProduct.name" class="w-full h-auto max-h-96 object-contain">
+                <span x-show="selectedProduct.onSale && selectedProduct.salePercent > 0" class="sale-badge absolute top-4 left-4 text-sm px-3 py-1">-<span x-text="selectedProduct.salePercent"></span>% OFF</span>
+              </div>
+              <div class="p-6 md:p-8 flex flex-col"><div class="flex-1"><div class="flex items-center gap-2 mb-3 flex-wrap"><span class="text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-medium" x-text="selectedProduct.categoryShort"></span><span x-show="selectedProduct.stock > 0 && selectedProduct.stock <= 3" class="text-xs bg-red-100 text-red-800 px-3 py-1 rounded-full font-medium">Only <span x-text="selectedProduct.stock"></span> left</span><span x-show="selectedProduct.stock === 0" class="text-xs bg-red-500 text-white px-3 py-1 rounded-full font-medium">Out of Stock</span><span x-show="selectedProduct.stock > 3" class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-medium">In Stock</span><span x-show="selectedProduct.isSet" class="set-badge text-xs px-3 py-1">MUG SET</span></div><h2 class="text-2xl md:text-3xl font-bold serif text-gray-800 mb-2" x-text="selectedProduct.name"></h2><div class="flex items-center gap-3 mb-4"><p class="text-3xl font-bold text-[#5e4b3c]">₱<span x-text="getEffectivePrice(selectedProduct).toLocaleString()"></span></p><span x-show="selectedProduct.onSale && selectedProduct.salePercent > 0" class="text-lg text-gray-400 line-through">₱<span x-text="selectedProduct.price.toLocaleString()"></span></span></div><div x-show="selectedProduct.isSet && selectedProduct.setPrice > 0" class="bg-purple-50 p-3 rounded-xl mb-4 border border-purple-200"><p class="text-sm font-semibold text-purple-800">📦 Mug Set Price: ₱<span x-text="selectedProduct.setPrice.toLocaleString()"></span></p><p class="text-xs text-purple-600 mt-1">Individual price: ₱<span x-text="selectedProduct.price.toLocaleString()"></span></p></div><div class="border-t border-gray-100 pt-4 mb-4"><h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Description</h3><p class="text-gray-600 leading-relaxed" x-text="selectedProduct.description"></p></div><div class="border-t border-gray-100 pt-4 mb-6"><h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Product Details</h3><ul class="space-y-2.5 text-sm text-gray-500"><li class="flex items-center gap-2"><i data-lucide="tag" class="w-4 h-4 text-[#b8977e]"></i>Category: <span class="text-gray-700 font-medium" x-text="selectedProduct.category"></span></li><li class="flex items-center gap-2"><i data-lucide="package" class="w-4 h-4 text-[#b8977e]"></i>Stock Available: <span class="text-gray-700 font-medium" x-text="selectedProduct.stock"></span></li><li class="flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4 text-[#b8977e]"></i>Free Shipping: <span class="text-green-600 font-medium">On orders over ₱1,500</span></li></ul></div></div><div class="border-t border-gray-100 pt-6"><div class="flex items-center gap-3"><button @click="addToCartFromModal(selectedProduct)" :disabled="selectedProduct.stock === 0" class="flex-1 btn-primary py-3.5 rounded-xl font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#5e4b3c]/20"><span x-show="!isInCart(selectedProduct.id)">🛒 Add to Cart</span><span x-show="isInCart(selectedProduct.id)">✓ Already in Cart</span></button><button @click="selectedProduct = null" class="btn-outline px-6 py-3.5 rounded-xl text-sm font-medium">Continue Shopping</button></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div id="reviews" class="bg-[#faf7f2] border-t border-b border-[#e7dfd4] py-10 sm:py-14 mt-8"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-gray-800 mb-8 text-center">What Our Customers Say</h2><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"><template x-for="review in approvedReviews" :key="review.id"><div class="bg-white rounded-2xl p-6 rustic-card"><div class="flex items-center gap-1 mb-3"><template x-for="i in 5"><span class="text-lg" :class="i <= review.rating ? 'text-yellow-500' : 'text-gray-200'">★</span></template></div><p class="text-sm text-gray-600 mb-4 leading-relaxed italic" x-text="'\"' + review.text + '\"'"></p><div class="flex items-center justify-between text-xs text-gray-400 pt-3 border-t border-gray-50"><span class="font-medium text-gray-600" x-text="review.customerName"></span><span x-text="new Date(review.date).toLocaleDateString('en-PH', {month:'short', day:'numeric', year:'numeric'})"></span></div></div></template><div x-show="approvedReviews.length === 0" class="col-span-full text-center text-gray-400 py-12 bg-white rounded-2xl rustic-card"><i data-lucide="message-circle" class="w-12 h-12 mx-auto mb-3 opacity-30"></i><p class="text-lg font-medium mb-1">No reviews yet</p><p class="text-sm">Be the first to share your experience!</p></div></div></div></div>
       <div id="newsletter" class="bg-[#f3ede7] border-b border-[#d9ccbb] py-10 sm:py-14 px-4"><div class="max-w-2xl mx-auto text-center"><h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-[#4a3728]">The Morning Pour</h2><p class="text-gray-500 mt-2 text-sm sm:text-base font-light">Stories, new glazes, and exclusive discounts — delivered weekly.</p><form @submit.prevent="subscribeNewsletter" class="mt-5 sm:mt-7 flex flex-col sm:flex-row gap-3 justify-center"><input type="email" required x-model="newsletterEmail" placeholder="your@email.com" class="input-field max-w-xs mx-auto sm:mx-0 text-sm"><button type="submit" class="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 text-sm shadow-lg shadow-[#5e4b3c]/20">Subscribe</button></form><p x-show="newsletterSubscribed" class="text-green-700 mt-3 text-sm font-medium">✨ You're in! Welcome to the society.</p></div></div>
       <div x-show="cartOpen" class="fixed inset-0 z-40 flex justify-end" x-cloak><div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="cartOpen = false"></div><div class="relative w-full max-w-lg bg-white h-full shadow-2xl flex flex-col rustic-card border-l animate-slide-in"><div class="flex justify-between items-center p-5 sm:p-6 border-b border-gray-100"><div><h3 class="text-lg sm:text-xl font-bold serif">Your Cart</h3><p class="text-xs text-gray-500 mt-0.5"><span x-text="cartItemCount"></span> item(s)</p></div><button @click="cartOpen = false" class="text-gray-400 hover:text-gray-700 p-1.5 hover:bg-gray-100 rounded-lg transition"><i data-lucide="x" class="w-5 h-5"></i></button></div><div x-show="cartTotal < 1500 && cart.length > 0" class="bg-amber-50 border-b border-amber-200 px-5 sm:px-6 py-2.5 text-xs text-amber-800 font-medium">🚚 Add ₱<span x-text="(1500 - cartTotal).toLocaleString()"></span> more for free shipping!</div><div x-show="cartTotal >= 1500 && cart.length > 0" class="bg-green-50 border-b border-green-200 px-5 sm:px-6 py-2.5 text-xs text-green-800 font-medium">✅ You've qualified for free shipping!</div><div class="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4"><template x-for="(item, idx) in cart" :key="item.cartId"><div class="cart-item-enter flex gap-3 sm:gap-4 border-b border-gray-100 pb-4"><img :src="item.image" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover flex-shrink-0 bg-gray-50"><div class="flex-1 min-w-0"><div class="flex justify-between items-start"><div class="min-w-0 flex-1"><p class="font-semibold text-sm sm:text-base truncate" x-text="item.name"></p><p class="text-xs text-gray-400 mt-0.5" x-text="item.categoryShort"></p></div><button @click="removeFromCart(idx)" class="text-gray-300 hover:text-red-500 p-1 flex-shrink-0 ml-2 transition"><i data-lucide="x-circle" class="w-4 h-4"></i></button></div><div class="flex items-center justify-between mt-3"><div class="flex items-center gap-2 bg-gray-50 rounded-lg p-0.5"><button @click="decrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity <= 1">−</button><span class="text-sm font-semibold w-6 text-center" x-text="item.quantity"></span><button @click="incrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity >= getProductStock(item.id)">+</button></div><p class="font-bold text-sm sm:text-base text-[#5e4b3c]">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></p></div><p class="text-xs text-gray-400 mt-1">₱<span x-text="item.price.toLocaleString()"></span> each</p></div></div></template><div x-show="cart.length === 0" class="text-center text-gray-400 py-16"><i data-lucide="shopping-bag" class="w-16 h-16 mx-auto mb-4 opacity-30"></i><p class="text-lg font-medium mb-1">Your cart is empty</p><p class="text-sm">Discover our handcrafted mugs.</p><button @click="cartOpen = false" class="btn-outline px-6 py-2 rounded-xl text-sm mt-4">Browse Collection</button></div></div><div class="border-t border-gray-100 p-5 sm:p-6 space-y-3" x-show="cart.length > 0"><div class="space-y-2 text-sm"><div class="flex justify-between"><span class="text-gray-500">Subtotal</span><span class="font-medium">₱<span x-text="cartSubtotal.toLocaleString()"></span></span></div><div class="flex justify-between"><span class="text-gray-500">Shipping</span><span class="font-medium" x-text="cartTotal >= 1500 ? 'Free' : '₱' + shippingFee.toLocaleString()"></span></div><div class="flex justify-between text-base font-bold pt-2 border-t border-gray-100"><span>Total</span><span class="text-[#5e4b3c]">₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div></div><button @click="proceedToCheckout" class="w-full btn-primary py-3 rounded-xl text-sm font-semibold shadow-lg shadow-[#5e4b3c]/20">Proceed to Checkout</button><button @click="clearCart" class="w-full text-xs text-gray-400 hover:text-red-500 transition py-1">Clear Cart</button></div></div></div>
@@ -216,7 +335,7 @@
 
   <!-- ==================== ADMIN VIEW ==================== -->
   <div x-show="currentUser && currentUser.role === 'admin'" x-cloak class="flex flex-col md:flex-row min-h-screen bg-gray-50">
-    <div class="admin-mobile-nav md:hidden flex overflow-x-auto bg-[#f5efe8] border-b border-[#ddd2c4] scrollbar-hide sticky top-16 z-20">
+    <div class="admin-mobile-nav md:hidden flex overflow-x-auto bg-[#f5efe8] border-b border-[#ddd2c4] scrollbar-hide sticky top-14 sm:top-20 z-20">
       <button @click="adminTab = 'dashboard'" :class="adminTab === 'dashboard' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">📊 Dashboard</button>
       <button @click="adminTab = 'products'" :class="adminTab === 'products' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">📦 Products</button>
       <button @click="adminTab = 'orders'" :class="adminTab === 'orders' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">📋 Orders</button>
@@ -253,7 +372,7 @@
       <!-- REVIEWS TAB -->
       <div x-show="adminTab === 'reviews'" class="space-y-6"><div class="flex items-center justify-between"><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Review Management</h2><span class="text-xs text-gray-400" x-text="reviews.length + ' total reviews'"></span></div><div class="space-y-3"><template x-for="review in reviews" :key="review.id"><div class="bg-white p-4 sm:p-5 rounded-2xl rustic-card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"><div><div class="flex text-yellow-500 mb-1"><template x-for="i in 5"><span :class="i <= review.rating ? 'text-yellow-500' : 'text-gray-200'">★</span></template></div><p class="text-sm text-gray-700 italic" x-text="'\"' + review.text + '\"'"></p><p class="text-xs text-gray-500 mt-1">By: <span class="font-medium" x-text="review.customerName"></span> · Order #<span x-text="review.orderId"></span></p><span class="text-xs px-2 py-0.5 rounded-full mt-1.5 inline-block font-medium" :class="review.approved ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'" x-text="review.approved ? '✓ Approved' : '⏳ Pending'"></span></div><div class="flex items-center gap-2"><button x-show="!review.approved" @click="approveReview(review.id)" class="btn-success px-4 py-2 rounded-lg text-xs">Approve</button><button @click="deleteReview(review.id)" class="btn-danger px-4 py-2 rounded-lg text-xs">Delete</button></div></div></template><div x-show="reviews.length === 0" class="text-center text-gray-400 py-16 bg-white rounded-2xl rustic-card"><i data-lucide="star" class="w-12 h-12 mx-auto mb-3 opacity-30"></i><p class="text-lg font-medium">No reviews yet</p></div></div></div>
 
-      <!-- PRODUCT FORM MODAL (FIXED) -->
+      <!-- PRODUCT FORM MODAL -->
       <div x-show="showProductModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" x-cloak>
         <div class="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 rustic-card max-h-[90vh] overflow-y-auto" @click.outside="showProductModal = false">
           <h2 class="text-xl sm:text-2xl font-bold serif mb-6" x-text="editingProductIndex !== null ? 'Edit Mug' : 'Add New Mug'"></h2>
@@ -268,31 +387,13 @@
             <div><label class="input-label">Description *</label><textarea required x-model="productForm.description" class="input-field text-sm" rows="3"></textarea></div>
             <div class="bg-red-50 p-4 rounded-xl border border-red-200 space-y-3">
               <div class="flex items-center gap-2"><i data-lucide="tag" class="w-4 h-4 text-red-600"></i><span class="text-sm font-bold text-red-800">Sale Settings</span></div>
-              <div class="flex items-center gap-3">
-                <label class="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" x-model="productForm.onSale" class="rounded">
-                  <span class="text-sm text-gray-700">Put on sale</span>
-                </label>
-              </div>
-              <div x-show="productForm.onSale">
-                <label class="input-label">Sale Percentage (%)</label>
-                <input type="number" x-model="productForm.salePercent" class="input-field text-sm" min="0" max="99" placeholder="e.g. 10 for 10% off">
-                <p class="text-xs text-gray-500 mt-1">Sale price: ₱<span x-text="Math.round((productForm.price || 0) - ((productForm.price || 0) * (productForm.salePercent || 0) / 100))"></span></p>
-              </div>
+              <div class="flex items-center gap-3"><label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" x-model="productForm.onSale" class="rounded"><span class="text-sm text-gray-700">Put on sale</span></label></div>
+              <div x-show="productForm.onSale"><label class="input-label">Sale Percentage (%)</label><input type="number" x-model="productForm.salePercent" class="input-field text-sm" min="0" max="99" placeholder="e.g. 10 for 10% off"><p class="text-xs text-gray-500 mt-1">Sale price: ₱<span x-text="Math.round((productForm.price || 0) - ((productForm.price || 0) * (productForm.salePercent || 0) / 100))"></span></p></div>
             </div>
             <div class="bg-purple-50 p-4 rounded-xl border border-purple-200 space-y-3">
               <div class="flex items-center gap-2"><i data-lucide="layers" class="w-4 h-4 text-purple-600"></i><span class="text-sm font-bold text-purple-800">Mug Set Settings</span></div>
-              <div class="flex items-center gap-3">
-                <label class="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" x-model="productForm.isSet" class="rounded">
-                  <span class="text-sm text-gray-700">This is a mug set</span>
-                </label>
-              </div>
-              <div x-show="productForm.isSet">
-                <label class="input-label">Set Price (₱)</label>
-                <input type="number" x-model="productForm.setPrice" class="input-field text-sm" min="0" placeholder="Set price for bundle">
-                <p class="text-xs text-gray-500 mt-1">Individual price remains ₱<span x-text="productForm.price || 0"></span></p>
-              </div>
+              <div class="flex items-center gap-3"><label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" x-model="productForm.isSet" class="rounded"><span class="text-sm text-gray-700">This is a mug set</span></label></div>
+              <div x-show="productForm.isSet"><label class="input-label">Set Price (₱)</label><input type="number" x-model="productForm.setPrice" class="input-field text-sm" min="0" placeholder="Set price for bundle"><p class="text-xs text-gray-500 mt-1">Individual price remains ₱<span x-text="productForm.price || 0"></span></p></div>
             </div>
             <div><label class="input-label">Product Image *</label><div class="drop-zone" :class="{ 'dragover': isDragging }" @dragover.prevent="isDragging = true" @dragleave.prevent="isDragging = false" @drop.prevent="handleDrop" @click="$refs.fileInput.click()"><div class="drop-zone-icon">🖼️</div><p class="text-sm text-gray-600 mb-1">Drag & drop image here</p><p class="text-xs text-gray-400">or click to browse · JPG, PNG, WebP (max 5MB)</p><input type="file" x-ref="fileInput" @change="handleFileSelect" accept="image/jpeg,image/png,image/webp" class="hidden"></div><div class="mt-3"><label class="input-label text-xs text-gray-500">Or paste image URL</label><input type="url" x-model="productForm.image" class="input-field text-sm" placeholder="https://example.com/image.jpg"></div></div>
             <div class="bg-gray-50 p-4 rounded-xl"><p class="text-xs font-semibold text-gray-600 mb-2">Image Preview</p><img :src="productForm.image || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2296%22 height=%2296%22%3E%3Crect fill=%22%23ddd%22 width=%2296%22 height=%2296%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2210%22%3ENo Image%3C/text%3E%3C/svg%3E'" class="w-24 h-24 rounded-xl object-cover border"></div>
