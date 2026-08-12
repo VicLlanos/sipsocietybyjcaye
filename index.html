@@ -4,181 +4,80 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
   <title>JCaye's Sip Society · Artisan Mugs Philippines</title>
-  
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="jcayelogo1.png">
   <link rel="apple-touch-icon" href="jcayelogo1.png">
-  
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet" />
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Lato:wght@300;400;500;700&display=swap');
-    
     * { -webkit-tap-highlight-color: transparent; }
-    
-    body {
-      font-family: 'Lato', system-ui, sans-serif;
-      background-color: #faf8f5;
-      scroll-behavior: smooth;
-      overflow-x: hidden;
-    }
-    
+    body { font-family: 'Lato', system-ui, sans-serif; background-color: #faf8f5; scroll-behavior: smooth; overflow-x: hidden; }
     h1, h2, h3, .serif { font-family: 'Playfair Display', Georgia, serif; }
-    
     .logo-img-header { width: 50px; height: 50px; object-fit: contain; border-radius: 14px; flex-shrink: 0; }
     .logo-img-hero { width: 90px; height: 90px; object-fit: contain; border-radius: 18px; flex-shrink: 0; }
     .logo-img-auth { width: 75px; height: 75px; object-fit: contain; border-radius: 16px; margin: 0 auto; display: block; }
     .logo-img-sm { width: 44px; height: 44px; object-fit: contain; border-radius: 12px; flex-shrink: 0; }
-    
     .brand-text { font-family: 'Playfair Display', Georgia, serif; font-weight: 600; color: #5e4b3c; letter-spacing: -0.01em; line-height: 1.1; }
     .brand-text-header { font-size: 1.1rem; }
     .brand-text-hero { font-size: 1.2rem; margin-top: 0.25rem; }
-    
     .logo-placeholder { background: #f3ede7; border: 2px dashed #c9b99a; display: flex; align-items: center; justify-content: center; color: #8b7355; font-size: 0.6rem; text-align: center; flex-shrink: 0; }
-    
-    .rustic-card {
-      background: #fefcf8; border: 1px solid #e7dfd4;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
+    .rustic-card { background: #fefcf8; border: 1px solid #e7dfd4; box-shadow: 0 4px 20px rgba(0,0,0,0.03); transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
     .rustic-card:hover { box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: #c9b99a; transform: translateY(-6px); }
-    
     .mug-card { position: relative; overflow: hidden; }
-    .mug-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(94,75,60,0.95) 0%, rgba(94,75,60,0.75) 50%, transparent 100%);
-      opacity: 0; transition: opacity 0.5s ease;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 1.25rem; pointer-events: none;
-    }
+    .mug-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(94,75,60,0.95) 0%, rgba(94,75,60,0.75) 50%, transparent 100%); opacity: 0; transition: opacity 0.5s ease; display: flex; flex-direction: column; justify-content: flex-end; padding: 1.25rem; pointer-events: none; }
     .mug-card:hover .mug-overlay { opacity: 1; }
     .mug-description { transform: translateY(20px); transition: transform 0.5s ease; }
     .mug-card:hover .mug-description { transform: translateY(0); }
-    
-    .btn-primary {
-      background: #5e4b3c; color: #fefaf5; transition: all 0.3s ease;
-      border-radius: 12px; cursor: pointer; border: none; font-weight: 600;
-    }
+    .btn-primary { background: #5e4b3c; color: #fefaf5; transition: all 0.3s ease; border-radius: 12px; cursor: pointer; border: none; font-weight: 600; }
     .btn-primary:hover { background: #3e3229; transform: scale(1.03); box-shadow: 0 8px 20px rgba(94,75,60,0.3); }
-    
-    .btn-accent {
-      background: #b8977e; color: white; border-radius: 12px;
-      cursor: pointer; border: none; font-weight: 600; transition: all 0.3s ease;
-    }
+    .btn-accent { background: #b8977e; color: white; border-radius: 12px; cursor: pointer; border: none; font-weight: 600; transition: all 0.3s ease; }
     .btn-accent:hover { background: #9c7d66; transform: scale(1.03); box-shadow: 0 8px 20px rgba(184,151,126,0.3); }
-    
-    .btn-outline {
-      background: transparent; color: #5e4b3c; border: 1.5px solid #c9b99a;
-      border-radius: 12px; cursor: pointer; font-weight: 500; transition: all 0.3s ease;
-    }
+    .btn-outline { background: transparent; color: #5e4b3c; border: 1.5px solid #c9b99a; border-radius: 12px; cursor: pointer; font-weight: 500; transition: all 0.3s ease; }
     .btn-outline:hover { background: #f3ede7; border-color: #5e4b3c; }
-    
-    .btn-danger {
-      background: transparent; color: #991b1b; border: 1.5px solid #fca5a5;
-      border-radius: 12px; cursor: pointer; font-weight: 500; transition: all 0.3s ease;
-    }
+    .btn-danger { background: transparent; color: #991b1b; border: 1.5px solid #fca5a5; border-radius: 12px; cursor: pointer; font-weight: 500; transition: all 0.3s ease; }
     .btn-danger:hover { background: #fef2f2; border-color: #991b1b; }
-    
     [x-cloak] { display: none !important; }
-    
-    .input-field {
-      border: 1px solid #d4c5b2; background: #fffdf9; border-radius: 10px;
-      padding: 12px 16px; width: 100%; transition: all 0.3s ease; font-size: 0.95rem;
-      -webkit-appearance: none; appearance: none;
-    }
+    .input-field { border: 1px solid #d4c5b2; background: #fffdf9; border-radius: 10px; padding: 12px 16px; width: 100%; transition: all 0.3s ease; font-size: 0.95rem; -webkit-appearance: none; appearance: none; }
     .input-field:focus { border-color: #8b7355; outline: none; box-shadow: 0 0 0 4px rgba(139,115,85,0.1); background: #fff; }
     textarea.input-field { resize: vertical; min-height: 80px; }
-    
     .input-label { display: block; font-size: 0.75rem; font-weight: 600; color: #6b5e4f; margin-bottom: 0.375rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    
-    .category-pill {
-      background: transparent; color: #8b7355; border: none;
-      border-bottom: 2px solid transparent; border-radius: 0;
-      padding: 6px 4px; font-size: 0.8rem; font-weight: 400;
-      letter-spacing: 0.04em; text-transform: uppercase;
-      transition: all 0.35s ease; cursor: pointer; white-space: nowrap;
-      position: relative;
-    }
+    .category-pill { background: transparent; color: #8b7355; border: none; border-bottom: 2px solid transparent; border-radius: 0; padding: 6px 4px; font-size: 0.8rem; font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; transition: all 0.35s ease; cursor: pointer; white-space: nowrap; position: relative; }
     .category-pill::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #b8977e; transition: width 0.35s ease; }
     .category-pill:hover::after, .category-pill.active::after { width: 100%; }
     .category-pill.active { color: #5e4b3c; font-weight: 500; }
     .category-pill:hover { color: #5e4b3c; }
     .category-divider { color: #d4c5b2; font-size: 0.8rem; user-select: none; }
-    
     .admin-sidebar { background: #f5efe8; border-right: 1px solid #ddd2c4; }
-    
     .status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 500; }
     .status-pending { background: #fef3c7; color: #92400e; }
     .status-processing { background: #dbeafe; color: #1e40af; }
     .status-shipping { background: #e0e7ff; color: #3730a3; }
     .status-delivered { background: #d1fae5; color: #065f46; }
     .status-cancelled { background: #fee2e2; color: #991b1b; }
-    
     .stat-card { background: #fefcf8; border: 1px solid #e7dfd4; border-radius: 16px; padding: 1.25rem; transition: all 0.3s ease; }
     .stat-card:hover { border-color: #c9b99a; box-shadow: 0 8px 24px rgba(0,0,0,0.05); }
-    
     .alert-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-    
     .product-image-preview { width: 80px; height: 80px; object-fit: cover; border-radius: 10px; border: 1px solid #e7dfd4; }
-    
     .cart-item-enter { animation: slideIn 0.3s ease-out; }
     @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-    
-    .quantity-btn {
-      width: 32px; height: 32px; border-radius: 8px; border: 1px solid #d4c5b2;
-      background: #fffdf9; cursor: pointer; display: flex; align-items: center; justify-content: center;
-      font-size: 1rem; font-weight: 600; color: #5e4b3c; transition: all 0.2s;
-    }
+    .quantity-btn { width: 32px; height: 32px; border-radius: 8px; border: 1px solid #d4c5b2; background: #fffdf9; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 600; color: #5e4b3c; transition: all 0.2s; }
     .quantity-btn:hover { background: #f3ede7; border-color: #5e4b3c; }
     .quantity-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-    
-    .drop-zone {
-      border: 2px dashed #c9b99a;
-      border-radius: 12px;
-      padding: 2rem;
-      text-align: center;
-      background: #faf7f2;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-    .drop-zone:hover, .drop-zone.dragover {
-      border-color: #5e4b3c;
-      background: #f3ede7;
-      transform: scale(1.01);
-    }
-    .drop-zone.dragover {
-      border-style: solid;
-      background: #e8e0d5;
-    }
-    .drop-zone-icon {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-      color: #8b7355;
-    }
-    
-    .modal-enter {
-      animation: modalFadeIn 0.3s ease-out;
-    }
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    
-    @media (max-width: 480px) {
-      .logo-img-header { width: 40px; height: 40px; }
-      .brand-text-header { font-size: 0.9rem; }
-      .logo-img-hero { width: 70px; height: 70px; }
-    }
+    .drop-zone { border: 2px dashed #c9b99a; border-radius: 12px; padding: 2rem; text-align: center; background: #faf7f2; transition: all 0.3s ease; cursor: pointer; }
+    .drop-zone:hover, .drop-zone.dragover { border-color: #5e4b3c; background: #f3ede7; transform: scale(1.01); }
+    .drop-zone.dragover { border-style: solid; background: #e8e0d5; }
+    .drop-zone-icon { font-size: 2.5rem; margin-bottom: 0.5rem; color: #8b7355; }
+    .modal-enter { animation: modalFadeIn 0.3s ease-out; }
+    @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    @media (max-width: 480px) { .logo-img-header { width: 40px; height: 40px; } .brand-text-header { font-size: 0.9rem; } .logo-img-hero { width: 70px; height: 70px; } }
     @media (max-width: 768px) { .admin-sidebar { display: none; } }
     @media (min-width: 769px) { .admin-mobile-nav { display: none; } }
-    
     .scrollbar-hide::-webkit-scrollbar { display: none; }
     .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    
     @keyframes slide-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
     .animate-slide-in { animation: slide-in 0.3s ease-out; }
     .fade-in-up { animation: fadeInUp 0.7s ease forwards; opacity: 0; }
@@ -188,7 +87,7 @@
 </head>
 <body class="min-h-screen text-gray-800" x-data="app()" x-init="initApp()">
 
-  <!-- ==================== AUTH OVERLAY ==================== -->
+  <!-- AUTH OVERLAY -->
   <div x-show="showAuth" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" x-cloak>
     <div class="bg-white rounded-2xl shadow-2xl p-5 sm:p-8 max-w-md w-full rustic-card border-0 fade-in-up max-h-[90vh] overflow-y-auto" @click.outside="showAuth = false">
       <div class="flex flex-col items-center mb-4 sm:mb-6">
@@ -203,40 +102,21 @@
       </p>
       <form @submit.prevent="handleAuth">
         <div class="space-y-3 sm:space-y-4">
-          <div x-show="authMode === 'register'">
-            <label class="input-label">Full Name *</label>
-            <input type="text" x-model="authForm.name" placeholder="Juan Dela Cruz" class="input-field text-sm" x-bind:required="authMode === 'register'">
-          </div>
-          <div>
-            <label class="input-label">Email *</label>
-            <input type="email" x-model="authForm.email" placeholder="juan@example.com" class="input-field text-sm" required>
-          </div>
-          <div x-show="authMode === 'register'">
-            <label class="input-label">Phone Number *</label>
-            <input type="tel" x-model="authForm.phone" placeholder="09123456789" class="input-field text-sm" x-bind:required="authMode === 'register'">
-          </div>
-          <div x-show="authMode === 'register'">
-            <label class="input-label">Complete Address *</label>
-            <textarea x-model="authForm.address" placeholder="House/Unit No., Street, Barangay, City, Province, Zip Code" class="input-field text-sm" rows="2" x-bind:required="authMode === 'register'"></textarea>
-          </div>
-          <div>
-            <label class="input-label">Password *</label>
-            <input type="password" x-model="authForm.password" placeholder="Enter your password" class="input-field text-sm" required>
-            <p x-show="authMode === 'register'" class="text-xs text-gray-400 mt-1">Minimum 6 characters recommended</p>
-          </div>
+          <div x-show="authMode === 'register'"><label class="input-label">Full Name *</label><input type="text" x-model="authForm.name" placeholder="Juan Dela Cruz" class="input-field text-sm" x-bind:required="authMode === 'register'"></div>
+          <div><label class="input-label">Email *</label><input type="email" x-model="authForm.email" placeholder="juan@example.com" class="input-field text-sm" required></div>
+          <div x-show="authMode === 'register'"><label class="input-label">Phone Number *</label><input type="tel" x-model="authForm.phone" placeholder="09123456789" class="input-field text-sm" x-bind:required="authMode === 'register'"></div>
+          <div x-show="authMode === 'register'"><label class="input-label">Complete Address *</label><textarea x-model="authForm.address" placeholder="House/Unit No., Street, Barangay, City, Province, Zip Code" class="input-field text-sm" rows="2" x-bind:required="authMode === 'register'"></textarea></div>
+          <div><label class="input-label">Password *</label><input type="password" x-model="authForm.password" placeholder="Enter your password" class="input-field text-sm" required><p x-show="authMode === 'register'" class="text-xs text-gray-400 mt-1">Minimum 6 characters recommended</p></div>
           <button type="submit" class="w-full btn-primary py-3 font-semibold tracking-wide text-sm">Continue</button>
         </div>
       </form>
-      <p class="mt-3 text-center text-xs text-gray-500">
-        <span x-text="authMode === 'login' ? 'New here?' : 'Already a member?'"></span>
-        <button @click="authMode = authMode === 'login' ? 'register' : 'login'" class="text-amber-700 underline font-medium ml-1">Switch</button>
-      </p>
+      <p class="mt-3 text-center text-xs text-gray-500"><span x-text="authMode === 'login' ? 'New here?' : 'Already a member?'"></span><button @click="authMode = authMode === 'login' ? 'register' : 'login'" class="text-amber-700 underline font-medium ml-1">Switch</button></p>
       <p class="mt-2 text-center text-xs text-gray-400">Demo: admin@sip.com / admin | customer@sip.com / customer</p>
       <button @click="showAuth = false; authRedirectMessage = ''" class="mt-2 text-xs text-gray-400 w-full hover:text-gray-600">Cancel</button>
     </div>
   </div>
 
-  <!-- ==================== HEADER ==================== -->
+  <!-- HEADER -->
   <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#e0d5c7] shadow-sm">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
       <div class="flex items-center gap-2">
@@ -245,9 +125,7 @@
         <span class="brand-text brand-text-header">JCaye's Sip Society</span>
       </div>
       <div class="flex items-center gap-1 sm:gap-4">
-        <template x-if="!currentUser">
-          <button @click="showAuth = true; authMode = 'login'; authRedirectMessage = ''" class="text-xs sm:text-sm font-medium text-gray-600 hover:text-amber-800 transition px-2 sm:px-3 py-2 rounded-lg hover:bg-gray-100">Sign In</button>
-        </template>
+        <template x-if="!currentUser"><button @click="showAuth = true; authMode = 'login'; authRedirectMessage = ''" class="text-xs sm:text-sm font-medium text-gray-600 hover:text-amber-800 transition px-2 sm:px-3 py-2 rounded-lg hover:bg-gray-100">Sign In</button></template>
         <template x-if="currentUser">
           <div class="flex items-center gap-1 sm:gap-3">
             <span class="text-xs sm:text-sm text-gray-700 font-medium hidden sm:inline" x-text="currentUser.name"></span>
@@ -264,9 +142,8 @@
     </div>
   </header>
 
-  <!-- ==================== CUSTOMER VIEW ==================== -->
+  <!-- CUSTOMER VIEW -->
   <div x-show="!currentUser || currentUser.role !== 'admin'" x-cloak class="w-full">
-    <!-- Hero -->
     <section class="relative hero-pattern bg-gradient-to-b from-[#faf7f2] to-[#f2ebe1] py-8 sm:py-12 md:py-16 px-4 text-center border-b border-[#d9ccbb]">
       <div class="fade-in-up max-w-4xl mx-auto">
         <div class="flex flex-col items-center mb-2 sm:mb-4">
@@ -283,39 +160,26 @@
       </div>
     </section>
 
-    <!-- Categories -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
       <div class="flex flex-wrap items-center justify-center gap-1 sm:gap-2 overflow-x-auto scrollbar-hide pb-1">
         <span class="text-xs text-gray-400 uppercase tracking-widest mr-2 sm:mr-4 font-light hidden sm:inline">Filter</span>
         <template x-for="(cat, index) in categories" :key="cat">
-          <div class="flex items-center">
-            <button @click="selectedCategory = cat" class="category-pill" :class="selectedCategory === cat ? 'active' : ''" x-text="cat"></button>
-            <span class="category-divider mx-1 sm:mx-2" x-show="index < categories.length - 1">·</span>
-          </div>
+          <div class="flex items-center"><button @click="selectedCategory = cat" class="category-pill" :class="selectedCategory === cat ? 'active' : ''" x-text="cat"></button><span class="category-divider mx-1 sm:mx-2" x-show="index < categories.length - 1">·</span></div>
         </template>
         <span class="category-divider mx-1 sm:mx-2">·</span>
         <button @click="selectedCategory = 'All'" class="category-pill" :class="selectedCategory === 'All' ? 'active' : ''">All Mugs</button>
       </div>
     </div>
 
-    <!-- Product Grid -->
     <div id="collection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
       <h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-gray-800 mb-2 sm:mb-4">The Curated Workshop</h2>
       <p class="text-xs sm:text-sm text-gray-400 mb-4 sm:mb-8 font-light tracking-wide uppercase" x-text="selectedCategory === 'All' ? 'All Collections' : selectedCategory"></p>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
         <template x-for="(product, index) in filteredProducts" :key="product.id">
-          <div class="rustic-card rounded-2xl flex flex-col fade-in-up mug-card cursor-pointer group"
-               :style="'animation-delay: ' + (index * 0.1) + 's'"
-               @click="openProductModal(product)">
+          <div class="rustic-card rounded-2xl flex flex-col fade-in-up mug-card cursor-pointer group" :style="'animation-delay: ' + (index * 0.1) + 's'" @click="openProductModal(product)">
             <div class="relative h-56 sm:h-64 lg:h-72 bg-gray-100 rounded-xl overflow-hidden">
               <img :src="product.image" alt="mug" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105">
-              <div class="mug-overlay rounded-xl">
-                <div class="mug-description text-white">
-                  <p class="text-sm sm:text-base font-semibold mb-1" x-text="product.name"></p>
-                  <p class="text-xs sm:text-sm opacity-90 leading-relaxed line-clamp-2" x-text="product.description"></p>
-                  <p class="text-xs mt-2 opacity-75">Click for details</p>
-                </div>
-              </div>
+              <div class="mug-overlay rounded-xl"><div class="mug-description text-white"><p class="text-sm sm:text-base font-semibold mb-1" x-text="product.name"></p><p class="text-xs sm:text-sm opacity-90 leading-relaxed line-clamp-2" x-text="product.description"></p><p class="text-xs mt-2 opacity-75">Click for details</p></div></div>
               <span x-show="product.stock === 0" class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full z-10">Out of stock</span>
               <span x-show="product.stock > 0 && product.stock <= 3" class="absolute top-2 left-2 bg-amber-500 text-white text-xs px-2 py-1 rounded-full z-10">Only <span x-text="product.stock"></span> left</span>
               <span class="absolute top-2 right-2 bg-white/80 backdrop-blur-sm text-xs px-2 py-1 rounded-full text-gray-600 z-10 shadow-sm font-light tracking-wide uppercase" x-text="product.categoryShort"></span>
@@ -324,14 +188,8 @@
               <h3 class="font-semibold text-base sm:text-lg text-gray-800" x-text="product.name"></h3>
               <p class="text-xs sm:text-sm text-gray-400 mt-1 mb-2 flex-1 line-clamp-2 font-light" x-text="product.description"></p>
               <div class="flex items-center justify-between mt-auto">
-                <div>
-                  <p class="text-base sm:text-lg font-bold text-[#5e4b3c]">₱<span x-text="product.price.toLocaleString()"></span></p>
-                  <p class="text-xs text-gray-400 font-light">Stock: <span x-text="product.stock"></span></p>
-                </div>
-                <button @click.stop="addToCart(product)" :disabled="product.stock === 0" class="btn-accent px-3 sm:px-5 py-2 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed">
-                  <span x-show="!isInCart(product.id)">Add to cart</span>
-                  <span x-show="isInCart(product.id)" class="flex items-center gap-1">✓ In Cart</span>
-                </button>
+                <div><p class="text-base sm:text-lg font-bold text-[#5e4b3c]">₱<span x-text="product.price.toLocaleString()"></span></p><p class="text-xs text-gray-400 font-light">Stock: <span x-text="product.stock"></span></p></div>
+                <button @click.stop="addToCart(product)" :disabled="product.stock === 0" class="btn-accent px-3 sm:px-5 py-2 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"><span x-show="!isInCart(product.id)">Add to cart</span><span x-show="isInCart(product.id)" class="flex items-center gap-1">✓ In Cart</span></button>
               </div>
             </div>
           </div>
@@ -339,17 +197,13 @@
       </div>
     </div>
 
-    <!-- Product Detail Modal -->
+    <!-- PRODUCT DETAIL MODAL -->
     <div x-show="selectedProduct" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" x-cloak @click.self="selectedProduct = null">
       <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto rustic-card modal-enter" @click.stop>
         <div class="relative">
-          <button @click="selectedProduct = null" class="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition">
-            <i data-lucide="x" class="w-5 h-5 text-gray-700"></i>
-          </button>
+          <button @click="selectedProduct = null" class="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition"><i data-lucide="x" class="w-5 h-5 text-gray-700"></i></button>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
-            <div class="bg-gray-100 flex items-center justify-center p-8 md:p-12">
-              <img :src="selectedProduct.image" :alt="selectedProduct.name" class="w-full h-auto max-h-96 object-contain rounded-xl">
-            </div>
+            <div class="bg-gray-100 flex items-center justify-center p-8 md:p-12"><img :src="selectedProduct.image" :alt="selectedProduct.name" class="w-full h-auto max-h-96 object-contain rounded-xl"></div>
             <div class="p-6 md:p-8 flex flex-col">
               <div class="flex-1">
                 <div class="flex items-center gap-2 mb-3">
@@ -360,12 +214,8 @@
                 </div>
                 <h2 class="text-2xl md:text-3xl font-bold serif text-gray-800 mb-2" x-text="selectedProduct.name"></h2>
                 <p class="text-3xl font-bold text-[#5e4b3c] mb-4">₱<span x-text="selectedProduct.price.toLocaleString()"></span></p>
-                <div class="border-t border-gray-200 pt-4 mb-4">
-                  <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Description</h3>
-                  <p class="text-gray-600 leading-relaxed" x-text="selectedProduct.description"></p>
-                </div>
-                <div class="border-t border-gray-200 pt-4 mb-6">
-                  <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Product Details</h3>
+                <div class="border-t border-gray-200 pt-4 mb-4"><h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Description</h3><p class="text-gray-600 leading-relaxed" x-text="selectedProduct.description"></p></div>
+                <div class="border-t border-gray-200 pt-4 mb-6"><h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Product Details</h3>
                   <ul class="space-y-2 text-sm text-gray-500">
                     <li class="flex items-center gap-2"><i data-lucide="tag" class="w-4 h-4"></i>Category: <span class="text-gray-700 font-medium" x-text="selectedProduct.category"></span></li>
                     <li class="flex items-center gap-2"><i data-lucide="package" class="w-4 h-4"></i>Stock Available: <span class="text-gray-700 font-medium" x-text="selectedProduct.stock"></span></li>
@@ -375,10 +225,7 @@
               </div>
               <div class="border-t border-gray-200 pt-6">
                 <div class="flex items-center gap-3">
-                  <button @click="addToCartFromModal(selectedProduct)" :disabled="selectedProduct.stock === 0" class="flex-1 btn-primary py-3.5 rounded-xl font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed">
-                    <span x-show="!isInCart(selectedProduct.id)">🛒 Add to Cart</span>
-                    <span x-show="isInCart(selectedProduct.id)">✓ Already in Cart</span>
-                  </button>
+                  <button @click="addToCartFromModal(selectedProduct)" :disabled="selectedProduct.stock === 0" class="flex-1 btn-primary py-3.5 rounded-xl font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed"><span x-show="!isInCart(selectedProduct.id)">🛒 Add to Cart</span><span x-show="isInCart(selectedProduct.id)">✓ Already in Cart</span></button>
                   <button @click="selectedProduct = null" class="btn-outline px-6 py-3.5 rounded-xl text-sm font-medium">Continue Shopping</button>
                 </div>
               </div>
@@ -407,13 +254,7 @@
     <div x-show="cartOpen" class="fixed inset-0 z-40 flex justify-end" x-cloak>
       <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="cartOpen = false"></div>
       <div class="relative w-full max-w-lg bg-white h-full shadow-2xl flex flex-col rustic-card border-l animate-slide-in">
-        <div class="flex justify-between items-center p-4 sm:p-6 border-b">
-          <div>
-            <h3 class="text-lg sm:text-xl font-bold serif">Your Cart</h3>
-            <p class="text-xs text-gray-500 mt-0.5"><span x-text="cartItemCount"></span> item(s)</p>
-          </div>
-          <button @click="cartOpen = false" class="text-gray-500 hover:text-gray-700 p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
-        </div>
+        <div class="flex justify-between items-center p-4 sm:p-6 border-b"><div><h3 class="text-lg sm:text-xl font-bold serif">Your Cart</h3><p class="text-xs text-gray-500 mt-0.5"><span x-text="cartItemCount"></span> item(s)</p></div><button @click="cartOpen = false" class="text-gray-500 hover:text-gray-700 p-1"><i data-lucide="x" class="w-5 h-5"></i></button></div>
         <div x-show="cartTotal < 1500 && cart.length > 0" class="bg-amber-50 border-b border-amber-200 px-4 sm:px-6 py-2.5 text-xs text-amber-800">🚚 Add ₱<span x-text="(1500 - cartTotal).toLocaleString()"></span> more for free shipping!</div>
         <div x-show="cartTotal >= 1500 && cart.length > 0" class="bg-green-50 border-b border-green-200 px-4 sm:px-6 py-2.5 text-xs text-green-800">✅ You've qualified for free shipping!</div>
         <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
@@ -421,38 +262,19 @@
             <div class="cart-item-enter flex gap-3 sm:gap-4 border-b pb-4">
               <img :src="item.image" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover flex-shrink-0" onerror="this.style.display='none'">
               <div class="flex-1 min-w-0">
-                <div class="flex justify-between items-start">
-                  <div class="min-w-0 flex-1">
-                    <p class="font-semibold text-sm sm:text-base truncate" x-text="item.name"></p>
-                    <p class="text-xs text-gray-500 mt-0.5" x-text="item.categoryShort"></p>
-                  </div>
-                  <button @click="removeFromCart(idx)" class="text-gray-400 hover:text-red-500 p-1 flex-shrink-0 ml-2"><i data-lucide="x-circle" class="w-4 h-4"></i></button>
-                </div>
+                <div class="flex justify-between items-start"><div class="min-w-0 flex-1"><p class="font-semibold text-sm sm:text-base truncate" x-text="item.name"></p><p class="text-xs text-gray-500 mt-0.5" x-text="item.categoryShort"></p></div><button @click="removeFromCart(idx)" class="text-gray-400 hover:text-red-500 p-1 flex-shrink-0 ml-2"><i data-lucide="x-circle" class="w-4 h-4"></i></button></div>
                 <div class="flex items-center justify-between mt-2">
-                  <div class="flex items-center gap-2">
-                    <button @click="decrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity <= 1">−</button>
-                    <span class="text-sm font-semibold w-6 text-center" x-text="item.quantity"></span>
-                    <button @click="incrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity >= getProductStock(item.id)">+</button>
-                  </div>
+                  <div class="flex items-center gap-2"><button @click="decrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity <= 1">−</button><span class="text-sm font-semibold w-6 text-center" x-text="item.quantity"></span><button @click="incrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity >= getProductStock(item.id)">+</button></div>
                   <p class="font-bold text-sm sm:text-base text-[#5e4b3c]">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></p>
                 </div>
                 <p class="text-xs text-gray-400 mt-1">₱<span x-text="item.price.toLocaleString()"></span> each</p>
               </div>
             </div>
           </template>
-          <div x-show="cart.length === 0" class="text-center text-gray-400 py-16">
-            <i data-lucide="shopping-bag" class="w-16 h-16 mx-auto mb-4 opacity-30"></i>
-            <p class="text-lg font-medium mb-1">Your cart is empty</p>
-            <p class="text-sm">Discover our handcrafted mugs and find your perfect sip.</p>
-            <button @click="cartOpen = false" class="btn-outline px-6 py-2 rounded-xl text-sm mt-4">Browse Collection</button>
-          </div>
+          <div x-show="cart.length === 0" class="text-center text-gray-400 py-16"><i data-lucide="shopping-bag" class="w-16 h-16 mx-auto mb-4 opacity-30"></i><p class="text-lg font-medium mb-1">Your cart is empty</p><p class="text-sm">Discover our handcrafted mugs and find your perfect sip.</p><button @click="cartOpen = false" class="btn-outline px-6 py-2 rounded-xl text-sm mt-4">Browse Collection</button></div>
         </div>
         <div class="border-t p-4 sm:p-6 space-y-3" x-show="cart.length > 0">
-          <div class="space-y-2 text-sm">
-            <div class="flex justify-between"><span class="text-gray-500">Subtotal</span><span>₱<span x-text="cartSubtotal.toLocaleString()"></span></span></div>
-            <div class="flex justify-between"><span class="text-gray-500">Shipping</span><span x-text="cartTotal >= 1500 ? 'Free' : '₱' + shippingFee.toLocaleString()"></span></div>
-            <div class="flex justify-between text-base font-bold pt-2 border-t"><span>Total</span><span class="text-[#5e4b3c]">₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div>
-          </div>
+          <div class="space-y-2 text-sm"><div class="flex justify-between"><span class="text-gray-500">Subtotal</span><span>₱<span x-text="cartSubtotal.toLocaleString()"></span></span></div><div class="flex justify-between"><span class="text-gray-500">Shipping</span><span x-text="cartTotal >= 1500 ? 'Free' : '₱' + shippingFee.toLocaleString()"></span></div><div class="flex justify-between text-base font-bold pt-2 border-t"><span>Total</span><span class="text-[#5e4b3c]">₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div></div>
           <button @click="proceedToCheckout" class="w-full btn-primary py-3 rounded-xl text-sm font-semibold">Proceed to Checkout</button>
           <button @click="clearCart" class="w-full text-xs text-gray-400 hover:text-red-500 transition py-1">Clear Cart</button>
         </div>
@@ -465,16 +287,7 @@
       <div class="relative bg-white rounded-2xl max-w-lg w-full p-5 sm:p-8 rustic-card fade-in-up max-h-[90vh] overflow-y-auto">
         <h2 class="text-xl sm:text-2xl font-bold serif mb-4">Checkout</h2>
         <div class="bg-blue-50 p-3 rounded-xl mb-4 text-xs text-blue-800" x-show="currentUser">📋 Your profile details are pre-filled below. You can edit them if needed.</div>
-        <div class="bg-[#f3ede7] p-4 rounded-xl mb-4">
-          <p class="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Order Items</p>
-          <template x-for="item in cart" :key="item.cartId">
-            <div class="flex justify-between text-sm py-1">
-              <span x-text="item.name + ' ×' + item.quantity"></span>
-              <span class="font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span>
-            </div>
-          </template>
-          <div class="border-t pt-2 mt-2 flex justify-between font-bold"><span>Total</span><span>₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div>
-        </div>
+        <div class="bg-[#f3ede7] p-4 rounded-xl mb-4"><p class="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Order Items</p><template x-for="item in cart" :key="item.cartId"><div class="flex justify-between text-sm py-1"><span x-text="item.name + ' ×' + item.quantity"></span><span class="font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template><div class="border-t pt-2 mt-2 flex justify-between font-bold"><span>Total</span><span>₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div></div>
         <form @submit.prevent="processOrder" class="space-y-3">
           <div><label class="input-label">Full Name *</label><input type="text" required x-model="checkoutForm.name" class="input-field text-sm" placeholder="Juan Dela Cruz"></div>
           <div><label class="input-label">Email *</label><input type="email" required x-model="checkoutForm.email" class="input-field text-sm" placeholder="juan@example.com"></div>
@@ -491,21 +304,14 @@
 
   <!-- ==================== ADMIN VIEW ==================== -->
   <div x-show="currentUser && currentUser.role === 'admin'" x-cloak class="flex flex-col md:flex-row min-h-screen bg-gray-50">
-    <!-- Mobile Nav -->
     <div class="admin-mobile-nav md:hidden flex overflow-x-auto bg-[#f5efe8] border-b border-[#ddd2c4] scrollbar-hide sticky top-16 z-20">
       <button @click="adminTab = 'dashboard'" :class="adminTab === 'dashboard' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">📊 Dashboard</button>
       <button @click="adminTab = 'products'" :class="adminTab === 'products' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">📦 Products</button>
       <button @click="adminTab = 'orders'" :class="adminTab === 'orders' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">📋 Orders</button>
       <button @click="adminTab = 'users'" :class="adminTab === 'users' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">👥 Users</button>
     </div>
-
-    <!-- Sidebar -->
     <div class="admin-sidebar w-64 p-6 flex-shrink-0 hidden md:block min-h-screen">
-      <div class="flex items-center gap-3 mb-8">
-        <img src="jcayelogo1.png" alt="JCaye's Sip Society" class="logo-img-sm" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="logo-img-sm logo-placeholder" style="display:none;">Logo</div>
-        <span class="brand-text text-sm">Admin Panel</span>
-      </div>
+      <div class="flex items-center gap-3 mb-8"><img src="jcayelogo1.png" alt="JCaye's Sip Society" class="logo-img-sm" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><div class="logo-img-sm logo-placeholder" style="display:none;">Logo</div><span class="brand-text text-sm">Admin Panel</span></div>
       <nav class="space-y-1 text-sm">
         <button @click="adminTab = 'dashboard'" :class="adminTab === 'dashboard' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-lg transition flex items-center gap-3"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
         <button @click="adminTab = 'products'" :class="adminTab === 'products' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-lg transition flex items-center gap-3"><i data-lucide="package" class="w-4 h-4"></i> Products</button>
@@ -513,15 +319,10 @@
         <button @click="adminTab = 'users'" :class="adminTab === 'users' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-lg transition flex items-center gap-3"><i data-lucide="users" class="w-4 h-4"></i> Users</button>
       </nav>
     </div>
-
-    <!-- Main Content -->
     <div class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto pb-20 md:pb-8">
       <!-- Dashboard -->
       <div x-show="adminTab === 'dashboard'" class="space-y-6">
-        <div class="flex items-center justify-between">
-          <div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Dashboard</h2><p class="text-sm text-gray-500 mt-1">Welcome back, <span x-text="currentUser?.name"></span></p></div>
-          <span class="text-xs text-gray-400" x-text="new Date().toLocaleDateString('en-PH', {weekday:'long', year:'numeric', month:'long', day:'numeric'})"></span>
-        </div>
+        <div class="flex items-center justify-between"><div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Dashboard</h2><p class="text-sm text-gray-500 mt-1">Welcome back, <span x-text="currentUser?.name"></span></p></div><span class="text-xs text-gray-400" x-text="new Date().toLocaleDateString('en-PH', {weekday:'long', year:'numeric', month:'long', day:'numeric'})"></span></div>
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Revenue</span><i data-lucide="trending-up" class="w-4 h-4 text-green-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800">₱<span x-text="financials.grossRevenue.toLocaleString()"></span></p></div>
           <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Orders</span><i data-lucide="shopping-bag" class="w-4 h-4 text-blue-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="orders.length"></p></div>
@@ -532,22 +333,15 @@
           <div class="flex items-center gap-2 mb-4"><span class="alert-dot bg-red-500"></span><h3 class="text-lg font-bold text-gray-800">Low Stock Alerts</h3><span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full" x-text="lowStockProducts.length + ' item(s)'"></span></div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <template x-for="p in lowStockProducts" :key="p.id">
-              <div class="flex items-center gap-3 bg-red-50 p-3 rounded-xl border border-red-200">
-                <img :src="p.image" class="w-12 h-12 rounded-lg object-cover" onerror="this.style.display='none'">
-                <div class="flex-1 min-w-0"><p class="font-semibold text-sm truncate" x-text="p.name"></p><p class="text-xs text-red-700 font-bold">Only <span x-text="p.stock"></span> left</p></div>
-                <button @click="adminTab='products'" class="text-xs btn-outline px-2 py-1 rounded-lg whitespace-nowrap">Manage</button>
-              </div>
+              <div class="flex items-center gap-3 bg-red-50 p-3 rounded-xl border border-red-200"><img :src="p.image" class="w-12 h-12 rounded-lg object-cover" onerror="this.style.display='none'"><div class="flex-1 min-w-0"><p class="font-semibold text-sm truncate" x-text="p.name"></p><p class="text-xs text-red-700 font-bold">Only <span x-text="p.stock"></span> left</p></div><button @click="adminTab='products'" class="text-xs btn-outline px-2 py-1 rounded-lg whitespace-nowrap">Manage</button></div>
             </template>
           </div>
         </div>
       </div>
 
-      <!-- Products -->
+      <!-- Products Tab -->
       <div x-show="adminTab === 'products'" class="space-y-6">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Product Inventory</h2><p class="text-sm text-gray-500 mt-1">Manage your mug collection</p></div>
-          <button @click="openAddProductModal" class="btn-primary px-5 py-2.5 rounded-xl text-sm flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Add New Mug</button>
-        </div>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"><div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Product Inventory</h2><p class="text-sm text-gray-500 mt-1">Manage your mug collection</p></div><button @click="openAddProductModal" class="btn-primary px-5 py-2.5 rounded-xl text-sm flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Add New Mug</button></div>
         <div class="hidden lg:block overflow-x-auto">
           <table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 font-semibold">Product</th><th class="pb-3 font-semibold">Category</th><th class="pb-3 font-semibold">Price</th><th class="pb-3 font-semibold">Stock</th><th class="pb-3 font-semibold">Status</th><th class="pb-3 font-semibold text-right">Actions</th></tr></thead>
             <tbody>
@@ -556,7 +350,7 @@
                   <td class="py-3"><div class="flex items-center gap-3"><img :src="p.image" class="product-image-preview" onerror="this.style.display='none'"><div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-xs text-gray-400" style="display:none;">No img</div><div><p class="font-semibold text-gray-800" x-text="p.name"></p><p class="text-xs text-gray-400 line-clamp-1" x-text="p.description"></p></div></div></td>
                   <td class="py-3"><span class="text-xs bg-gray-100 px-2 py-1 rounded-full" x-text="p.categoryShort"></span></td>
                   <td class="py-3 font-semibold">₱<span x-text="p.price.toLocaleString()"></span></td>
-                  <td class="py-3"><span :class="p.stock <= 3 ? 'text-red-600 font-bold' : 'text-gray-700'" x-text="p.stock"></span></td>
+                  <td class="py-3"><span :class="p.stock <= 3 ? 'text-red-600 font-bold' : 'text-gray-700'" x-text="p.stock"></span><span x-show="p.stock <= 3" class="alert-dot bg-red-500 ml-1 inline-block align-middle"></span></td>
                   <td class="py-3"><span x-show="p.stock > 3" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">In Stock</span><span x-show="p.stock > 0 && p.stock <= 3" class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">Low Stock</span><span x-show="p.stock === 0" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Out of Stock</span></td>
                   <td class="py-3 text-right"><button @click="editProduct(idx)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="deleteProduct(idx)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td>
                 </tr>
@@ -564,18 +358,23 @@
             </tbody>
           </table>
         </div>
+        <div class="lg:hidden space-y-3">
+          <template x-for="(p, idx) in products" :key="p.id">
+            <div class="bg-white p-4 rounded-xl rustic-card">
+              <div class="flex gap-3 mb-3"><img :src="p.image" class="product-image-preview flex-shrink-0" onerror="this.style.display='none'"><div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-xs text-gray-400 flex-shrink-0" style="display:none;">No img</div><div class="flex-1 min-w-0"><p class="font-semibold text-sm" x-text="p.name"></p><p class="text-xs text-gray-400 line-clamp-2" x-text="p.description"></p><div class="flex items-center gap-2 mt-1"><span class="text-xs bg-gray-100 px-2 py-0.5 rounded-full" x-text="p.categoryShort"></span><span x-show="p.stock <= 3" class="alert-dot bg-red-500"></span></div></div></div>
+              <div class="flex items-center justify-between"><div><p class="font-bold text-[#5e4b3c]">₱<span x-text="p.price.toLocaleString()"></span></p><p class="text-xs" :class="p.stock <= 3 ? 'text-red-600' : 'text-gray-500'">Stock: <span x-text="p.stock"></span></p></div><div class="flex gap-2"><button @click="editProduct(idx)" class="btn-outline px-3 py-1.5 rounded-lg text-xs">Edit</button><button @click="deleteProduct(idx)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></div></div>
+            </div>
+          </template>
+        </div>
       </div>
 
-      <!-- Orders -->
+      <!-- Orders Tab -->
       <div x-show="adminTab === 'orders'" class="space-y-6">
         <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Order Management</h2>
         <div class="space-y-4">
           <template x-for="o in orders" :key="o.id">
             <div class="bg-white p-4 sm:p-6 rounded-xl rustic-card">
-              <div class="flex flex-col sm:flex-row justify-between gap-4 mb-4">
-                <div><p class="font-semibold text-lg" x-text="o.customerName"></p><p class="text-sm text-gray-500" x-text="o.email"></p><p class="text-sm text-gray-500" x-text="o.phone"></p></div>
-                <div class="text-left sm:text-right"><p class="text-2xl font-bold text-[#5e4b3c]">₱<span x-text="o.total?.toLocaleString() || 0"></span></p><span class="text-xs px-2 py-0.5 rounded-full" :class="o.paymentMethod === 'gcash' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'" x-text="o.paymentMethod?.toUpperCase()"></span></div>
-              </div>
+              <div class="flex flex-col sm:flex-row justify-between gap-4 mb-4"><div><p class="font-semibold text-lg" x-text="o.customerName"></p><p class="text-sm text-gray-500" x-text="o.email"></p><p class="text-sm text-gray-500" x-text="o.phone"></p><p class="text-xs text-gray-400 mt-1">📅 <span x-text="o.date ? new Date(o.date).toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric'}) : ''"></span></p></div><div class="text-left sm:text-right"><p class="text-2xl font-bold text-[#5e4b3c]">₱<span x-text="o.total?.toLocaleString() || 0"></span></p><span class="text-xs px-2 py-0.5 rounded-full" :class="o.paymentMethod === 'gcash' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'" x-text="o.paymentMethod?.toUpperCase()"></span><p class="text-xs text-gray-500 mt-1" x-text="o.paymentStatus"></p></div></div>
               <div class="bg-gray-50 p-3 rounded-lg mb-4"><p class="text-xs font-semibold text-gray-600 mb-1">📍 Delivery Address:</p><p class="text-sm text-gray-700" x-text="o.address"></p></div>
               <div class="border-t pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div class="flex items-center gap-2"><span class="text-sm font-medium text-gray-600">Status:</span><span class="status-badge" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span></div>
@@ -586,22 +385,17 @@
               </div>
             </div>
           </template>
+          <div x-show="orders.length === 0" class="text-center text-gray-400 py-12">No orders yet</div>
         </div>
       </div>
 
-      <!-- Users -->
+      <!-- Users Tab -->
       <div x-show="adminTab === 'users'" class="space-y-6">
         <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">User Management</h2>
         <div class="space-y-3">
           <template x-for="u in users" :key="u.id">
             <div class="bg-white p-4 rounded-xl rustic-card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div>
-                <p class="font-semibold" x-text="u.name"></p>
-                <p class="text-sm text-gray-500" x-text="u.email"></p>
-                <p class="text-sm text-gray-500" x-text="u.phone || 'No phone'"></p>
-                <p class="text-xs text-gray-400" x-text="u.address || 'No address'"></p>
-                <div class="flex gap-1 mt-1"><span x-show="u.role === 'admin'" class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">Admin</span><span x-show="u.role === 'customer'" class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">Customer</span><span x-show="u.blocked" class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">Blocked</span></div>
-              </div>
+              <div><p class="font-semibold" x-text="u.name"></p><p class="text-sm text-gray-500" x-text="u.email"></p><p class="text-sm text-gray-500" x-text="u.phone || 'No phone'"></p><p class="text-xs text-gray-400" x-text="u.address || 'No address'"></p><div class="flex gap-1 mt-1"><span x-show="u.role === 'admin'" class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">Admin</span><span x-show="u.role === 'customer'" class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">Customer</span><span x-show="u.blocked" class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">Blocked</span></div></div>
               <div class="flex items-center gap-2"><button @click="toggleUserRole(u.id)" class="btn-outline text-xs px-3 py-2 rounded-lg"><span x-text="u.role === 'admin' ? 'Demote' : 'Promote'"></span></button><button @click="toggleBlockUser(u.id)" class="btn-danger text-xs px-3 py-2 rounded-lg"><span x-text="u.blocked ? 'Unblock' : 'Block'"></span></button></div>
             </div>
           </template>
@@ -707,34 +501,27 @@
           this.$nextTick(() => { lucide.createIcons(); });
         },
 
-        openProductModal(product) {
-          this.selectedProduct = product;
-          this.$nextTick(() => { lucide.createIcons(); });
-        },
-
-        addToCartFromModal(product) {
-          this.addToCart(product);
-          const updatedProduct = this.products.find(p => p.id === product.id);
-          if (updatedProduct) this.selectedProduct = updatedProduct;
-        },
+        openProductModal(product) { this.selectedProduct = product; this.$nextTick(() => { lucide.createIcons(); }); },
+        addToCartFromModal(product) { this.addToCart(product); const updatedProduct = this.products.find(p => p.id === product.id); if (updatedProduct) this.selectedProduct = updatedProduct; },
 
         handleAuth() {
           if (this.authMode === 'register') {
             if (!this.authForm.name || !this.authForm.email || !this.authForm.phone || !this.authForm.address || !this.authForm.password) { alert('Please fill in all required fields.'); return; }
             if (this.authForm.password.length < 6) { alert('Password must be at least 6 characters.'); return; }
-            if (this.users.find(u => u.email === this.authForm.email)) { alert('Email already exists.'); return; }
+            if (this.users.find(u => u.email === this.authForm.email)) { alert('An account with this email already exists.'); return; }
             const nu = { id: Date.now(), name: this.authForm.name, email: this.authForm.email, phone: this.authForm.phone, address: this.authForm.address, password: this.authForm.password, blocked: false, role: 'customer' };
             this.users.push(nu); localStorage.setItem('sip_users', JSON.stringify(this.users));
             this.currentUser = nu; this.showAuth = false; this.authRedirectMessage = '';
             this.authForm = { name: '', email: '', phone: '', address: '', password: '' };
             if (this.pendingCheckout) { this.pendingCheckout = false; this.showCheckout = true; this.checkoutForm.name = nu.name; this.checkoutForm.email = nu.email; this.checkoutForm.phone = nu.phone; this.checkoutForm.address = nu.address; }
+            alert('Registration successful! Welcome to JCaye\'s Sip Society.');
           } else {
             const f = this.users.find(u => u.email === this.authForm.email && u.password === this.authForm.password);
             if (f && !f.blocked) {
               this.currentUser = f; this.showAuth = false; this.authRedirectMessage = '';
               this.authForm = { name: '', email: '', phone: '', address: '', password: '' };
               if (this.pendingCheckout) { this.pendingCheckout = false; this.showCheckout = true; this.checkoutForm.name = f.name; this.checkoutForm.email = f.email; this.checkoutForm.phone = f.phone || ''; this.checkoutForm.address = f.address || ''; }
-            } else { alert(f?.blocked ? 'Account blocked.' : 'Invalid credentials.'); }
+            } else { alert(f?.blocked ? 'Your account has been blocked.' : 'Invalid email or password.'); }
           }
         },
 
@@ -743,47 +530,27 @@
         addToCart(product) {
           if (product.stock <= 0) return;
           const existing = this.cart.find(item => item.id === product.id);
-          if (existing) {
-            if (existing.quantity < product.stock + existing.quantity) { existing.quantity++; } else { alert('Stock limit reached.'); return; }
-          } else { this.cart.push({ ...product, quantity: 1, cartId: Date.now() + Math.random() }); }
+          if (existing) { if (existing.quantity < product.stock + existing.quantity) { existing.quantity++; } else { alert('Cannot add more. Stock limit reached.'); return; } }
+          else { this.cart.push({ ...product, quantity: 1, cartId: Date.now() + Math.random() }); }
           product.stock--; this.saveCart(); this.saveProducts();
         },
 
-        removeFromCart(idx) {
-          const item = this.cart[idx]; const product = this.products.find(p => p.id === item.id);
-          if (product) product.stock += item.quantity;
-          this.cart.splice(idx, 1); this.saveCart(); this.saveProducts();
-        },
-
-        incrementQuantity(idx) {
-          const item = this.cart[idx]; const product = this.products.find(p => p.id === item.id);
-          if (product && product.stock > 0) { item.quantity++; product.stock--; this.saveCart(); this.saveProducts(); }
-        },
-
-        decrementQuantity(idx) {
-          const item = this.cart[idx];
-          if (item.quantity > 1) { const product = this.products.find(p => p.id === item.id); if (product) product.stock++; item.quantity--; this.saveCart(); this.saveProducts(); }
-        },
-
-        clearCart() {
-          if (confirm('Remove all items from cart?')) {
-            this.cart.forEach(item => { const product = this.products.find(p => p.id === item.id); if (product) product.stock += item.quantity; });
-            this.cart = []; this.saveCart(); this.saveProducts();
-          }
-        },
-
+        removeFromCart(idx) { const item = this.cart[idx]; const product = this.products.find(p => p.id === item.id); if (product) product.stock += item.quantity; this.cart.splice(idx, 1); this.saveCart(); this.saveProducts(); },
+        incrementQuantity(idx) { const item = this.cart[idx]; const product = this.products.find(p => p.id === item.id); if (product && product.stock > 0) { item.quantity++; product.stock--; this.saveCart(); this.saveProducts(); } },
+        decrementQuantity(idx) { const item = this.cart[idx]; if (item.quantity > 1) { const product = this.products.find(p => p.id === item.id); if (product) product.stock++; item.quantity--; this.saveCart(); this.saveProducts(); } },
+        clearCart() { if (confirm('Remove all items from cart?')) { this.cart.forEach(item => { const product = this.products.find(p => p.id === item.id); if (product) product.stock += item.quantity; }); this.cart = []; this.saveCart(); this.saveProducts(); } },
         saveCart() { localStorage.setItem('sip_cart', JSON.stringify(this.cart)); },
         saveProducts() { localStorage.setItem('sip_products', JSON.stringify(this.products)); },
 
         proceedToCheckout() {
-          if (!this.currentUser) { this.cartOpen = false; this.authRedirectMessage = 'Please sign in to checkout.'; this.authMode = 'login'; this.pendingCheckout = true; this.showAuth = true; return; }
+          if (!this.currentUser) { this.cartOpen = false; this.authRedirectMessage = 'Please sign in to continue with checkout.'; this.authMode = 'login'; this.pendingCheckout = true; this.showAuth = true; return; }
           if (this.cart.length === 0) return;
           this.checkoutForm.name = this.currentUser.name || ''; this.checkoutForm.email = this.currentUser.email || ''; this.checkoutForm.phone = this.currentUser.phone || ''; this.checkoutForm.address = this.currentUser.address || '';
           this.cartOpen = false; this.showCheckout = true;
         },
 
         processOrder() {
-          if (!this.checkoutForm.name || !this.checkoutForm.email || !this.checkoutForm.phone || !this.checkoutForm.address || !this.checkoutForm.paymentMethod) { alert('Fill all fields.'); return; }
+          if (!this.checkoutForm.name || !this.checkoutForm.email || !this.checkoutForm.phone || !this.checkoutForm.address || !this.checkoutForm.paymentMethod) { alert('Please fill in all required fields.'); return; }
           const order = { id: Date.now(), customerName: this.checkoutForm.name, email: this.checkoutForm.email, phone: this.checkoutForm.phone, address: this.checkoutForm.address, paymentMethod: this.checkoutForm.paymentMethod, paymentStatus: this.checkoutForm.paymentMethod === 'cod' ? 'Paid' : 'Pending', deliveryStatus: 'Pending', items: [...this.cart], total: this.cartGrandTotal, date: new Date().toISOString() };
           this.orders.push(order); localStorage.setItem('sip_orders', JSON.stringify(this.orders));
           this.cart = []; this.saveCart(); this.showCheckout = false;
@@ -792,33 +559,27 @@
         },
 
         subscribeNewsletter() { if (this.newsletterEmail) { this.newsletterSubscribed = true; this.newsletterEmail = ''; setTimeout(() => this.newsletterSubscribed = false, 5000); } },
-        
         openAddProductModal() { this.editingProductIndex = null; this.productForm = { name: '', price: '', stock: '', category: this.categories[0], categoryShort: '', description: '', image: '' }; this.uploadStatus = null; this.showProductModal = true; },
         editProduct(idx) { this.editingProductIndex = idx; const p = this.products[idx]; this.productForm = { name: p.name, price: p.price, stock: p.stock, category: p.category, categoryShort: p.categoryShort, description: p.description, image: p.image }; this.uploadStatus = null; this.showProductModal = true; },
-        
         saveProductForm() {
-          if (!this.productForm.image) { alert('Please provide an image.'); return; }
+          if (!this.productForm.image) { alert('Please upload an image or provide an image URL.'); return; }
           const data = { id: this.editingProductIndex !== null ? this.products[this.editingProductIndex].id : Date.now(), name: this.productForm.name, price: Number(this.productForm.price), stock: Number(this.productForm.stock), category: this.productForm.category, categoryShort: this.productForm.categoryShort || this.productForm.category.split(' ')[0], description: this.productForm.description, image: this.productForm.image };
           if (this.editingProductIndex !== null) { this.products[this.editingProductIndex] = data; } else { this.products.push(data); }
           this.saveProducts(); this.showProductModal = false; this.$nextTick(() => lucide.createIcons());
         },
-        
-        deleteProduct(idx) { if (confirm('Delete permanently?')) { this.products.splice(idx, 1); this.saveProducts(); } },
-        
+        deleteProduct(idx) { if (confirm('Delete this product permanently?')) { this.products.splice(idx, 1); this.saveProducts(); } },
         handleDrop(event) { this.isDragging = false; const files = event.dataTransfer.files; if (files.length > 0) this.processFile(files[0]); },
         handleFileSelect(event) { const files = event.target.files; if (files.length > 0) this.processFile(files[0]); },
-        
         processFile(file) {
           const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-          if (!validTypes.includes(file.type)) { this.uploadStatus = { type: 'error', message: 'Invalid file type.' }; return; }
-          if (file.size > 5 * 1024 * 1024) { this.uploadStatus = { type: 'error', message: 'File too large.' }; return; }
+          if (!validTypes.includes(file.type)) { this.uploadStatus = { type: 'error', message: 'Please upload a JPG, PNG, or WebP image.' }; return; }
+          if (file.size > 5 * 1024 * 1024) { this.uploadStatus = { type: 'error', message: 'Image must be less than 5MB.' }; return; }
           this.uploadStatus = { type: 'success', message: 'Uploading...' };
           const reader = new FileReader();
           reader.onload = (e) => { this.productForm.image = e.target.result; this.uploadStatus = { type: 'success', message: 'Uploaded!' }; setTimeout(() => this.uploadStatus = null, 3000); };
           reader.onerror = () => { this.uploadStatus = { type: 'error', message: 'Failed.' }; };
           reader.readAsDataURL(file);
         },
-        
         recalculateFinancials() { const r = this.orders.reduce((s, o) => s + (o.total || 0), 0); this.financials.grossRevenue = r; this.financials.cogs = Math.round(r * 0.4); this.financials.netProfit = this.financials.grossRevenue - this.financials.cogs - this.financials.opex; },
         approvePayment(id) { const o = this.orders.find(o => o.id === id); if (o) { o.paymentStatus = 'Paid'; localStorage.setItem('sip_orders', JSON.stringify(this.orders)); } },
         toggleUserRole(id) { const u = this.users.find(u => u.id === id); if (u) { u.role = u.role === 'admin' ? 'customer' : 'admin'; localStorage.setItem('sip_users', JSON.stringify(this.users)); } },
