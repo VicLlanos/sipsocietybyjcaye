@@ -52,13 +52,13 @@
     .category-pill:hover { color: #5e4b3c; }
     .category-divider { color: #d4c5b2; font-size: 0.8rem; user-select: none; }
     .admin-sidebar { background: #f5efe8; border-right: 1px solid #ddd2c4; }
-    .status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 500; }
+    .status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.02em; }
     .status-pending { background: #fef3c7; color: #92400e; }
     .status-processing { background: #dbeafe; color: #1e40af; }
     .status-shipping { background: #e0e7ff; color: #3730a3; }
     .status-delivered { background: #d1fae5; color: #065f46; }
     .status-cancelled { background: #fee2e2; color: #991b1b; }
-    .stat-card { background: #fefcf8; border: 1px solid #e7dfd4; border-radius: 16px; padding: 1.25rem; transition: all 0.3s ease; }
+    .stat-card { background: #fefcf8; border: 1px solid #e7dfd4; border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease; }
     .stat-card:hover { border-color: #c9b99a; box-shadow: 0 8px 24px rgba(0,0,0,0.05); }
     .alert-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
@@ -74,6 +74,8 @@
     .drop-zone-icon { font-size: 2.5rem; margin-bottom: 0.5rem; color: #8b7355; }
     .modal-enter { animation: modalFadeIn 0.3s ease-out; }
     @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    .timeline-dot { width: 10px; height: 10px; border-radius: 50%; background: #5e4b3c; display: inline-block; margin-right: 8px; }
+    .timeline-dot.active { background: #059669; animation: pulse 2s infinite; }
     @media (max-width: 480px) { .logo-img-header { width: 40px; height: 40px; } .brand-text-header { font-size: 0.9rem; } .logo-img-hero { width: 70px; height: 70px; } }
     @media (max-width: 768px) { .admin-sidebar { display: none; } }
     @media (min-width: 769px) { .admin-mobile-nav { display: none; } }
@@ -91,8 +93,8 @@
 
   <!-- ==================== AUTH OVERLAY ==================== -->
   <div x-show="showAuth" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" x-cloak>
-    <div class="bg-white rounded-2xl shadow-2xl p-5 sm:p-8 max-w-md w-full rustic-card border-0 fade-in-up max-h-[90vh] overflow-y-auto" @click.outside="showAuth = false">
-      <div class="flex flex-col items-center mb-4 sm:mb-6">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 max-w-md w-full rustic-card border-0 fade-in-up max-h-[90vh] overflow-y-auto" @click.outside="showAuth = false">
+      <div class="flex flex-col items-center mb-5 sm:mb-6">
         <img src="jcayelogo1.png" alt="JCaye's Sip Society" class="logo-img-auth" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <div class="logo-img-auth logo-placeholder" style="display:none;">Logo</div>
         <p class="brand-text brand-text-hero mt-2 text-center">JCaye's Sip Society</p>
@@ -152,14 +154,14 @@
     <!-- CUSTOMER PROFILE PAGE -->
     <div x-show="currentUser && currentUser.role === 'customer' && customerTab === 'profile'" class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800 mb-6">My Profile</h2>
-      <div class="bg-white p-6 rounded-xl rustic-card">
+      <div class="bg-white p-6 sm:p-8 rounded-2xl rustic-card">
         <div x-show="!showProfileEdit">
-          <div class="space-y-4">
-            <div><label class="text-xs text-gray-500 uppercase">Name</label><p class="font-semibold text-gray-800" x-text="currentUser?.name"></p></div>
-            <div><label class="text-xs text-gray-500 uppercase">Email</label><p class="font-semibold text-gray-800" x-text="currentUser?.email"></p></div>
-            <div><label class="text-xs text-gray-500 uppercase">Phone</label><p class="font-semibold text-gray-800" x-text="currentUser?.phone || 'Not set'"></p></div>
-            <div><label class="text-xs text-gray-500 uppercase">Address</label><p class="font-semibold text-gray-800" x-text="currentUser?.address || 'Not set'"></p></div>
-            <button @click="showProfileEdit = true; profileForm = { name: currentUser.name, email: currentUser.email, phone: currentUser.phone || '', address: currentUser.address || '', password: '', newPassword: '' }" class="btn-primary px-6 py-2.5 rounded-xl text-sm mt-4">✏️ Edit Profile</button>
+          <div class="space-y-5">
+            <div class="flex items-center gap-4 pb-4 border-b border-gray-100"><span class="text-2xl">👤</span><div><label class="text-xs text-gray-400 uppercase tracking-wider">Name</label><p class="font-semibold text-gray-800 text-lg" x-text="currentUser?.name"></p></div></div>
+            <div class="flex items-center gap-4 pb-4 border-b border-gray-100"><span class="text-2xl">📧</span><div><label class="text-xs text-gray-400 uppercase tracking-wider">Email</label><p class="font-semibold text-gray-800" x-text="currentUser?.email"></p></div></div>
+            <div class="flex items-center gap-4 pb-4 border-b border-gray-100"><span class="text-2xl">📱</span><div><label class="text-xs text-gray-400 uppercase tracking-wider">Phone</label><p class="font-semibold text-gray-800" x-text="currentUser?.phone || 'Not set'"></p></div></div>
+            <div class="flex items-center gap-4 pb-4"><span class="text-2xl">📍</span><div><label class="text-xs text-gray-400 uppercase tracking-wider">Address</label><p class="font-semibold text-gray-800" x-text="currentUser?.address || 'Not set'"></p></div></div>
+            <button @click="showProfileEdit = true; profileForm = { name: currentUser.name, email: currentUser.email, phone: currentUser.phone || '', address: currentUser.address || '', password: '', newPassword: '' }" class="btn-primary px-6 py-2.5 rounded-xl text-sm mt-2 w-full sm:w-auto">✏️ Edit Profile</button>
           </div>
         </div>
         <div x-show="showProfileEdit">
@@ -168,7 +170,7 @@
             <div><label class="input-label">Email *</label><input type="email" required x-model="profileForm.email" class="input-field text-sm"></div>
             <div><label class="input-label">Phone Number *</label><input type="tel" required x-model="profileForm.phone" class="input-field text-sm"></div>
             <div><label class="input-label">Complete Address *</label><textarea required x-model="profileForm.address" class="input-field text-sm" rows="2"></textarea></div>
-            <div><label class="input-label">Current Password (required to save changes)</label><input type="password" required x-model="profileForm.password" class="input-field text-sm"></div>
+            <div class="bg-amber-50 p-4 rounded-xl border border-amber-200"><label class="input-label text-amber-800">Current Password (required to save changes)</label><input type="password" required x-model="profileForm.password" class="input-field text-sm bg-white"></div>
             <div><label class="input-label">New Password (leave blank to keep current)</label><input type="password" x-model="profileForm.newPassword" class="input-field text-sm"></div>
             <div class="flex gap-3 pt-2"><button type="submit" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1">💾 Save Changes</button><button type="button" @click="showProfileEdit = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div>
           </form>
@@ -179,26 +181,30 @@
 
     <!-- CUSTOMER ORDERS PAGE -->
     <div x-show="currentUser && currentUser.role === 'customer' && customerTab === 'orders'" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800 mb-6">My Orders</h2>
+      <div class="flex items-center justify-between mb-6"><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">My Orders</h2><span class="text-xs text-gray-400" x-text="customerOrders.length + ' order(s)'"></span></div>
       <div class="space-y-4">
         <template x-for="o in customerOrders" :key="o.id">
-          <div class="bg-white p-4 sm:p-6 rounded-xl rustic-card">
+          <div class="bg-white p-4 sm:p-6 rounded-2xl rustic-card">
             <div class="flex flex-col sm:flex-row justify-between gap-4 mb-4">
               <div><p class="text-xs text-gray-400">Order #<span x-text="o.id"></span></p><p class="text-xs text-gray-400 mt-1">📅 <span x-text="new Date(o.date).toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'})"></span></p></div>
               <div class="text-left sm:text-right"><p class="text-2xl font-bold text-[#5e4b3c]">₱<span x-text="o.total?.toLocaleString() || 0"></span></p><span class="status-badge" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span></div>
             </div>
-            <div class="border-t pt-3 mb-3"><p class="text-xs font-semibold text-gray-600 mb-2">Items:</p>
-              <template x-for="item in o.items" :key="item.cartId || item.id"><div class="flex justify-between text-sm py-1"><span x-text="item.name + ' ×' + item.quantity"></span><span class="text-gray-600">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template>
+            <div class="bg-gray-50 p-4 rounded-xl mb-3"><p class="text-xs font-semibold text-gray-600 mb-2">📦 Order Items:</p>
+              <template x-for="item in o.items" :key="item.cartId || item.id"><div class="flex justify-between text-sm py-1.5 border-b border-gray-100 last:border-0"><span x-text="item.name + ' ×' + item.quantity"></span><span class="text-gray-600 font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template>
             </div>
-            <div class="flex items-center gap-2 text-xs text-gray-500 mb-3"><span>Payment: <span class="font-medium" x-text="o.paymentMethod?.toUpperCase()"></span></span><span class="px-2 py-0.5 rounded-full text-xs" :class="o.paymentStatus === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'" x-text="o.paymentStatus"></span></div>
-            <div class="flex flex-wrap gap-2">
-              <button x-show="canCancelOrder(o)" @click="cancelOrder(o.id)" class="btn-danger px-4 py-2 rounded-lg text-xs">Cancel Order</button>
-              <button x-show="o.deliveryStatus === 'Delivered' && !hasReviewed(o.id)" @click="openReviewModal(o)" class="btn-accent px-4 py-2 rounded-lg text-xs">Write a Review</button>
-              <span x-show="o.deliveryStatus === 'Delivered' && hasReviewed(o.id)" class="text-xs text-green-600">✓ Reviewed</span>
+            <div class="flex items-center gap-3 text-xs text-gray-500 mb-3"><span class="flex items-center gap-1">💳 Payment: <span class="font-semibold text-gray-700" x-text="o.paymentMethod?.toUpperCase()"></span></span><span class="px-2 py-0.5 rounded-full text-xs font-medium" :class="o.paymentStatus === 'Paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'" x-text="o.paymentStatus"></span></div>
+            <div class="flex flex-wrap gap-2 pt-3 border-t border-gray-100">
+              <button x-show="canCancelOrder(o)" @click="cancelOrder(o.id)" class="btn-danger px-4 py-2 rounded-lg text-xs">✕ Cancel Order</button>
+              <button x-show="o.deliveryStatus === 'Delivered' && !hasReviewed(o.id)" @click="openReviewModal(o)" class="btn-accent px-4 py-2 rounded-lg text-xs">⭐ Write a Review</button>
+              <span x-show="o.deliveryStatus === 'Delivered' && hasReviewed(o.id)" class="text-xs text-green-600 font-medium flex items-center gap-1">✅ Reviewed</span>
             </div>
           </div>
         </template>
-        <div x-show="customerOrders.length === 0" class="text-center text-gray-400 py-12">No orders yet</div>
+        <div x-show="customerOrders.length === 0" class="text-center text-gray-400 py-16 bg-white rounded-2xl rustic-card">
+          <i data-lucide="package-open" class="w-16 h-16 mx-auto mb-4 opacity-30"></i>
+          <p class="text-lg font-medium mb-1">No orders yet</p>
+          <p class="text-sm">Start shopping to see your orders here.</p>
+        </div>
       </div>
       <button @click="customerTab = 'shop'" class="mt-6 btn-outline px-6 py-2 rounded-xl text-sm">← Back to Shop</button>
     </div>
@@ -208,26 +214,26 @@
       <div class="bg-white rounded-2xl max-w-md w-full p-6 rustic-card modal-enter">
         <h3 class="text-xl font-bold serif mb-4">Write a Review</h3>
         <p class="text-sm text-gray-600 mb-3">Order #<span x-text="reviewOrder?.id"></span></p>
-        <div class="mb-4"><label class="input-label">Rating</label><div class="flex gap-1 text-2xl"><template x-for="i in 5"><button @click="reviewRating = i" :class="i <= reviewRating ? 'text-yellow-500' : 'text-gray-300'">★</button></template></div></div>
-        <div class="mb-4"><label class="input-label">Your Review</label><textarea x-model="reviewText" class="input-field text-sm" rows="3" placeholder="Share your experience..."></textarea></div>
-        <div class="flex gap-3"><button @click="submitReview" class="btn-primary px-6 py-2 rounded-xl text-sm flex-1">Submit</button><button @click="showReviewModal = false" class="btn-outline px-6 py-2 rounded-xl text-sm">Cancel</button></div>
+        <div class="mb-4"><label class="input-label">Rating</label><div class="flex gap-1 text-3xl"><template x-for="i in 5"><button @click="reviewRating = i" :class="i <= reviewRating ? 'text-yellow-500' : 'text-gray-300'" class="transition hover:scale-110">★</button></template></div></div>
+        <div class="mb-4"><label class="input-label">Your Review</label><textarea x-model="reviewText" class="input-field text-sm" rows="3" placeholder="Share your experience with this product..."></textarea></div>
+        <div class="flex gap-3"><button @click="submitReview" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1">Submit Review</button><button @click="showReviewModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div>
       </div>
     </div>
 
     <!-- MAIN SHOP VIEW -->
     <div x-show="!currentUser || currentUser.role !== 'customer' || customerTab === 'shop'">
       <!-- Hero -->
-      <section class="relative hero-pattern bg-gradient-to-b from-[#faf7f2] to-[#f2ebe1] py-8 sm:py-12 md:py-16 px-4 text-center border-b border-[#d9ccbb]">
+      <section class="relative hero-pattern bg-gradient-to-b from-[#faf7f2] to-[#f2ebe1] py-10 sm:py-14 md:py-20 px-4 text-center border-b border-[#d9ccbb]">
         <div class="fade-in-up max-w-4xl mx-auto">
-          <div class="flex flex-col items-center mb-2 sm:mb-4">
+          <div class="flex flex-col items-center mb-3 sm:mb-4">
             <img src="jcayelogo1.png" alt="JCaye's Sip Society" class="logo-img-hero" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
             <p class="brand-text brand-text-hero mt-2">JCaye's Sip Society</p>
           </div>
           <h1 class="text-2xl sm:text-3xl md:text-5xl font-bold serif text-[#4a3728] leading-tight mt-1">Mugs That Tell Your Story</h1>
-          <p class="mt-2 sm:mt-3 text-sm sm:text-base text-gray-500 max-w-xl mx-auto px-2 font-light">Handcrafted ceramic companions for slow mornings, deep conversations, and creative spirits.</p>
-          <div class="mt-4 sm:mt-6 flex justify-center gap-3 sm:gap-4 flex-wrap">
-            <a href="#collection" class="btn-primary px-5 sm:px-6 py-2 sm:py-2.5 font-semibold tracking-wide inline-block text-sm">Explore Collection</a>
-            <a href="#reviews" class="border-2 border-[#5e4b3c] text-[#5e4b3c] px-5 sm:px-6 py-2 sm:py-2.5 rounded-xl font-semibold hover:bg-[#5e4b3c] hover:text-white transition text-sm">Customer Reviews</a>
+          <p class="mt-3 sm:mt-4 text-sm sm:text-base text-gray-500 max-w-xl mx-auto px-2 font-light">Handcrafted ceramic companions for slow mornings, deep conversations, and creative spirits.</p>
+          <div class="mt-5 sm:mt-7 flex justify-center gap-3 sm:gap-4 flex-wrap">
+            <a href="#collection" class="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 font-semibold tracking-wide inline-block text-sm shadow-lg shadow-[#5e4b3c]/20">Explore Collection</a>
+            <a href="#reviews" class="border-2 border-[#5e4b3c] text-[#5e4b3c] px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-semibold hover:bg-[#5e4b3c] hover:text-white transition text-sm">Customer Reviews</a>
           </div>
         </div>
       </section>
@@ -245,22 +251,22 @@
       <div id="collection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         <h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-gray-800 mb-2 sm:mb-4">The Curated Workshop</h2>
         <p class="text-xs sm:text-sm text-gray-400 mb-4 sm:mb-8 font-light tracking-wide uppercase" x-text="selectedCategory === 'All' ? 'All Collections' : selectedCategory"></p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
           <template x-for="(product, index) in filteredProducts" :key="product.id">
-            <div class="rustic-card rounded-2xl flex flex-col fade-in-up mug-card cursor-pointer group" :style="'animation-delay: ' + (index * 0.1) + 's'" @click="openProductModal(product)">
-              <div class="relative h-56 sm:h-64 lg:h-72 bg-gray-100 rounded-xl overflow-hidden">
+            <div class="rustic-card rounded-2xl flex flex-col fade-in-up mug-card cursor-pointer group overflow-hidden" :style="'animation-delay: ' + (index * 0.1) + 's'" @click="openProductModal(product)">
+              <div class="relative h-56 sm:h-64 lg:h-72 bg-gray-100 overflow-hidden">
                 <img :src="product.image" alt="mug" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105">
-                <div class="mug-overlay rounded-xl"><div class="mug-description text-white"><p class="text-sm sm:text-base font-semibold mb-1" x-text="product.name"></p><p class="text-xs sm:text-sm opacity-90 leading-relaxed line-clamp-2" x-text="product.description"></p><p class="text-xs mt-2 opacity-75">Click for details</p></div></div>
-                <span x-show="product.stock === 0" class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full z-10">Out of stock</span>
-                <span x-show="product.stock > 0 && product.stock <= 3" class="absolute top-2 left-2 bg-amber-500 text-white text-xs px-2 py-1 rounded-full z-10">Only <span x-text="product.stock"></span> left</span>
-                <span class="absolute top-2 right-2 bg-white/80 backdrop-blur-sm text-xs px-2 py-1 rounded-full text-gray-600 z-10 shadow-sm font-light tracking-wide uppercase" x-text="product.categoryShort"></span>
+                <div class="mug-overlay"><div class="mug-description text-white"><p class="text-sm sm:text-base font-semibold mb-1" x-text="product.name"></p><p class="text-xs sm:text-sm opacity-90 leading-relaxed line-clamp-2" x-text="product.description"></p><p class="text-xs mt-2 opacity-75">Click for details</p></div></div>
+                <span x-show="product.stock === 0" class="absolute top-3 left-3 bg-red-500 text-white text-xs px-2.5 py-1 rounded-full z-10 shadow">Out of stock</span>
+                <span x-show="product.stock > 0 && product.stock <= 3" class="absolute top-3 left-3 bg-amber-500 text-white text-xs px-2.5 py-1 rounded-full z-10 shadow">Only <span x-text="product.stock"></span> left</span>
+                <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-xs px-2.5 py-1 rounded-full text-gray-600 z-10 shadow font-light tracking-wide uppercase" x-text="product.categoryShort"></span>
               </div>
-              <div class="p-3 sm:p-4 flex flex-col flex-1">
+              <div class="p-4 sm:p-5 flex flex-col flex-1">
                 <h3 class="font-semibold text-base sm:text-lg text-gray-800" x-text="product.name"></h3>
-                <p class="text-xs sm:text-sm text-gray-400 mt-1 mb-2 flex-1 line-clamp-2 font-light" x-text="product.description"></p>
-                <div class="flex items-center justify-between mt-auto">
-                  <div><p class="text-base sm:text-lg font-bold text-[#5e4b3c]">₱<span x-text="product.price.toLocaleString()"></span></p><p class="text-xs text-gray-400 font-light">Stock: <span x-text="product.stock"></span></p></div>
-                  <button @click.stop="addToCart(product)" :disabled="product.stock === 0" class="btn-accent px-3 sm:px-5 py-2 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"><span x-show="!isInCart(product.id)">Add to cart</span><span x-show="isInCart(product.id)" class="flex items-center gap-1">✓ In Cart</span></button>
+                <p class="text-xs sm:text-sm text-gray-400 mt-1 mb-3 flex-1 line-clamp-2 font-light" x-text="product.description"></p>
+                <div class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100">
+                  <div><p class="text-lg sm:text-xl font-bold text-[#5e4b3c]">₱<span x-text="product.price.toLocaleString()"></span></p><p class="text-xs text-gray-400">Stock: <span x-text="product.stock"></span></p></div>
+                  <button @click.stop="addToCart(product)" :disabled="product.stock === 0" class="btn-accent px-4 sm:px-5 py-2 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#b8977e]/30"><span x-show="!isInCart(product.id)">Add to cart</span><span x-show="isInCart(product.id)" class="flex items-center gap-1">✓ In Cart</span></button>
                 </div>
               </div>
             </div>
@@ -272,52 +278,58 @@
       <div x-show="selectedProduct" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" x-cloak @click.self="selectedProduct = null">
         <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto rustic-card modal-enter" @click.stop>
           <div class="relative"><button @click="selectedProduct = null" class="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition"><i data-lucide="x" class="w-5 h-5 text-gray-700"></i></button>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
-              <div class="bg-gray-100 flex items-center justify-center p-8 md:p-12"><img :src="selectedProduct.image" :alt="selectedProduct.name" class="w-full h-auto max-h-96 object-contain rounded-xl"></div>
-              <div class="p-6 md:p-8 flex flex-col"><div class="flex-1"><div class="flex items-center gap-2 mb-3"><span class="text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-medium" x-text="selectedProduct.categoryShort"></span><span x-show="selectedProduct.stock > 0 && selectedProduct.stock <= 3" class="text-xs bg-red-100 text-red-800 px-3 py-1 rounded-full font-medium">Only <span x-text="selectedProduct.stock"></span> left</span><span x-show="selectedProduct.stock === 0" class="text-xs bg-red-500 text-white px-3 py-1 rounded-full font-medium">Out of Stock</span><span x-show="selectedProduct.stock > 3" class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-medium">In Stock</span></div><h2 class="text-2xl md:text-3xl font-bold serif text-gray-800 mb-2" x-text="selectedProduct.name"></h2><p class="text-3xl font-bold text-[#5e4b3c] mb-4">₱<span x-text="selectedProduct.price.toLocaleString()"></span></p><div class="border-t border-gray-200 pt-4 mb-4"><h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Description</h3><p class="text-gray-600 leading-relaxed" x-text="selectedProduct.description"></p></div><div class="border-t border-gray-200 pt-4 mb-6"><h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Product Details</h3><ul class="space-y-2 text-sm text-gray-500"><li class="flex items-center gap-2"><i data-lucide="tag" class="w-4 h-4"></i>Category: <span class="text-gray-700 font-medium" x-text="selectedProduct.category"></span></li><li class="flex items-center gap-2"><i data-lucide="package" class="w-4 h-4"></i>Stock Available: <span class="text-gray-700 font-medium" x-text="selectedProduct.stock"></span></li><li class="flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4"></i>Free Shipping: <span class="text-green-600 font-medium">On orders over ₱1,500</span></li></ul></div></div><div class="border-t border-gray-200 pt-6"><div class="flex items-center gap-3"><button @click="addToCartFromModal(selectedProduct)" :disabled="selectedProduct.stock === 0" class="flex-1 btn-primary py-3.5 rounded-xl font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed"><span x-show="!isInCart(selectedProduct.id)">🛒 Add to Cart</span><span x-show="isInCart(selectedProduct.id)">✓ Already in Cart</span></button><button @click="selectedProduct = null" class="btn-outline px-6 py-3.5 rounded-xl text-sm font-medium">Continue Shopping</button></div></div></div>
+            <div class="grid grid-cols-1 md:grid-cols-2">
+              <div class="bg-gray-50 flex items-center justify-center p-8 md:p-12 rounded-l-2xl"><img :src="selectedProduct.image" :alt="selectedProduct.name" class="w-full h-auto max-h-96 object-contain"></div>
+              <div class="p-6 md:p-8 flex flex-col"><div class="flex-1"><div class="flex items-center gap-2 mb-3"><span class="text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-medium" x-text="selectedProduct.categoryShort"></span><span x-show="selectedProduct.stock > 0 && selectedProduct.stock <= 3" class="text-xs bg-red-100 text-red-800 px-3 py-1 rounded-full font-medium">Only <span x-text="selectedProduct.stock"></span> left</span><span x-show="selectedProduct.stock === 0" class="text-xs bg-red-500 text-white px-3 py-1 rounded-full font-medium">Out of Stock</span><span x-show="selectedProduct.stock > 3" class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-medium">In Stock</span></div><h2 class="text-2xl md:text-3xl font-bold serif text-gray-800 mb-2" x-text="selectedProduct.name"></h2><p class="text-3xl font-bold text-[#5e4b3c] mb-4">₱<span x-text="selectedProduct.price.toLocaleString()"></span></p><div class="border-t border-gray-100 pt-4 mb-4"><h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Description</h3><p class="text-gray-600 leading-relaxed" x-text="selectedProduct.description"></p></div><div class="border-t border-gray-100 pt-4 mb-6"><h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Product Details</h3><ul class="space-y-2.5 text-sm text-gray-500"><li class="flex items-center gap-2"><i data-lucide="tag" class="w-4 h-4 text-[#b8977e]"></i>Category: <span class="text-gray-700 font-medium" x-text="selectedProduct.category"></span></li><li class="flex items-center gap-2"><i data-lucide="package" class="w-4 h-4 text-[#b8977e]"></i>Stock Available: <span class="text-gray-700 font-medium" x-text="selectedProduct.stock"></span></li><li class="flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4 text-[#b8977e]"></i>Free Shipping: <span class="text-green-600 font-medium">On orders over ₱1,500</span></li></ul></div></div><div class="border-t border-gray-100 pt-6"><div class="flex items-center gap-3"><button @click="addToCartFromModal(selectedProduct)" :disabled="selectedProduct.stock === 0" class="flex-1 btn-primary py-3.5 rounded-xl font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#5e4b3c]/20"><span x-show="!isInCart(selectedProduct.id)">🛒 Add to Cart</span><span x-show="isInCart(selectedProduct.id)">✓ Already in Cart</span></button><button @click="selectedProduct = null" class="btn-outline px-6 py-3.5 rounded-xl text-sm font-medium">Continue Shopping</button></div></div></div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- REVIEWS SECTION -->
-      <div id="reviews" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-gray-800 mb-6 text-center">What Our Customers Say</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          <template x-for="review in approvedReviews" :key="review.id">
-            <div class="rustic-card rounded-2xl p-5"><div class="flex items-center gap-2 mb-2"><div class="flex text-yellow-500"><template x-for="i in 5"><span :class="i <= review.rating ? 'text-yellow-500' : 'text-gray-300'">★</span></template></div></div><p class="text-sm text-gray-600 mb-3" x-text="review.text"></p><div class="flex items-center justify-between text-xs text-gray-400"><span x-text="review.customerName"></span><span x-text="new Date(review.date).toLocaleDateString('en-PH', {month:'short', day:'numeric', year:'numeric'})"></span></div></div>
-          </template>
-          <div x-show="approvedReviews.length === 0" class="col-span-full text-center text-gray-400 py-8">No reviews yet. Be the first to review!</div>
+      <div id="reviews" class="bg-[#faf7f2] border-t border-b border-[#e7dfd4] py-10 sm:py-14 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-gray-800 mb-8 text-center">What Our Customers Say</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            <template x-for="review in approvedReviews" :key="review.id">
+              <div class="bg-white rounded-2xl p-6 rustic-card"><div class="flex items-center gap-1 mb-3"><template x-for="i in 5"><span class="text-lg" :class="i <= review.rating ? 'text-yellow-500' : 'text-gray-200'">★</span></template></div><p class="text-sm text-gray-600 mb-4 leading-relaxed italic" x-text="'\"' + review.text + '\"'"></p><div class="flex items-center justify-between text-xs text-gray-400 pt-3 border-t border-gray-50"><span class="font-medium text-gray-600" x-text="review.customerName"></span><span x-text="new Date(review.date).toLocaleDateString('en-PH', {month:'short', day:'numeric', year:'numeric'})"></span></div></div>
+            </template>
+            <div x-show="approvedReviews.length === 0" class="col-span-full text-center text-gray-400 py-12 bg-white rounded-2xl rustic-card">
+              <i data-lucide="message-circle" class="w-12 h-12 mx-auto mb-3 opacity-30"></i>
+              <p class="text-lg font-medium mb-1">No reviews yet</p>
+              <p class="text-sm">Be the first to share your experience!</p>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- Newsletter -->
-      <div id="newsletter" class="bg-[#f3ede7] border-t border-b border-[#d9ccbb] py-8 sm:py-12 px-4 mt-4 sm:mt-8">
-        <div class="max-w-2xl mx-auto text-center"><h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-[#4a3728]">The Morning Pour</h2><p class="text-gray-500 mt-2 text-sm sm:text-base font-light">Stories, new glazes, and exclusive discounts — delivered weekly.</p><form @submit.prevent="subscribeNewsletter" class="mt-4 sm:mt-6 flex flex-col sm:flex-row gap-3 justify-center"><input type="email" required x-model="newsletterEmail" placeholder="your@email.com" class="input-field max-w-xs mx-auto sm:mx-0 text-sm"><button type="submit" class="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 text-sm">Subscribe</button></form><p x-show="newsletterSubscribed" class="text-green-700 mt-3 text-sm font-medium">✨ You're in! Welcome to the society.</p></div>
+      <div id="newsletter" class="bg-[#f3ede7] border-b border-[#d9ccbb] py-10 sm:py-14 px-4">
+        <div class="max-w-2xl mx-auto text-center"><h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-[#4a3728]">The Morning Pour</h2><p class="text-gray-500 mt-2 text-sm sm:text-base font-light">Stories, new glazes, and exclusive discounts — delivered weekly.</p><form @submit.prevent="subscribeNewsletter" class="mt-5 sm:mt-7 flex flex-col sm:flex-row gap-3 justify-center"><input type="email" required x-model="newsletterEmail" placeholder="your@email.com" class="input-field max-w-xs mx-auto sm:mx-0 text-sm"><button type="submit" class="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 text-sm shadow-lg shadow-[#5e4b3c]/20">Subscribe</button></form><p x-show="newsletterSubscribed" class="text-green-700 mt-3 text-sm font-medium">✨ You're in! Welcome to the society.</p></div>
       </div>
 
       <!-- CART DRAWER -->
       <div x-show="cartOpen" class="fixed inset-0 z-40 flex justify-end" x-cloak>
         <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="cartOpen = false"></div>
         <div class="relative w-full max-w-lg bg-white h-full shadow-2xl flex flex-col rustic-card border-l animate-slide-in">
-          <div class="flex justify-between items-center p-4 sm:p-6 border-b"><div><h3 class="text-lg sm:text-xl font-bold serif">Your Cart</h3><p class="text-xs text-gray-500 mt-0.5"><span x-text="cartItemCount"></span> item(s)</p></div><button @click="cartOpen = false" class="text-gray-500 hover:text-gray-700 p-1"><i data-lucide="x" class="w-5 h-5"></i></button></div>
-          <div x-show="cartTotal < 1500 && cart.length > 0" class="bg-amber-50 border-b border-amber-200 px-4 sm:px-6 py-2.5 text-xs text-amber-800">🚚 Add ₱<span x-text="(1500 - cartTotal).toLocaleString()"></span> more for free shipping!</div>
-          <div x-show="cartTotal >= 1500 && cart.length > 0" class="bg-green-50 border-b border-green-200 px-4 sm:px-6 py-2.5 text-xs text-green-800">✅ You've qualified for free shipping!</div>
-          <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+          <div class="flex justify-between items-center p-5 sm:p-6 border-b border-gray-100"><div><h3 class="text-lg sm:text-xl font-bold serif">Your Cart</h3><p class="text-xs text-gray-500 mt-0.5"><span x-text="cartItemCount"></span> item(s)</p></div><button @click="cartOpen = false" class="text-gray-400 hover:text-gray-700 p-1.5 hover:bg-gray-100 rounded-lg transition"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+          <div x-show="cartTotal < 1500 && cart.length > 0" class="bg-amber-50 border-b border-amber-200 px-5 sm:px-6 py-2.5 text-xs text-amber-800 font-medium">🚚 Add ₱<span x-text="(1500 - cartTotal).toLocaleString()"></span> more for free shipping!</div>
+          <div x-show="cartTotal >= 1500 && cart.length > 0" class="bg-green-50 border-b border-green-200 px-5 sm:px-6 py-2.5 text-xs text-green-800 font-medium">✅ You've qualified for free shipping!</div>
+          <div class="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4">
             <template x-for="(item, idx) in cart" :key="item.cartId">
-              <div class="cart-item-enter flex gap-3 sm:gap-4 border-b pb-4">
-                <img :src="item.image" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover flex-shrink-0" onerror="this.style.display='none'">
-                <div class="flex-1 min-w-0"><div class="flex justify-between items-start"><div class="min-w-0 flex-1"><p class="font-semibold text-sm sm:text-base truncate" x-text="item.name"></p><p class="text-xs text-gray-500 mt-0.5" x-text="item.categoryShort"></p></div><button @click="removeFromCart(idx)" class="text-gray-400 hover:text-red-500 p-1 flex-shrink-0 ml-2"><i data-lucide="x-circle" class="w-4 h-4"></i></button></div>
-                  <div class="flex items-center justify-between mt-2"><div class="flex items-center gap-2"><button @click="decrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity <= 1">−</button><span class="text-sm font-semibold w-6 text-center" x-text="item.quantity"></span><button @click="incrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity >= getProductStock(item.id)">+</button></div><p class="font-bold text-sm sm:text-base text-[#5e4b3c]">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></p></div>
+              <div class="cart-item-enter flex gap-3 sm:gap-4 border-b border-gray-100 pb-4">
+                <img :src="item.image" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover flex-shrink-0 bg-gray-50" onerror="this.style.display='none'">
+                <div class="flex-1 min-w-0"><div class="flex justify-between items-start"><div class="min-w-0 flex-1"><p class="font-semibold text-sm sm:text-base truncate" x-text="item.name"></p><p class="text-xs text-gray-400 mt-0.5" x-text="item.categoryShort"></p></div><button @click="removeFromCart(idx)" class="text-gray-300 hover:text-red-500 p-1 flex-shrink-0 ml-2 transition"><i data-lucide="x-circle" class="w-4 h-4"></i></button></div>
+                  <div class="flex items-center justify-between mt-3"><div class="flex items-center gap-2 bg-gray-50 rounded-lg p-0.5"><button @click="decrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity <= 1">−</button><span class="text-sm font-semibold w-6 text-center" x-text="item.quantity"></span><button @click="incrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity >= getProductStock(item.id)">+</button></div><p class="font-bold text-sm sm:text-base text-[#5e4b3c]">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></p></div>
                   <p class="text-xs text-gray-400 mt-1">₱<span x-text="item.price.toLocaleString()"></span> each</p>
                 </div>
               </div>
             </template>
-            <div x-show="cart.length === 0" class="text-center text-gray-400 py-16"><i data-lucide="shopping-bag" class="w-16 h-16 mx-auto mb-4 opacity-30"></i><p class="text-lg font-medium mb-1">Your cart is empty</p><button @click="cartOpen = false" class="btn-outline px-6 py-2 rounded-xl text-sm mt-4">Browse Collection</button></div>
+            <div x-show="cart.length === 0" class="text-center text-gray-400 py-16"><i data-lucide="shopping-bag" class="w-16 h-16 mx-auto mb-4 opacity-30"></i><p class="text-lg font-medium mb-1">Your cart is empty</p><p class="text-sm">Discover our handcrafted mugs.</p><button @click="cartOpen = false" class="btn-outline px-6 py-2 rounded-xl text-sm mt-4">Browse Collection</button></div>
           </div>
-          <div class="border-t p-4 sm:p-6 space-y-3" x-show="cart.length > 0">
-            <div class="space-y-2 text-sm"><div class="flex justify-between"><span class="text-gray-500">Subtotal</span><span>₱<span x-text="cartSubtotal.toLocaleString()"></span></span></div><div class="flex justify-between"><span class="text-gray-500">Shipping</span><span x-text="cartTotal >= 1500 ? 'Free' : '₱' + shippingFee.toLocaleString()"></span></div><div class="flex justify-between text-base font-bold pt-2 border-t"><span>Total</span><span class="text-[#5e4b3c]">₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div></div>
-            <button @click="proceedToCheckout" class="w-full btn-primary py-3 rounded-xl text-sm font-semibold">Proceed to Checkout</button>
+          <div class="border-t border-gray-100 p-5 sm:p-6 space-y-3" x-show="cart.length > 0">
+            <div class="space-y-2 text-sm"><div class="flex justify-between"><span class="text-gray-500">Subtotal</span><span class="font-medium">₱<span x-text="cartSubtotal.toLocaleString()"></span></span></div><div class="flex justify-between"><span class="text-gray-500">Shipping</span><span class="font-medium" x-text="cartTotal >= 1500 ? 'Free' : '₱' + shippingFee.toLocaleString()"></span></div><div class="flex justify-between text-base font-bold pt-2 border-t border-gray-100"><span>Total</span><span class="text-[#5e4b3c]">₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div></div>
+            <button @click="proceedToCheckout" class="w-full btn-primary py-3 rounded-xl text-sm font-semibold shadow-lg shadow-[#5e4b3c]/20">Proceed to Checkout</button>
             <button @click="clearCart" class="w-full text-xs text-gray-400 hover:text-red-500 transition py-1">Clear Cart</button>
           </div>
         </div>
@@ -329,17 +341,17 @@
         <div class="relative bg-white rounded-2xl max-w-lg w-full p-5 sm:p-8 rustic-card fade-in-up max-h-[90vh] overflow-y-auto">
           <h2 class="text-xl sm:text-2xl font-bold serif mb-4">Checkout</h2>
           <div class="bg-blue-50 p-3 rounded-xl mb-4 text-xs text-blue-800" x-show="currentUser">📋 Your profile details are pre-filled below.</div>
-          <div class="bg-[#f3ede7] p-4 rounded-xl mb-4"><p class="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Order Items</p><template x-for="item in cart" :key="item.cartId"><div class="flex justify-between text-sm py-1"><span x-text="item.name + ' ×' + item.quantity"></span><span class="font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template><div class="border-t pt-2 mt-2 flex justify-between font-bold"><span>Total</span><span>₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div></div>
+          <div class="bg-[#f3ede7] p-4 rounded-xl mb-4"><p class="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Order Items</p><template x-for="item in cart" :key="item.cartId"><div class="flex justify-between text-sm py-1"><span x-text="item.name + ' ×' + item.quantity"></span><span class="font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template><div class="border-t border-[#d9ccbb] pt-2 mt-2 flex justify-between font-bold"><span>Total</span><span>₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div></div>
           <form @submit.prevent="processOrder" class="space-y-3">
             <div><label class="input-label">Full Name *</label><input type="text" required x-model="checkoutForm.name" class="input-field text-sm"></div>
             <div><label class="input-label">Email *</label><input type="email" required x-model="checkoutForm.email" class="input-field text-sm"></div>
             <div><label class="input-label">Phone Number *</label><input type="tel" required x-model="checkoutForm.phone" class="input-field text-sm"></div>
             <div><label class="input-label">Complete Delivery Address *</label><textarea required x-model="checkoutForm.address" class="input-field text-sm" rows="3"></textarea></div>
-            <div><label class="input-label">Payment Method *</label><select x-model="checkoutForm.paymentMethod" class="input-field text-sm" required><option value="">Select</option><option value="cod">Cash on Delivery</option><option value="gcash">GCash</option></select></div>
-            <div x-show="checkoutForm.paymentMethod === 'gcash'" class="bg-gray-50 p-4 rounded-xl text-center"><p class="text-sm font-semibold mb-2">📱 Send payment to: 0912-345-6789</p></div>
-            <button type="submit" class="w-full btn-primary py-3 rounded-xl font-semibold text-sm">Place Order</button>
+            <div><label class="input-label">Payment Method *</label><select x-model="checkoutForm.paymentMethod" class="input-field text-sm" required><option value="">Select</option><option value="cod">💵 Cash on Delivery</option><option value="gcash">📱 GCash</option></select></div>
+            <div x-show="checkoutForm.paymentMethod === 'gcash'" class="bg-gray-50 p-4 rounded-xl text-center border border-gray-200"><p class="text-sm font-semibold mb-2">📱 Send payment to: <span class="text-[#5e4b3c]">0912-345-6789</span></p><p class="text-xs text-amber-700">Order pending until admin verifies payment.</p></div>
+            <button type="submit" class="w-full btn-primary py-3 rounded-xl font-semibold text-sm shadow-lg shadow-[#5e4b3c]/20">Place Order</button>
           </form>
-          <button @click="showCheckout = false" class="mt-3 text-sm text-gray-500 w-full">Cancel</button>
+          <button @click="showCheckout = false" class="mt-3 text-sm text-gray-500 w-full hover:text-gray-700">Cancel</button>
         </div>
       </div>
     </div>
@@ -357,50 +369,104 @@
     <div class="admin-sidebar w-64 p-6 flex-shrink-0 hidden md:block min-h-screen">
       <div class="flex items-center gap-3 mb-8"><img src="jcayelogo1.png" alt="JCaye's Sip Society" class="logo-img-sm" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><span class="brand-text text-sm">Admin Panel</span></div>
       <nav class="space-y-1 text-sm">
-        <button @click="adminTab = 'dashboard'" :class="adminTab === 'dashboard' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-lg transition flex items-center gap-3"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
-        <button @click="adminTab = 'products'" :class="adminTab === 'products' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-lg transition flex items-center gap-3"><i data-lucide="package" class="w-4 h-4"></i> Products</button>
-        <button @click="adminTab = 'orders'" :class="adminTab === 'orders' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-lg transition flex items-center gap-3"><i data-lucide="truck" class="w-4 h-4"></i> Orders</button>
-        <button @click="adminTab = 'users'" :class="adminTab === 'users' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-lg transition flex items-center gap-3"><i data-lucide="users" class="w-4 h-4"></i> Users</button>
-        <button @click="adminTab = 'reviews'" :class="adminTab === 'reviews' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-lg transition flex items-center gap-3"><i data-lucide="star" class="w-4 h-4"></i> Reviews</button>
+        <button @click="adminTab = 'dashboard'" :class="adminTab === 'dashboard' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-xl transition flex items-center gap-3"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
+        <button @click="adminTab = 'products'" :class="adminTab === 'products' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-xl transition flex items-center gap-3"><i data-lucide="package" class="w-4 h-4"></i> Products</button>
+        <button @click="adminTab = 'orders'" :class="adminTab === 'orders' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-xl transition flex items-center gap-3"><i data-lucide="truck" class="w-4 h-4"></i> Orders</button>
+        <button @click="adminTab = 'users'" :class="adminTab === 'users' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-xl transition flex items-center gap-3"><i data-lucide="users" class="w-4 h-4"></i> Users</button>
+        <button @click="adminTab = 'reviews'" :class="adminTab === 'reviews' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-xl transition flex items-center gap-3"><i data-lucide="star" class="w-4 h-4"></i> Reviews</button>
       </nav>
     </div>
     <div class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto pb-20 md:pb-8">
-      <!-- DASHBOARD TAB -->
+      <!-- ==================== ENHANCED DASHBOARD ==================== -->
       <div x-show="adminTab === 'dashboard'" class="space-y-6">
-        <div class="flex items-center justify-between"><div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Dashboard</h2><p class="text-sm text-gray-500 mt-1">Welcome back, <span x-text="currentUser?.name"></span></p></div><span class="text-xs text-gray-400" x-text="new Date().toLocaleDateString('en-PH', {weekday:'long', year:'numeric', month:'long', day:'numeric'})"></span></div>
+        <div class="flex items-center justify-between"><div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Dashboard</h2><p class="text-sm text-gray-500 mt-1">Welcome back, <span class="font-semibold text-[#5e4b3c]" x-text="currentUser?.name"></span></p></div><span class="text-xs text-gray-400 bg-white px-3 py-1.5 rounded-full" x-text="new Date().toLocaleDateString('en-PH', {weekday:'long', year:'numeric', month:'long', day:'numeric'})"></span></div>
+        
+        <!-- Stats Grid -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Revenue</span><i data-lucide="trending-up" class="w-4 h-4 text-green-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800">₱<span x-text="financials.grossRevenue.toLocaleString()"></span></p></div>
-          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Orders</span><i data-lucide="shopping-bag" class="w-4 h-4 text-blue-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="orders.length"></p></div>
-          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Profit</span><i data-lucide="dollar-sign" class="w-4 h-4" :class="financials.netProfit >= 0 ? 'text-green-600' : 'text-red-600'"></i></div><p class="text-xl sm:text-2xl font-bold" :class="financials.netProfit >= 0 ? 'text-green-700' : 'text-red-700'">₱<span x-text="financials.netProfit.toLocaleString()"></span></p></div>
-          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Products</span><i data-lucide="package" class="w-4 h-4 text-amber-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="products.length"></p></div>
+          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Revenue</span><i data-lucide="trending-up" class="w-4 h-4 text-green-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800">₱<span x-text="financials.grossRevenue.toLocaleString()"></span></p><p class="text-xs text-gray-400 mt-1">Total gross revenue</p></div>
+          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Orders</span><i data-lucide="shopping-bag" class="w-4 h-4 text-blue-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="orders.length"></p><p class="text-xs text-gray-400 mt-1">Total orders placed</p></div>
+          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Profit</span><i data-lucide="dollar-sign" class="w-4 h-4" :class="financials.netProfit >= 0 ? 'text-green-600' : 'text-red-600'"></i></div><p class="text-xl sm:text-2xl font-bold" :class="financials.netProfit >= 0 ? 'text-green-700' : 'text-red-700'">₱<span x-text="financials.netProfit.toLocaleString()"></span></p><p class="text-xs text-gray-400 mt-1">Net profit/loss</p></div>
+          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Products</span><i data-lucide="package" class="w-4 h-4 text-amber-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="products.length"></p><p class="text-xs text-gray-400 mt-1">Active listings</p></div>
         </div>
-        <div class="stat-card" x-show="lowStockProducts.length > 0"><div class="flex items-center gap-2 mb-4"><span class="alert-dot bg-red-500"></span><h3 class="text-lg font-bold text-gray-800">Low Stock Alerts</h3></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"><template x-for="p in lowStockProducts" :key="p.id"><div class="flex items-center gap-3 bg-red-50 p-3 rounded-xl border border-red-200"><img :src="p.image" class="w-12 h-12 rounded-lg object-cover"><div class="flex-1 min-w-0"><p class="font-semibold text-sm truncate" x-text="p.name"></p><p class="text-xs text-red-700 font-bold">Only <span x-text="p.stock"></span> left</p></div><button @click="adminTab='products'" class="text-xs btn-outline px-2 py-1 rounded-lg">Manage</button></div></template></div></div>
+
+        <!-- Active Orders & Low Stock Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+          <!-- Active Orders -->
+          <div class="stat-card">
+            <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i data-lucide="clock" class="w-5 h-5 text-blue-600"></i> Active Orders</h3><span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium" x-text="activeOrders.length + ' active'"></span></div>
+            <div class="space-y-3 max-h-80 overflow-y-auto">
+              <template x-for="o in activeOrders.slice(0, 5)" :key="o.id">
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer" @click="adminTab='orders'">
+                  <div class="flex items-center gap-3 min-w-0">
+                    <span class="status-badge flex-shrink-0" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span>
+                    <div class="min-w-0"><p class="text-sm font-semibold truncate" x-text="o.customerName"></p><p class="text-xs text-gray-400">#<span x-text="o.id"></span> · ₱<span x-text="o.total?.toLocaleString() || 0"></span></p></div>
+                  </div>
+                  <span class="text-xs text-gray-400 flex-shrink-0 ml-2" x-text="new Date(o.date).toLocaleDateString('en-PH', {month:'short', day:'numeric'})"></span>
+                </div>
+              </template>
+              <div x-show="activeOrders.length === 0" class="text-center text-gray-400 py-4 text-sm">No active orders</div>
+            </div>
+            <button x-show="activeOrders.length > 5" @click="adminTab='orders'" class="text-xs text-[#5e4b3c] hover:underline mt-3 w-full text-center">View all <span x-text="activeOrders.length"></span> active orders →</button>
+          </div>
+
+          <!-- Low Stock & Recent Activity -->
+          <div class="stat-card">
+            <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600"></i> Low Stock Alerts</h3><span x-show="lowStockProducts.length > 0" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full font-medium" x-text="lowStockProducts.length + ' item(s)'"></span></div>
+            <div class="space-y-2 max-h-80 overflow-y-auto">
+              <template x-for="p in lowStockProducts" :key="p.id">
+                <div class="flex items-center justify-between p-2.5 bg-red-50 rounded-xl border border-red-100">
+                  <div class="flex items-center gap-2 min-w-0"><img :src="p.image" class="w-10 h-10 rounded-lg object-cover flex-shrink-0"><div class="min-w-0"><p class="text-sm font-semibold truncate" x-text="p.name"></p><p class="text-xs text-red-600 font-bold">Only <span x-text="p.stock"></span> left</p></div></div>
+                  <button @click="adminTab='products'" class="text-xs btn-outline px-2 py-1 rounded-lg flex-shrink-0 ml-2">Manage</button>
+                </div>
+              </template>
+              <div x-show="lowStockProducts.length === 0" class="text-center text-gray-400 py-4 text-sm">✅ All products well-stocked</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Orders Timeline -->
+        <div class="stat-card">
+          <div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i data-lucide="activity" class="w-5 h-5 text-green-600"></i> Recent Activity</h3><span class="text-xs text-gray-400">Last 5 orders</span></div>
+          <div class="space-y-0">
+            <template x-for="(o, idx) in recentOrders.slice(0, 5)" :key="o.id">
+              <div class="flex items-start gap-3 py-3" :class="idx < 4 ? 'border-b border-gray-100' : ''">
+                <span class="timeline-dot flex-shrink-0 mt-1.5" :class="o.deliveryStatus === 'Delivered' ? 'active' : ''"></span>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between gap-2"><p class="text-sm font-semibold truncate" x-text="o.customerName"></p><span class="status-badge flex-shrink-0 text-xs" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span></div>
+                  <p class="text-xs text-gray-400 mt-0.5">Order #<span x-text="o.id"></span> · ₱<span x-text="o.total?.toLocaleString() || 0"></span> · <span x-text="o.paymentMethod?.toUpperCase()"></span></p>
+                  <p class="text-xs text-gray-400"><span x-text="new Date(o.date).toLocaleDateString('en-PH', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'})"></span></p>
+                </div>
+              </div>
+            </template>
+            <div x-show="orders.length === 0" class="text-center text-gray-400 py-6 text-sm">No orders yet</div>
+          </div>
+        </div>
       </div>
 
       <!-- PRODUCTS TAB -->
       <div x-show="adminTab === 'products'" class="space-y-6">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"><div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Product Inventory</h2></div><button @click="openAddProductModal" class="btn-primary px-5 py-2.5 rounded-xl text-sm flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Add New Mug</button></div>
-        <div class="hidden lg:block overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 font-semibold">Product</th><th class="pb-3 font-semibold">Category</th><th class="pb-3 font-semibold">Price</th><th class="pb-3 font-semibold">Stock</th><th class="pb-3 font-semibold">Status</th><th class="pb-3 font-semibold text-right">Actions</th></tr></thead><tbody><template x-for="(p, idx) in products" :key="p.id"><tr class="border-b hover:bg-gray-50/50 transition"><td class="py-3"><div class="flex items-center gap-3"><img :src="p.image" class="product-image-preview"><div><p class="font-semibold text-gray-800" x-text="p.name"></p><p class="text-xs text-gray-400 line-clamp-1" x-text="p.description"></p></div></div></td><td class="py-3"><span class="text-xs bg-gray-100 px-2 py-1 rounded-full" x-text="p.categoryShort"></span></td><td class="py-3 font-semibold">₱<span x-text="p.price.toLocaleString()"></span></td><td class="py-3"><span :class="p.stock <= 3 ? 'text-red-600 font-bold' : 'text-gray-700'" x-text="p.stock"></span></td><td class="py-3"><span x-show="p.stock > 3" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">In Stock</span><span x-show="p.stock > 0 && p.stock <= 3" class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">Low Stock</span><span x-show="p.stock === 0" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Out of Stock</span></td><td class="py-3 text-right"><button @click="editProduct(idx)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="deleteProduct(idx)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td></tr></template></tbody></table></div>
-        <div class="lg:hidden space-y-3"><template x-for="(p, idx) in products" :key="p.id"><div class="bg-white p-4 rounded-xl rustic-card"><div class="flex gap-3 mb-3"><img :src="p.image" class="product-image-preview flex-shrink-0"><div class="flex-1 min-w-0"><p class="font-semibold text-sm" x-text="p.name"></p><p class="text-xs text-gray-400 line-clamp-2" x-text="p.description"></p></div></div><div class="flex items-center justify-between"><div><p class="font-bold text-[#5e4b3c]">₱<span x-text="p.price.toLocaleString()"></span></p><p class="text-xs" :class="p.stock <= 3 ? 'text-red-600' : 'text-gray-500'">Stock: <span x-text="p.stock"></span></p></div><div class="flex gap-2"><button @click="editProduct(idx)" class="btn-outline px-3 py-1.5 rounded-lg text-xs">Edit</button><button @click="deleteProduct(idx)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></div></div></div></template></div>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"><div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Product Inventory</h2><p class="text-sm text-gray-500 mt-1">Manage your mug collection</p></div><button @click="openAddProductModal" class="btn-primary px-5 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow-lg shadow-[#5e4b3c]/20"><i data-lucide="plus" class="w-4 h-4"></i> Add New Mug</button></div>
+        <div class="hidden lg:block overflow-x-auto bg-white rounded-2xl rustic-card"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 px-4 font-semibold">Product</th><th class="pb-3 px-4 font-semibold">Category</th><th class="pb-3 px-4 font-semibold">Price</th><th class="pb-3 px-4 font-semibold">Stock</th><th class="pb-3 px-4 font-semibold">Status</th><th class="pb-3 px-4 font-semibold text-right">Actions</th></tr></thead><tbody><template x-for="(p, idx) in products" :key="p.id"><tr class="border-b hover:bg-gray-50/50 transition"><td class="py-3 px-4"><div class="flex items-center gap-3"><img :src="p.image" class="product-image-preview" onerror="this.style.display='none'"><div><p class="font-semibold text-gray-800" x-text="p.name"></p><p class="text-xs text-gray-400 line-clamp-1" x-text="p.description"></p></div></div></td><td class="py-3 px-4"><span class="text-xs bg-gray-100 px-2 py-1 rounded-full" x-text="p.categoryShort"></span></td><td class="py-3 px-4 font-semibold">₱<span x-text="p.price.toLocaleString()"></span></td><td class="py-3 px-4"><span :class="p.stock <= 3 ? 'text-red-600 font-bold' : 'text-gray-700'" x-text="p.stock"></span></td><td class="py-3 px-4"><span x-show="p.stock > 3" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">In Stock</span><span x-show="p.stock > 0 && p.stock <= 3" class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">Low Stock</span><span x-show="p.stock === 0" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Out of Stock</span></td><td class="py-3 px-4 text-right"><button @click="editProduct(idx)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="deleteProduct(idx)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td></tr></template></tbody></table></div>
+        <div class="lg:hidden space-y-3"><template x-for="(p, idx) in products" :key="p.id"><div class="bg-white p-4 rounded-2xl rustic-card"><div class="flex gap-3 mb-3"><img :src="p.image" class="product-image-preview flex-shrink-0"><div class="flex-1 min-w-0"><p class="font-semibold text-sm" x-text="p.name"></p><p class="text-xs text-gray-400 line-clamp-2" x-text="p.description"></p><div class="flex items-center gap-2 mt-1"><span class="text-xs bg-gray-100 px-2 py-0.5 rounded-full" x-text="p.categoryShort"></span><span x-show="p.stock <= 3" class="alert-dot bg-red-500"></span></div></div></div><div class="flex items-center justify-between"><div><p class="font-bold text-[#5e4b3c]">₱<span x-text="p.price.toLocaleString()"></span></p><p class="text-xs" :class="p.stock <= 3 ? 'text-red-600' : 'text-gray-500'">Stock: <span x-text="p.stock"></span></p></div><div class="flex gap-2"><button @click="editProduct(idx)" class="btn-outline px-3 py-1.5 rounded-lg text-xs">Edit</button><button @click="deleteProduct(idx)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></div></div></div></template></div>
       </div>
 
       <!-- ORDERS TAB -->
       <div x-show="adminTab === 'orders'" class="space-y-6">
-        <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Order Management</h2>
-        <div class="space-y-4"><template x-for="o in orders" :key="o.id"><div class="bg-white p-4 sm:p-6 rounded-xl rustic-card"><div class="flex flex-col sm:flex-row justify-between gap-4 mb-4"><div><p class="font-semibold text-lg" x-text="o.customerName"></p><p class="text-sm text-gray-500" x-text="o.email"></p><p class="text-sm text-gray-500" x-text="o.phone"></p><p class="text-xs text-gray-400 mt-1">📅 <span x-text="o.date ? new Date(o.date).toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'}) : ''"></span></p></div><div class="text-left sm:text-right"><p class="text-2xl font-bold text-[#5e4b3c]">₱<span x-text="o.total?.toLocaleString() || 0"></span></p><span class="text-xs px-2 py-0.5 rounded-full" :class="o.paymentMethod === 'gcash' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'" x-text="o.paymentMethod?.toUpperCase()"></span><p class="text-xs text-gray-500 mt-1" x-text="o.paymentStatus"></p></div></div><div class="bg-gray-50 p-3 rounded-lg mb-3"><p class="text-xs font-semibold text-gray-600 mb-2">📦 Order Items:</p><template x-for="item in o.items" :key="item.cartId || item.id"><div class="flex justify-between text-sm py-1"><span x-text="item.name + ' ×' + item.quantity"></span><span class="text-gray-600">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template><div class="border-t pt-2 mt-2 flex justify-between font-bold text-sm"><span>Total</span><span>₱<span x-text="o.total?.toLocaleString() || 0"></span></span></div></div><div class="bg-gray-50 p-3 rounded-lg mb-4"><p class="text-xs font-semibold text-gray-600 mb-1">📍 Delivery Address:</p><p class="text-sm text-gray-700" x-text="o.address"></p></div><div class="border-t pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"><div class="flex items-center gap-2"><span class="text-sm font-medium text-gray-600">Status:</span><span class="status-badge" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span></div><div class="flex items-center gap-2 w-full sm:w-auto"><select @change="updateDeliveryStatus(o.id, $event.target.value)" class="input-field w-full sm:w-48 text-sm py-2"><option value="">Update Status</option><option value="Pending">📝 Pending</option><option value="Processing">⚙️ Processing</option><option value="To Ship">📦 To Ship</option><option value="Out for Delivery">🚚 Out for Delivery</option><option value="Delivered">✅ Delivered</option><option value="Cancelled">❌ Cancelled</option></select><button x-show="o.paymentMethod === 'gcash' && o.paymentStatus === 'Pending'" @click="approvePayment(o.id)" class="btn-outline text-xs px-3 py-2 rounded-lg whitespace-nowrap">✅ Approve</button></div></div></div></template><div x-show="orders.length === 0" class="text-center text-gray-400 py-12">No orders yet</div></div>
+        <div class="flex items-center justify-between"><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Order Management</h2><span class="text-xs text-gray-400" x-text="orders.length + ' total orders'"></span></div>
+        <div class="space-y-4"><template x-for="o in orders" :key="o.id"><div class="bg-white p-4 sm:p-6 rounded-2xl rustic-card"><div class="flex flex-col sm:flex-row justify-between gap-4 mb-4"><div><p class="font-semibold text-lg" x-text="o.customerName"></p><p class="text-sm text-gray-500" x-text="o.email"></p><p class="text-sm text-gray-500" x-text="o.phone"></p><p class="text-xs text-gray-400 mt-1">📅 <span x-text="o.date ? new Date(o.date).toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'}) : ''"></span></p></div><div class="text-left sm:text-right"><p class="text-2xl font-bold text-[#5e4b3c]">₱<span x-text="o.total?.toLocaleString() || 0"></span></p><span class="text-xs px-2 py-0.5 rounded-full font-medium" :class="o.paymentMethod === 'gcash' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'" x-text="o.paymentMethod?.toUpperCase()"></span><p class="text-xs text-gray-500 mt-1" x-text="o.paymentStatus"></p></div></div><div class="bg-gray-50 p-4 rounded-xl mb-3"><p class="text-xs font-semibold text-gray-600 mb-2">📦 Order Items:</p><template x-for="item in o.items" :key="item.cartId || item.id"><div class="flex justify-between text-sm py-1.5 border-b border-gray-100 last:border-0"><span x-text="item.name + ' ×' + item.quantity"></span><span class="text-gray-600 font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template><div class="border-t border-gray-200 pt-2 mt-2 flex justify-between font-bold text-sm"><span>Total</span><span>₱<span x-text="o.total?.toLocaleString() || 0"></span></span></div></div><div class="bg-gray-50 p-4 rounded-xl mb-4"><p class="text-xs font-semibold text-gray-600 mb-1">📍 Delivery Address:</p><p class="text-sm text-gray-700" x-text="o.address"></p></div><div class="border-t border-gray-100 pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"><div class="flex items-center gap-2"><span class="text-sm font-medium text-gray-600">Status:</span><span class="status-badge" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span></div><div class="flex items-center gap-2 w-full sm:w-auto"><select @change="updateDeliveryStatus(o.id, $event.target.value)" class="input-field w-full sm:w-48 text-sm py-2"><option value="">Update Status</option><option value="Pending">📝 Pending</option><option value="Processing">⚙️ Processing</option><option value="To Ship">📦 To Ship</option><option value="Out for Delivery">🚚 Out for Delivery</option><option value="Delivered">✅ Delivered</option><option value="Cancelled">❌ Cancelled</option></select><button x-show="o.paymentMethod === 'gcash' && o.paymentStatus === 'Pending'" @click="approvePayment(o.id)" class="btn-outline text-xs px-3 py-2 rounded-lg whitespace-nowrap">✅ Approve Payment</button></div></div></div></template><div x-show="orders.length === 0" class="text-center text-gray-400 py-16 bg-white rounded-2xl rustic-card"><i data-lucide="inbox" class="w-12 h-12 mx-auto mb-3 opacity-30"></i><p class="text-lg font-medium">No orders yet</p></div></div>
       </div>
 
       <!-- USERS TAB -->
       <div x-show="adminTab === 'users'" class="space-y-6">
-        <div class="flex justify-between items-center"><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">User Management</h2><button @click="openAddUserModal" class="btn-primary px-5 py-2.5 rounded-xl text-sm flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Add User</button></div>
-        <div class="stat-card"><h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">Admin</span> Administrators</h3><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 font-semibold">Name</th><th class="pb-3 font-semibold">Email</th><th class="pb-3 font-semibold">Phone</th><th class="pb-3 font-semibold">Status</th><th class="pb-3 font-semibold text-right">Actions</th></tr></thead><tbody><template x-for="u in adminUsers" :key="u.id"><tr class="border-b hover:bg-gray-50/50 transition"><td class="py-3"><span class="font-semibold" x-text="u.name"></span></td><td class="py-3"><span class="text-gray-600" x-text="u.email"></span></td><td class="py-3"><span class="text-gray-600" x-text="u.phone || '—'"></span></td><td class="py-3"><span x-show="!u.blocked" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Active</span><span x-show="u.blocked" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Blocked</span></td><td class="py-3 text-right"><button @click="editUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="deleteUser(u.id)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td></tr></template></tbody></table></div></div>
-        <div class="stat-card"><h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Customer</span> Customers</h3><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 font-semibold">Name</th><th class="pb-3 font-semibold">Email</th><th class="pb-3 font-semibold">Phone</th><th class="pb-3 font-semibold">Address</th><th class="pb-3 font-semibold">Status</th><th class="pb-3 font-semibold text-right">Actions</th></tr></thead><tbody><template x-for="u in customerUsers" :key="u.id"><tr class="border-b hover:bg-gray-50/50 transition"><td class="py-3"><span class="font-semibold" x-text="u.name"></span></td><td class="py-3"><span class="text-gray-600" x-text="u.email"></span></td><td class="py-3"><span class="text-gray-600" x-text="u.phone || '—'"></span></td><td class="py-3"><span class="text-gray-600 text-xs" x-text="u.address ? u.address.substring(0, 30) + '...' : '—'"></span></td><td class="py-3"><span x-show="!u.blocked" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Active</span><span x-show="u.blocked" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Blocked</span></td><td class="py-3 text-right"><button @click="editUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="toggleBlockUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2" :class="u.blocked ? 'text-green-600 border-green-400' : 'text-red-600 border-red-400'" x-text="u.blocked ? 'Unblock' : 'Block'"></button><button @click="deleteUser(u.id)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td></tr></template></tbody></table></div></div>
+        <div class="flex justify-between items-center"><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">User Management</h2><button @click="openAddUserModal" class="btn-primary px-5 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow-lg shadow-[#5e4b3c]/20"><i data-lucide="plus" class="w-4 h-4"></i> Add User</button></div>
+        <div class="stat-card"><h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">Admin</span> Administrators</h3><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 px-3 font-semibold">Name</th><th class="pb-3 px-3 font-semibold">Email</th><th class="pb-3 px-3 font-semibold">Phone</th><th class="pb-3 px-3 font-semibold">Status</th><th class="pb-3 px-3 font-semibold text-right">Actions</th></tr></thead><tbody><template x-for="u in adminUsers" :key="u.id"><tr class="border-b hover:bg-gray-50/50 transition"><td class="py-3 px-3"><span class="font-semibold" x-text="u.name"></span></td><td class="py-3 px-3"><span class="text-gray-600" x-text="u.email"></span></td><td class="py-3 px-3"><span class="text-gray-600" x-text="u.phone || '—'"></span></td><td class="py-3 px-3"><span x-show="!u.blocked" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Active</span><span x-show="u.blocked" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Blocked</span></td><td class="py-3 px-3 text-right"><button @click="editUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="deleteUser(u.id)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td></tr></template></tbody></table></div></div>
+        <div class="stat-card"><h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Customer</span> Customers</h3><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 px-3 font-semibold">Name</th><th class="pb-3 px-3 font-semibold">Email</th><th class="pb-3 px-3 font-semibold">Phone</th><th class="pb-3 px-3 font-semibold">Address</th><th class="pb-3 px-3 font-semibold">Status</th><th class="pb-3 px-3 font-semibold text-right">Actions</th></tr></thead><tbody><template x-for="u in customerUsers" :key="u.id"><tr class="border-b hover:bg-gray-50/50 transition"><td class="py-3 px-3"><span class="font-semibold" x-text="u.name"></span></td><td class="py-3 px-3"><span class="text-gray-600" x-text="u.email"></span></td><td class="py-3 px-3"><span class="text-gray-600" x-text="u.phone || '—'"></span></td><td class="py-3 px-3"><span class="text-gray-600 text-xs" x-text="u.address ? u.address.substring(0, 30) + '...' : '—'"></span></td><td class="py-3 px-3"><span x-show="!u.blocked" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Active</span><span x-show="u.blocked" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Blocked</span></td><td class="py-3 px-3 text-right"><button @click="editUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="toggleBlockUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2" :class="u.blocked ? 'text-green-600 border-green-400' : 'text-red-600 border-red-400'" x-text="u.blocked ? 'Unblock' : 'Block'"></button><button @click="deleteUser(u.id)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td></tr></template></tbody></table></div></div>
       </div>
 
       <!-- REVIEWS TAB -->
       <div x-show="adminTab === 'reviews'" class="space-y-6">
-        <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Review Management</h2>
-        <div class="space-y-3"><template x-for="review in reviews" :key="review.id"><div class="bg-white p-4 rounded-xl rustic-card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"><div><div class="flex text-yellow-500 mb-1"><template x-for="i in 5"><span :class="i <= review.rating ? 'text-yellow-500' : 'text-gray-300'">★</span></template></div><p class="text-sm text-gray-700" x-text="review.text"></p><p class="text-xs text-gray-500 mt-1">By: <span x-text="review.customerName"></span> | Order #<span x-text="review.orderId"></span></p><span class="text-xs px-2 py-0.5 rounded-full mt-1 inline-block" :class="review.approved ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'" x-text="review.approved ? 'Approved' : 'Pending'"></span></div><div class="flex items-center gap-2"><button x-show="!review.approved" @click="approveReview(review.id)" class="btn-outline text-xs px-3 py-2 rounded-lg">Approve</button><button @click="deleteReview(review.id)" class="btn-danger text-xs px-3 py-2 rounded-lg">Delete</button></div></div></template><div x-show="reviews.length === 0" class="text-center text-gray-400 py-12">No reviews yet</div></div>
+        <div class="flex items-center justify-between"><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Review Management</h2><span class="text-xs text-gray-400" x-text="reviews.length + ' total reviews'"></span></div>
+        <div class="space-y-3"><template x-for="review in reviews" :key="review.id"><div class="bg-white p-4 sm:p-5 rounded-2xl rustic-card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"><div><div class="flex text-yellow-500 mb-1"><template x-for="i in 5"><span :class="i <= review.rating ? 'text-yellow-500' : 'text-gray-200'">★</span></template></div><p class="text-sm text-gray-700 italic" x-text="'\"' + review.text + '\"'"></p><p class="text-xs text-gray-500 mt-1">By: <span class="font-medium" x-text="review.customerName"></span> · Order #<span x-text="review.orderId"></span></p><span class="text-xs px-2 py-0.5 rounded-full mt-1.5 inline-block font-medium" :class="review.approved ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'" x-text="review.approved ? '✓ Approved' : '⏳ Pending'"></span></div><div class="flex items-center gap-2"><button x-show="!review.approved" @click="approveReview(review.id)" class="btn-success px-4 py-2 rounded-lg text-xs">Approve</button><button @click="deleteReview(review.id)" class="btn-danger px-4 py-2 rounded-lg text-xs">Delete</button></div></div></template><div x-show="reviews.length === 0" class="text-center text-gray-400 py-16 bg-white rounded-2xl rustic-card"><i data-lucide="star" class="w-12 h-12 mx-auto mb-3 opacity-30"></i><p class="text-lg font-medium">No reviews yet</p></div></div>
       </div>
 
       <!-- PRODUCT FORM MODAL -->
@@ -410,9 +476,9 @@
           <form @submit.prevent="saveProductForm" class="space-y-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="input-label">Product Name *</label><input type="text" required x-model="productForm.name" class="input-field text-sm"></div><div><label class="input-label">Price (₱) *</label><input type="number" required x-model="productForm.price" class="input-field text-sm" min="0"></div><div><label class="input-label">Stock Quantity *</label><input type="number" required x-model="productForm.stock" class="input-field text-sm" min="0"></div><div><label class="input-label">Category *</label><select x-model="productForm.category" class="input-field text-sm" required><option value="">Select</option><template x-for="cat in categories"><option :value="cat" x-text="cat"></option></template></select></div><div><label class="input-label">Short Label</label><input type="text" x-model="productForm.categoryShort" class="input-field text-sm"></div></div>
             <div><label class="input-label">Description *</label><textarea required x-model="productForm.description" class="input-field text-sm" rows="3"></textarea></div>
-            <div><label class="input-label">Product Image *</label><div class="drop-zone" :class="{ 'dragover': isDragging }" @dragover.prevent="isDragging = true" @dragleave.prevent="isDragging = false" @drop.prevent="handleDrop" @click="$refs.fileInput.click()"><div class="drop-zone-icon">🖼️</div><p class="text-sm text-gray-600 mb-1">Drag & drop image here</p><p class="text-xs text-gray-400">or click to browse</p><input type="file" x-ref="fileInput" @change="handleFileSelect" accept="image/jpeg,image/png,image/webp" class="hidden"></div><div class="mt-3"><label class="input-label text-xs text-gray-500">Or paste image URL</label><input type="url" x-model="productForm.image" class="input-field text-sm" placeholder="https://example.com/image.jpg"></div></div>
+            <div><label class="input-label">Product Image *</label><div class="drop-zone" :class="{ 'dragover': isDragging }" @dragover.prevent="isDragging = true" @dragleave.prevent="isDragging = false" @drop.prevent="handleDrop" @click="$refs.fileInput.click()"><div class="drop-zone-icon">🖼️</div><p class="text-sm text-gray-600 mb-1">Drag & drop image here</p><p class="text-xs text-gray-400">or click to browse · JPG, PNG, WebP (max 5MB)</p><input type="file" x-ref="fileInput" @change="handleFileSelect" accept="image/jpeg,image/png,image/webp" class="hidden"></div><div class="mt-3"><label class="input-label text-xs text-gray-500">Or paste image URL</label><input type="url" x-model="productForm.image" class="input-field text-sm" placeholder="https://example.com/image.jpg"></div></div>
             <div class="bg-gray-50 p-4 rounded-xl"><p class="text-xs font-semibold text-gray-600 mb-2">Image Preview</p><img :src="productForm.image || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2296%22 height=%2296%22%3E%3Crect fill=%22%23ddd%22 width=%2296%22 height=%2296%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2210%22%3ENo Image%3C/text%3E%3C/svg%3E'" class="w-24 h-24 rounded-xl object-cover border"></div>
-            <div class="flex gap-3 pt-2"><button type="submit" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1">💾 Save</button><button type="button" @click="showProductModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div>
+            <div class="flex gap-3 pt-2"><button type="submit" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1 shadow-lg shadow-[#5e4b3c]/20">💾 Save</button><button type="button" @click="showProductModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div>
           </form>
         </div>
       </div>
@@ -428,7 +494,7 @@
             <div><label class="input-label">Address</label><textarea x-model="userForm.address" class="input-field text-sm" rows="2"></textarea></div>
             <div><label class="input-label">Role *</label><select x-model="userForm.role" class="input-field text-sm" required><option value="customer">Customer</option><option value="admin">Admin</option></select></div>
             <div><label class="input-label">Password <span x-show="!editingUserId">*</span></label><input type="password" x-model="userForm.password" class="input-field text-sm" :placeholder="editingUserId ? 'Leave blank to keep current' : 'Enter password'" x-bind:required="!editingUserId"></div>
-            <div class="flex gap-3 pt-2"><button type="submit" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1">💾 Save</button><button type="button" @click="showUserModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div>
+            <div class="flex gap-3 pt-2"><button type="submit" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1 shadow-lg shadow-[#5e4b3c]/20">💾 Save</button><button type="button" @click="showUserModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div>
           </form>
         </div>
       </div>
@@ -492,6 +558,8 @@
         get approvedReviews() { return this.reviews.filter(r => r.approved); },
         get adminUsers() { return this.users.filter(u => u.role === 'admin'); },
         get customerUsers() { return this.users.filter(u => u.role === 'customer'); },
+        get activeOrders() { return this.orders.filter(o => o.deliveryStatus !== 'Delivered' && o.deliveryStatus !== 'Cancelled'); },
+        get recentOrders() { return [...this.orders].sort((a, b) => new Date(b.date) - new Date(a.date)); },
 
         getStatusClass(status) {
           const map = { 'Pending': 'status-pending', 'Processing': 'status-processing', 'To Ship': 'status-shipping', 'Out for Delivery': 'status-shipping', 'Delivered': 'status-delivered', 'Cancelled': 'status-cancelled' };
