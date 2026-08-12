@@ -74,7 +74,6 @@
     .drop-zone-icon { font-size: 2.5rem; margin-bottom: 0.5rem; color: #8b7355; }
     .modal-enter { animation: modalFadeIn 0.3s ease-out; }
     @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-    .star-rating { color: #f59e0b; }
     @media (max-width: 480px) { .logo-img-header { width: 40px; height: 40px; } .brand-text-header { font-size: 0.9rem; } .logo-img-hero { width: 70px; height: 70px; } }
     @media (max-width: 768px) { .admin-sidebar { display: none; } }
     @media (min-width: 769px) { .admin-mobile-nav { display: none; } }
@@ -90,7 +89,7 @@
 </head>
 <body class="min-h-screen text-gray-800" x-data="app()" x-init="initApp()">
 
-  <!-- AUTH OVERLAY -->
+  <!-- ==================== AUTH OVERLAY ==================== -->
   <div x-show="showAuth" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" x-cloak>
     <div class="bg-white rounded-2xl shadow-2xl p-5 sm:p-8 max-w-md w-full rustic-card border-0 fade-in-up max-h-[90vh] overflow-y-auto" @click.outside="showAuth = false">
       <div class="flex flex-col items-center mb-4 sm:mb-6">
@@ -119,7 +118,7 @@
     </div>
   </div>
 
-  <!-- HEADER -->
+  <!-- ==================== HEADER ==================== -->
   <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#e0d5c7] shadow-sm">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
       <div class="flex items-center gap-2">
@@ -147,42 +146,38 @@
     </div>
   </header>
 
-  <!-- CUSTOMER VIEW -->
+  <!-- ==================== CUSTOMER VIEW ==================== -->
   <div x-show="!currentUser || currentUser.role !== 'admin'" x-cloak class="w-full">
-    <!-- Customer Profile Page -->
+
+    <!-- CUSTOMER PROFILE PAGE -->
     <div x-show="currentUser && currentUser.role === 'customer' && customerTab === 'profile'" class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800 mb-6">My Profile</h2>
       <div class="bg-white p-6 rounded-xl rustic-card">
-        <!-- View Mode -->
         <div x-show="!showProfileEdit">
           <div class="space-y-4">
-            <div><label class="text-xs text-gray-500 uppercase">Name</label><p class="font-semibold text-gray-800" x-text="currentUser.name"></p></div>
-            <div><label class="text-xs text-gray-500 uppercase">Email</label><p class="font-semibold text-gray-800" x-text="currentUser.email"></p></div>
-            <div><label class="text-xs text-gray-500 uppercase">Phone</label><p class="font-semibold text-gray-800" x-text="currentUser.phone || 'Not set'"></p></div>
-            <div><label class="text-xs text-gray-500 uppercase">Address</label><p class="font-semibold text-gray-800" x-text="currentUser.address || 'Not set'"></p></div>
+            <div><label class="text-xs text-gray-500 uppercase">Name</label><p class="font-semibold text-gray-800" x-text="currentUser?.name"></p></div>
+            <div><label class="text-xs text-gray-500 uppercase">Email</label><p class="font-semibold text-gray-800" x-text="currentUser?.email"></p></div>
+            <div><label class="text-xs text-gray-500 uppercase">Phone</label><p class="font-semibold text-gray-800" x-text="currentUser?.phone || 'Not set'"></p></div>
+            <div><label class="text-xs text-gray-500 uppercase">Address</label><p class="font-semibold text-gray-800" x-text="currentUser?.address || 'Not set'"></p></div>
             <button @click="showProfileEdit = true; profileForm = { name: currentUser.name, email: currentUser.email, phone: currentUser.phone || '', address: currentUser.address || '', password: '', newPassword: '' }" class="btn-primary px-6 py-2.5 rounded-xl text-sm mt-4">✏️ Edit Profile</button>
           </div>
         </div>
-        <!-- Edit Mode -->
         <div x-show="showProfileEdit">
           <form @submit.prevent="updateProfile" class="space-y-4">
             <div><label class="input-label">Full Name *</label><input type="text" required x-model="profileForm.name" class="input-field text-sm"></div>
             <div><label class="input-label">Email *</label><input type="email" required x-model="profileForm.email" class="input-field text-sm"></div>
             <div><label class="input-label">Phone Number *</label><input type="tel" required x-model="profileForm.phone" class="input-field text-sm"></div>
             <div><label class="input-label">Complete Address *</label><textarea required x-model="profileForm.address" class="input-field text-sm" rows="2"></textarea></div>
-            <div><label class="input-label">Current Password (required to save changes)</label><input type="password" required x-model="profileForm.password" class="input-field text-sm" placeholder="Enter current password"></div>
-            <div><label class="input-label">New Password (leave blank to keep current)</label><input type="password" x-model="profileForm.newPassword" class="input-field text-sm" placeholder="Enter new password"></div>
-            <div class="flex gap-3 pt-2">
-              <button type="submit" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1">💾 Save Changes</button>
-              <button type="button" @click="showProfileEdit = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button>
-            </div>
+            <div><label class="input-label">Current Password (required to save changes)</label><input type="password" required x-model="profileForm.password" class="input-field text-sm"></div>
+            <div><label class="input-label">New Password (leave blank to keep current)</label><input type="password" x-model="profileForm.newPassword" class="input-field text-sm"></div>
+            <div class="flex gap-3 pt-2"><button type="submit" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1">💾 Save Changes</button><button type="button" @click="showProfileEdit = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div>
           </form>
         </div>
       </div>
       <button @click="customerTab = 'shop'" class="mt-6 btn-outline px-6 py-2 rounded-xl text-sm">← Back to Shop</button>
     </div>
 
-    <!-- Customer Orders Page -->
+    <!-- CUSTOMER ORDERS PAGE -->
     <div x-show="currentUser && currentUser.role === 'customer' && customerTab === 'orders'" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800 mb-6">My Orders</h2>
       <div class="space-y-4">
@@ -208,21 +203,20 @@
       <button @click="customerTab = 'shop'" class="mt-6 btn-outline px-6 py-2 rounded-xl text-sm">← Back to Shop</button>
     </div>
 
-    <!-- Review Modal -->
+    <!-- REVIEW MODAL -->
     <div x-show="showReviewModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" x-cloak>
       <div class="bg-white rounded-2xl max-w-md w-full p-6 rustic-card modal-enter">
         <h3 class="text-xl font-bold serif mb-4">Write a Review</h3>
         <p class="text-sm text-gray-600 mb-3">Order #<span x-text="reviewOrder?.id"></span></p>
-        <div class="mb-4"><label class="input-label">Rating</label><div class="flex gap-1 text-2xl"><template x-for="i in 5"><button @click="reviewRating = i" class="star-rating" :class="i <= reviewRating ? 'text-yellow-500' : 'text-gray-300'">★</button></template></div></div>
+        <div class="mb-4"><label class="input-label">Rating</label><div class="flex gap-1 text-2xl"><template x-for="i in 5"><button @click="reviewRating = i" :class="i <= reviewRating ? 'text-yellow-500' : 'text-gray-300'">★</button></template></div></div>
         <div class="mb-4"><label class="input-label">Your Review</label><textarea x-model="reviewText" class="input-field text-sm" rows="3" placeholder="Share your experience..."></textarea></div>
         <div class="flex gap-3"><button @click="submitReview" class="btn-primary px-6 py-2 rounded-xl text-sm flex-1">Submit</button><button @click="showReviewModal = false" class="btn-outline px-6 py-2 rounded-xl text-sm">Cancel</button></div>
       </div>
     </div>
 
-    <!-- Main Shop View -->
+    <!-- MAIN SHOP VIEW -->
     <div x-show="!currentUser || currentUser.role !== 'customer' || customerTab === 'shop'">
-      <!-- Hero, Categories, Product Grid, Product Modal, Reviews, Newsletter, Cart, Checkout - same as before -->
-      <!-- [All existing shop content here] -->
+      <!-- Hero -->
       <section class="relative hero-pattern bg-gradient-to-b from-[#faf7f2] to-[#f2ebe1] py-8 sm:py-12 md:py-16 px-4 text-center border-b border-[#d9ccbb]">
         <div class="fade-in-up max-w-4xl mx-auto">
           <div class="flex flex-col items-center mb-2 sm:mb-4">
@@ -238,6 +232,7 @@
         </div>
       </section>
 
+      <!-- Categories -->
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div class="flex flex-wrap items-center justify-center gap-1 sm:gap-2 overflow-x-auto scrollbar-hide pb-1">
           <span class="text-xs text-gray-400 uppercase tracking-widest mr-2 sm:mr-4 font-light hidden sm:inline">Filter</span>
@@ -246,6 +241,7 @@
         </div>
       </div>
 
+      <!-- Product Grid -->
       <div id="collection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         <h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-gray-800 mb-2 sm:mb-4">The Curated Workshop</h2>
         <p class="text-xs sm:text-sm text-gray-400 mb-4 sm:mb-8 font-light tracking-wide uppercase" x-text="selectedCategory === 'All' ? 'All Collections' : selectedCategory"></p>
@@ -272,16 +268,7 @@
         </div>
       </div>
 
-      <div id="reviews" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-gray-800 mb-6 text-center">What Our Customers Say</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          <template x-for="review in approvedReviews" :key="review.id">
-            <div class="rustic-card rounded-2xl p-5"><div class="flex items-center gap-2 mb-2"><div class="flex text-yellow-500"><template x-for="i in 5"><span :class="i <= review.rating ? 'text-yellow-500' : 'text-gray-300'">★</span></template></div></div><p class="text-sm text-gray-600 mb-3" x-text="review.text"></p><div class="flex items-center justify-between text-xs text-gray-400"><span x-text="review.customerName"></span><span x-text="new Date(review.date).toLocaleDateString('en-PH', {month:'short', day:'numeric', year:'numeric'})"></span></div></div>
-          </template>
-          <div x-show="approvedReviews.length === 0" class="col-span-full text-center text-gray-400 py-8">No reviews yet. Be the first to review!</div>
-        </div>
-      </div>
-
+      <!-- PRODUCT DETAIL MODAL -->
       <div x-show="selectedProduct" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" x-cloak @click.self="selectedProduct = null">
         <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto rustic-card modal-enter" @click.stop>
           <div class="relative"><button @click="selectedProduct = null" class="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition"><i data-lucide="x" class="w-5 h-5 text-gray-700"></i></button>
@@ -293,13 +280,72 @@
         </div>
       </div>
 
-      <div id="newsletter" class="bg-[#f3ede7] border-t border-b border-[#d9ccbb] py-8 sm:py-12 px-4 mt-4 sm:mt-8"><div class="max-w-2xl mx-auto text-center"><h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-[#4a3728]">The Morning Pour</h2><p class="text-gray-500 mt-2 text-sm sm:text-base font-light">Stories, new glazes, and exclusive discounts — delivered weekly.</p><form @submit.prevent="subscribeNewsletter" class="mt-4 sm:mt-6 flex flex-col sm:flex-row gap-3 justify-center"><input type="email" required x-model="newsletterEmail" placeholder="your@email.com" class="input-field max-w-xs mx-auto sm:mx-0 text-sm"><button type="submit" class="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 text-sm">Subscribe</button></form><p x-show="newsletterSubscribed" class="text-green-700 mt-3 text-sm font-medium">✨ You're in! Welcome to the society.</p></div></div>
+      <!-- REVIEWS SECTION -->
+      <div id="reviews" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-gray-800 mb-6 text-center">What Our Customers Say</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <template x-for="review in approvedReviews" :key="review.id">
+            <div class="rustic-card rounded-2xl p-5"><div class="flex items-center gap-2 mb-2"><div class="flex text-yellow-500"><template x-for="i in 5"><span :class="i <= review.rating ? 'text-yellow-500' : 'text-gray-300'">★</span></template></div></div><p class="text-sm text-gray-600 mb-3" x-text="review.text"></p><div class="flex items-center justify-between text-xs text-gray-400"><span x-text="review.customerName"></span><span x-text="new Date(review.date).toLocaleDateString('en-PH', {month:'short', day:'numeric', year:'numeric'})"></span></div></div>
+          </template>
+          <div x-show="approvedReviews.length === 0" class="col-span-full text-center text-gray-400 py-8">No reviews yet. Be the first to review!</div>
+        </div>
+      </div>
 
-      <!-- Cart Drawer and Checkout (same as before) -->
+      <!-- Newsletter -->
+      <div id="newsletter" class="bg-[#f3ede7] border-t border-b border-[#d9ccbb] py-8 sm:py-12 px-4 mt-4 sm:mt-8">
+        <div class="max-w-2xl mx-auto text-center"><h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-[#4a3728]">The Morning Pour</h2><p class="text-gray-500 mt-2 text-sm sm:text-base font-light">Stories, new glazes, and exclusive discounts — delivered weekly.</p><form @submit.prevent="subscribeNewsletter" class="mt-4 sm:mt-6 flex flex-col sm:flex-row gap-3 justify-center"><input type="email" required x-model="newsletterEmail" placeholder="your@email.com" class="input-field max-w-xs mx-auto sm:mx-0 text-sm"><button type="submit" class="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 text-sm">Subscribe</button></form><p x-show="newsletterSubscribed" class="text-green-700 mt-3 text-sm font-medium">✨ You're in! Welcome to the society.</p></div>
+      </div>
+
+      <!-- CART DRAWER -->
+      <div x-show="cartOpen" class="fixed inset-0 z-40 flex justify-end" x-cloak>
+        <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="cartOpen = false"></div>
+        <div class="relative w-full max-w-lg bg-white h-full shadow-2xl flex flex-col rustic-card border-l animate-slide-in">
+          <div class="flex justify-between items-center p-4 sm:p-6 border-b"><div><h3 class="text-lg sm:text-xl font-bold serif">Your Cart</h3><p class="text-xs text-gray-500 mt-0.5"><span x-text="cartItemCount"></span> item(s)</p></div><button @click="cartOpen = false" class="text-gray-500 hover:text-gray-700 p-1"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+          <div x-show="cartTotal < 1500 && cart.length > 0" class="bg-amber-50 border-b border-amber-200 px-4 sm:px-6 py-2.5 text-xs text-amber-800">🚚 Add ₱<span x-text="(1500 - cartTotal).toLocaleString()"></span> more for free shipping!</div>
+          <div x-show="cartTotal >= 1500 && cart.length > 0" class="bg-green-50 border-b border-green-200 px-4 sm:px-6 py-2.5 text-xs text-green-800">✅ You've qualified for free shipping!</div>
+          <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+            <template x-for="(item, idx) in cart" :key="item.cartId">
+              <div class="cart-item-enter flex gap-3 sm:gap-4 border-b pb-4">
+                <img :src="item.image" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover flex-shrink-0" onerror="this.style.display='none'">
+                <div class="flex-1 min-w-0"><div class="flex justify-between items-start"><div class="min-w-0 flex-1"><p class="font-semibold text-sm sm:text-base truncate" x-text="item.name"></p><p class="text-xs text-gray-500 mt-0.5" x-text="item.categoryShort"></p></div><button @click="removeFromCart(idx)" class="text-gray-400 hover:text-red-500 p-1 flex-shrink-0 ml-2"><i data-lucide="x-circle" class="w-4 h-4"></i></button></div>
+                  <div class="flex items-center justify-between mt-2"><div class="flex items-center gap-2"><button @click="decrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity <= 1">−</button><span class="text-sm font-semibold w-6 text-center" x-text="item.quantity"></span><button @click="incrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity >= getProductStock(item.id)">+</button></div><p class="font-bold text-sm sm:text-base text-[#5e4b3c]">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></p></div>
+                  <p class="text-xs text-gray-400 mt-1">₱<span x-text="item.price.toLocaleString()"></span> each</p>
+                </div>
+              </div>
+            </template>
+            <div x-show="cart.length === 0" class="text-center text-gray-400 py-16"><i data-lucide="shopping-bag" class="w-16 h-16 mx-auto mb-4 opacity-30"></i><p class="text-lg font-medium mb-1">Your cart is empty</p><button @click="cartOpen = false" class="btn-outline px-6 py-2 rounded-xl text-sm mt-4">Browse Collection</button></div>
+          </div>
+          <div class="border-t p-4 sm:p-6 space-y-3" x-show="cart.length > 0">
+            <div class="space-y-2 text-sm"><div class="flex justify-between"><span class="text-gray-500">Subtotal</span><span>₱<span x-text="cartSubtotal.toLocaleString()"></span></span></div><div class="flex justify-between"><span class="text-gray-500">Shipping</span><span x-text="cartTotal >= 1500 ? 'Free' : '₱' + shippingFee.toLocaleString()"></span></div><div class="flex justify-between text-base font-bold pt-2 border-t"><span>Total</span><span class="text-[#5e4b3c]">₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div></div>
+            <button @click="proceedToCheckout" class="w-full btn-primary py-3 rounded-xl text-sm font-semibold">Proceed to Checkout</button>
+            <button @click="clearCart" class="w-full text-xs text-gray-400 hover:text-red-500 transition py-1">Clear Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHECKOUT MODAL -->
+      <div x-show="showCheckout" class="fixed inset-0 z-50 flex items-center justify-center p-4" x-cloak>
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showCheckout = false"></div>
+        <div class="relative bg-white rounded-2xl max-w-lg w-full p-5 sm:p-8 rustic-card fade-in-up max-h-[90vh] overflow-y-auto">
+          <h2 class="text-xl sm:text-2xl font-bold serif mb-4">Checkout</h2>
+          <div class="bg-blue-50 p-3 rounded-xl mb-4 text-xs text-blue-800" x-show="currentUser">📋 Your profile details are pre-filled below.</div>
+          <div class="bg-[#f3ede7] p-4 rounded-xl mb-4"><p class="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Order Items</p><template x-for="item in cart" :key="item.cartId"><div class="flex justify-between text-sm py-1"><span x-text="item.name + ' ×' + item.quantity"></span><span class="font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template><div class="border-t pt-2 mt-2 flex justify-between font-bold"><span>Total</span><span>₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div></div>
+          <form @submit.prevent="processOrder" class="space-y-3">
+            <div><label class="input-label">Full Name *</label><input type="text" required x-model="checkoutForm.name" class="input-field text-sm"></div>
+            <div><label class="input-label">Email *</label><input type="email" required x-model="checkoutForm.email" class="input-field text-sm"></div>
+            <div><label class="input-label">Phone Number *</label><input type="tel" required x-model="checkoutForm.phone" class="input-field text-sm"></div>
+            <div><label class="input-label">Complete Delivery Address *</label><textarea required x-model="checkoutForm.address" class="input-field text-sm" rows="3"></textarea></div>
+            <div><label class="input-label">Payment Method *</label><select x-model="checkoutForm.paymentMethod" class="input-field text-sm" required><option value="">Select</option><option value="cod">Cash on Delivery</option><option value="gcash">GCash</option></select></div>
+            <div x-show="checkoutForm.paymentMethod === 'gcash'" class="bg-gray-50 p-4 rounded-xl text-center"><p class="text-sm font-semibold mb-2">📱 Send payment to: 0912-345-6789</p></div>
+            <button type="submit" class="w-full btn-primary py-3 rounded-xl font-semibold text-sm">Place Order</button>
+          </form>
+          <button @click="showCheckout = false" class="mt-3 text-sm text-gray-500 w-full">Cancel</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- ADMIN VIEW -->
+  <!-- ==================== ADMIN VIEW ==================== -->
   <div x-show="currentUser && currentUser.role === 'admin'" x-cloak class="flex flex-col md:flex-row min-h-screen bg-gray-50">
     <div class="admin-mobile-nav md:hidden flex overflow-x-auto bg-[#f5efe8] border-b border-[#ddd2c4] scrollbar-hide sticky top-16 z-20">
       <button @click="adminTab = 'dashboard'" :class="adminTab === 'dashboard' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">📊 Dashboard</button>
@@ -319,51 +365,59 @@
       </nav>
     </div>
     <div class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto pb-20 md:pb-8">
-      <!-- Dashboard, Products, Orders, Reviews tabs (same as before) -->
+      <!-- DASHBOARD TAB -->
+      <div x-show="adminTab === 'dashboard'" class="space-y-6">
+        <div class="flex items-center justify-between"><div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Dashboard</h2><p class="text-sm text-gray-500 mt-1">Welcome back, <span x-text="currentUser?.name"></span></p></div><span class="text-xs text-gray-400" x-text="new Date().toLocaleDateString('en-PH', {weekday:'long', year:'numeric', month:'long', day:'numeric'})"></span></div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Revenue</span><i data-lucide="trending-up" class="w-4 h-4 text-green-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800">₱<span x-text="financials.grossRevenue.toLocaleString()"></span></p></div>
+          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Orders</span><i data-lucide="shopping-bag" class="w-4 h-4 text-blue-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="orders.length"></p></div>
+          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Profit</span><i data-lucide="dollar-sign" class="w-4 h-4" :class="financials.netProfit >= 0 ? 'text-green-600' : 'text-red-600'"></i></div><p class="text-xl sm:text-2xl font-bold" :class="financials.netProfit >= 0 ? 'text-green-700' : 'text-red-700'">₱<span x-text="financials.netProfit.toLocaleString()"></span></p></div>
+          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Products</span><i data-lucide="package" class="w-4 h-4 text-amber-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="products.length"></p></div>
+        </div>
+        <div class="stat-card" x-show="lowStockProducts.length > 0"><div class="flex items-center gap-2 mb-4"><span class="alert-dot bg-red-500"></span><h3 class="text-lg font-bold text-gray-800">Low Stock Alerts</h3></div><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"><template x-for="p in lowStockProducts" :key="p.id"><div class="flex items-center gap-3 bg-red-50 p-3 rounded-xl border border-red-200"><img :src="p.image" class="w-12 h-12 rounded-lg object-cover"><div class="flex-1 min-w-0"><p class="font-semibold text-sm truncate" x-text="p.name"></p><p class="text-xs text-red-700 font-bold">Only <span x-text="p.stock"></span> left</p></div><button @click="adminTab='products'" class="text-xs btn-outline px-2 py-1 rounded-lg">Manage</button></div></template></div></div>
+      </div>
 
-      <!-- Enhanced Users Tab -->
+      <!-- PRODUCTS TAB -->
+      <div x-show="adminTab === 'products'" class="space-y-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"><div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Product Inventory</h2></div><button @click="openAddProductModal" class="btn-primary px-5 py-2.5 rounded-xl text-sm flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Add New Mug</button></div>
+        <div class="hidden lg:block overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 font-semibold">Product</th><th class="pb-3 font-semibold">Category</th><th class="pb-3 font-semibold">Price</th><th class="pb-3 font-semibold">Stock</th><th class="pb-3 font-semibold">Status</th><th class="pb-3 font-semibold text-right">Actions</th></tr></thead><tbody><template x-for="(p, idx) in products" :key="p.id"><tr class="border-b hover:bg-gray-50/50 transition"><td class="py-3"><div class="flex items-center gap-3"><img :src="p.image" class="product-image-preview"><div><p class="font-semibold text-gray-800" x-text="p.name"></p><p class="text-xs text-gray-400 line-clamp-1" x-text="p.description"></p></div></div></td><td class="py-3"><span class="text-xs bg-gray-100 px-2 py-1 rounded-full" x-text="p.categoryShort"></span></td><td class="py-3 font-semibold">₱<span x-text="p.price.toLocaleString()"></span></td><td class="py-3"><span :class="p.stock <= 3 ? 'text-red-600 font-bold' : 'text-gray-700'" x-text="p.stock"></span></td><td class="py-3"><span x-show="p.stock > 3" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">In Stock</span><span x-show="p.stock > 0 && p.stock <= 3" class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">Low Stock</span><span x-show="p.stock === 0" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Out of Stock</span></td><td class="py-3 text-right"><button @click="editProduct(idx)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="deleteProduct(idx)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td></tr></template></tbody></table></div>
+        <div class="lg:hidden space-y-3"><template x-for="(p, idx) in products" :key="p.id"><div class="bg-white p-4 rounded-xl rustic-card"><div class="flex gap-3 mb-3"><img :src="p.image" class="product-image-preview flex-shrink-0"><div class="flex-1 min-w-0"><p class="font-semibold text-sm" x-text="p.name"></p><p class="text-xs text-gray-400 line-clamp-2" x-text="p.description"></p></div></div><div class="flex items-center justify-between"><div><p class="font-bold text-[#5e4b3c]">₱<span x-text="p.price.toLocaleString()"></span></p><p class="text-xs" :class="p.stock <= 3 ? 'text-red-600' : 'text-gray-500'">Stock: <span x-text="p.stock"></span></p></div><div class="flex gap-2"><button @click="editProduct(idx)" class="btn-outline px-3 py-1.5 rounded-lg text-xs">Edit</button><button @click="deleteProduct(idx)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></div></div></div></template></div>
+      </div>
+
+      <!-- ORDERS TAB -->
+      <div x-show="adminTab === 'orders'" class="space-y-6">
+        <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Order Management</h2>
+        <div class="space-y-4"><template x-for="o in orders" :key="o.id"><div class="bg-white p-4 sm:p-6 rounded-xl rustic-card"><div class="flex flex-col sm:flex-row justify-between gap-4 mb-4"><div><p class="font-semibold text-lg" x-text="o.customerName"></p><p class="text-sm text-gray-500" x-text="o.email"></p><p class="text-sm text-gray-500" x-text="o.phone"></p><p class="text-xs text-gray-400 mt-1">📅 <span x-text="o.date ? new Date(o.date).toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'}) : ''"></span></p></div><div class="text-left sm:text-right"><p class="text-2xl font-bold text-[#5e4b3c]">₱<span x-text="o.total?.toLocaleString() || 0"></span></p><span class="text-xs px-2 py-0.5 rounded-full" :class="o.paymentMethod === 'gcash' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'" x-text="o.paymentMethod?.toUpperCase()"></span><p class="text-xs text-gray-500 mt-1" x-text="o.paymentStatus"></p></div></div><div class="bg-gray-50 p-3 rounded-lg mb-3"><p class="text-xs font-semibold text-gray-600 mb-2">📦 Order Items:</p><template x-for="item in o.items" :key="item.cartId || item.id"><div class="flex justify-between text-sm py-1"><span x-text="item.name + ' ×' + item.quantity"></span><span class="text-gray-600">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template><div class="border-t pt-2 mt-2 flex justify-between font-bold text-sm"><span>Total</span><span>₱<span x-text="o.total?.toLocaleString() || 0"></span></span></div></div><div class="bg-gray-50 p-3 rounded-lg mb-4"><p class="text-xs font-semibold text-gray-600 mb-1">📍 Delivery Address:</p><p class="text-sm text-gray-700" x-text="o.address"></p></div><div class="border-t pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"><div class="flex items-center gap-2"><span class="text-sm font-medium text-gray-600">Status:</span><span class="status-badge" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span></div><div class="flex items-center gap-2 w-full sm:w-auto"><select @change="updateDeliveryStatus(o.id, $event.target.value)" class="input-field w-full sm:w-48 text-sm py-2"><option value="">Update Status</option><option value="Pending">📝 Pending</option><option value="Processing">⚙️ Processing</option><option value="To Ship">📦 To Ship</option><option value="Out for Delivery">🚚 Out for Delivery</option><option value="Delivered">✅ Delivered</option><option value="Cancelled">❌ Cancelled</option></select><button x-show="o.paymentMethod === 'gcash' && o.paymentStatus === 'Pending'" @click="approvePayment(o.id)" class="btn-outline text-xs px-3 py-2 rounded-lg whitespace-nowrap">✅ Approve</button></div></div></div></template><div x-show="orders.length === 0" class="text-center text-gray-400 py-12">No orders yet</div></div>
+      </div>
+
+      <!-- USERS TAB -->
       <div x-show="adminTab === 'users'" class="space-y-6">
         <div class="flex justify-between items-center"><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">User Management</h2><button @click="openAddUserModal" class="btn-primary px-5 py-2.5 rounded-xl text-sm flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Add User</button></div>
-        
-        <!-- Admin Users Table -->
-        <div class="stat-card"><h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">Admin</span> Administrators</h3>
-          <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 font-semibold">Name</th><th class="pb-3 font-semibold">Email</th><th class="pb-3 font-semibold">Phone</th><th class="pb-3 font-semibold">Status</th><th class="pb-3 font-semibold text-right">Actions</th></tr></thead>
-            <tbody>
-              <template x-for="u in adminUsers" :key="u.id">
-                <tr class="border-b hover:bg-gray-50/50 transition">
-                  <td class="py-3"><span class="font-semibold" x-text="u.name"></span></td>
-                  <td class="py-3"><span class="text-gray-600" x-text="u.email"></span></td>
-                  <td class="py-3"><span class="text-gray-600" x-text="u.phone || '—'"></span></td>
-                  <td class="py-3"><span x-show="!u.blocked" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Active</span><span x-show="u.blocked" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Blocked</span></td>
-                  <td class="py-3 text-right"><button @click="editUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="deleteUser(u.id)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td>
-                </tr>
-              </template>
-            </tbody></table></div>
-        </div>
+        <div class="stat-card"><h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">Admin</span> Administrators</h3><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 font-semibold">Name</th><th class="pb-3 font-semibold">Email</th><th class="pb-3 font-semibold">Phone</th><th class="pb-3 font-semibold">Status</th><th class="pb-3 font-semibold text-right">Actions</th></tr></thead><tbody><template x-for="u in adminUsers" :key="u.id"><tr class="border-b hover:bg-gray-50/50 transition"><td class="py-3"><span class="font-semibold" x-text="u.name"></span></td><td class="py-3"><span class="text-gray-600" x-text="u.email"></span></td><td class="py-3"><span class="text-gray-600" x-text="u.phone || '—'"></span></td><td class="py-3"><span x-show="!u.blocked" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Active</span><span x-show="u.blocked" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Blocked</span></td><td class="py-3 text-right"><button @click="editUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="deleteUser(u.id)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td></tr></template></tbody></table></div></div>
+        <div class="stat-card"><h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Customer</span> Customers</h3><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 font-semibold">Name</th><th class="pb-3 font-semibold">Email</th><th class="pb-3 font-semibold">Phone</th><th class="pb-3 font-semibold">Address</th><th class="pb-3 font-semibold">Status</th><th class="pb-3 font-semibold text-right">Actions</th></tr></thead><tbody><template x-for="u in customerUsers" :key="u.id"><tr class="border-b hover:bg-gray-50/50 transition"><td class="py-3"><span class="font-semibold" x-text="u.name"></span></td><td class="py-3"><span class="text-gray-600" x-text="u.email"></span></td><td class="py-3"><span class="text-gray-600" x-text="u.phone || '—'"></span></td><td class="py-3"><span class="text-gray-600 text-xs" x-text="u.address ? u.address.substring(0, 30) + '...' : '—'"></span></td><td class="py-3"><span x-show="!u.blocked" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Active</span><span x-show="u.blocked" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Blocked</span></td><td class="py-3 text-right"><button @click="editUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="toggleBlockUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2" :class="u.blocked ? 'text-green-600 border-green-400' : 'text-red-600 border-red-400'" x-text="u.blocked ? 'Unblock' : 'Block'"></button><button @click="deleteUser(u.id)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td></tr></template></tbody></table></div></div>
+      </div>
 
-        <!-- Customer Users Table -->
-        <div class="stat-card"><h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Customer</span> Customers</h3>
-          <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 font-semibold">Name</th><th class="pb-3 font-semibold">Email</th><th class="pb-3 font-semibold">Phone</th><th class="pb-3 font-semibold">Address</th><th class="pb-3 font-semibold">Status</th><th class="pb-3 font-semibold text-right">Actions</th></tr></thead>
-            <tbody>
-              <template x-for="u in customerUsers" :key="u.id">
-                <tr class="border-b hover:bg-gray-50/50 transition">
-                  <td class="py-3"><span class="font-semibold" x-text="u.name"></span></td>
-                  <td class="py-3"><span class="text-gray-600" x-text="u.email"></span></td>
-                  <td class="py-3"><span class="text-gray-600" x-text="u.phone || '—'"></span></td>
-                  <td class="py-3"><span class="text-gray-600 text-xs" x-text="u.address ? u.address.substring(0, 30) + '...' : '—'"></span></td>
-                  <td class="py-3"><span x-show="!u.blocked" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Active</span><span x-show="u.blocked" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Blocked</span></td>
-                  <td class="py-3 text-right">
-                    <button @click="editUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button>
-                    <button @click="toggleBlockUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2" :class="u.blocked ? 'text-green-600 border-green-400' : 'text-red-600 border-red-400'" x-text="u.blocked ? 'Unblock' : 'Block'"></button>
-                    <button @click="deleteUser(u.id)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button>
-                  </td>
-                </tr>
-              </template>
-            </tbody></table></div>
+      <!-- REVIEWS TAB -->
+      <div x-show="adminTab === 'reviews'" class="space-y-6">
+        <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Review Management</h2>
+        <div class="space-y-3"><template x-for="review in reviews" :key="review.id"><div class="bg-white p-4 rounded-xl rustic-card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"><div><div class="flex text-yellow-500 mb-1"><template x-for="i in 5"><span :class="i <= review.rating ? 'text-yellow-500' : 'text-gray-300'">★</span></template></div><p class="text-sm text-gray-700" x-text="review.text"></p><p class="text-xs text-gray-500 mt-1">By: <span x-text="review.customerName"></span> | Order #<span x-text="review.orderId"></span></p><span class="text-xs px-2 py-0.5 rounded-full mt-1 inline-block" :class="review.approved ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'" x-text="review.approved ? 'Approved' : 'Pending'"></span></div><div class="flex items-center gap-2"><button x-show="!review.approved" @click="approveReview(review.id)" class="btn-outline text-xs px-3 py-2 rounded-lg">Approve</button><button @click="deleteReview(review.id)" class="btn-danger text-xs px-3 py-2 rounded-lg">Delete</button></div></div></template><div x-show="reviews.length === 0" class="text-center text-gray-400 py-12">No reviews yet</div></div>
+      </div>
+
+      <!-- PRODUCT FORM MODAL -->
+      <div x-show="showProductModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" x-cloak>
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 rustic-card max-h-[90vh] overflow-y-auto" @click.outside="showProductModal = false">
+          <h2 class="text-xl sm:text-2xl font-bold serif mb-6" x-text="editingProductIndex === null ? 'Add New Mug' : 'Edit Mug'"></h2>
+          <form @submit.prevent="saveProductForm" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="input-label">Product Name *</label><input type="text" required x-model="productForm.name" class="input-field text-sm"></div><div><label class="input-label">Price (₱) *</label><input type="number" required x-model="productForm.price" class="input-field text-sm" min="0"></div><div><label class="input-label">Stock Quantity *</label><input type="number" required x-model="productForm.stock" class="input-field text-sm" min="0"></div><div><label class="input-label">Category *</label><select x-model="productForm.category" class="input-field text-sm" required><option value="">Select</option><template x-for="cat in categories"><option :value="cat" x-text="cat"></option></template></select></div><div><label class="input-label">Short Label</label><input type="text" x-model="productForm.categoryShort" class="input-field text-sm"></div></div>
+            <div><label class="input-label">Description *</label><textarea required x-model="productForm.description" class="input-field text-sm" rows="3"></textarea></div>
+            <div><label class="input-label">Product Image *</label><div class="drop-zone" :class="{ 'dragover': isDragging }" @dragover.prevent="isDragging = true" @dragleave.prevent="isDragging = false" @drop.prevent="handleDrop" @click="$refs.fileInput.click()"><div class="drop-zone-icon">🖼️</div><p class="text-sm text-gray-600 mb-1">Drag & drop image here</p><p class="text-xs text-gray-400">or click to browse</p><input type="file" x-ref="fileInput" @change="handleFileSelect" accept="image/jpeg,image/png,image/webp" class="hidden"></div><div class="mt-3"><label class="input-label text-xs text-gray-500">Or paste image URL</label><input type="url" x-model="productForm.image" class="input-field text-sm" placeholder="https://example.com/image.jpg"></div></div>
+            <div class="bg-gray-50 p-4 rounded-xl"><p class="text-xs font-semibold text-gray-600 mb-2">Image Preview</p><img :src="productForm.image || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2296%22 height=%2296%22%3E%3Crect fill=%22%23ddd%22 width=%2296%22 height=%2296%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2210%22%3ENo Image%3C/text%3E%3C/svg%3E'" class="w-24 h-24 rounded-xl object-cover border"></div>
+            <div class="flex gap-3 pt-2"><button type="submit" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1">💾 Save</button><button type="button" @click="showProductModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div>
+          </form>
         </div>
       </div>
 
-      <!-- User Form Modal -->
+      <!-- USER FORM MODAL -->
       <div x-show="showUserModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" x-cloak>
         <div class="bg-white rounded-2xl max-w-md w-full p-6 rustic-card modal-enter" @click.outside="showUserModal = false">
           <h2 class="text-xl font-bold serif mb-4" x-text="editingUserId ? 'Edit User' : 'Add User'"></h2>
@@ -381,6 +435,7 @@
     </div>
   </div>
 
+  <!-- ==================== JAVASCRIPT ==================== -->
   <script>
     function app() {
       return {
@@ -395,8 +450,7 @@
         selectedCategory: 'All',
         pendingCheckout: false,
         selectedProduct: null,
-        isDragging: false,
-        uploadStatus: null,
+        isDragging: false, uploadStatus: null,
         customerTab: 'shop',
         showProfileEdit: false,
         profileForm: { name: '', email: '', phone: '', address: '', password: '', newPassword: '' },
@@ -446,7 +500,7 @@
 
         isInCart(productId) { return this.cart.some(item => item.id === productId); },
         getProductStock(productId) { const p = this.products.find(p => p.id === productId); return p ? p.stock + (this.cart.find(i => i.id === productId)?.quantity || 0) : 0; },
-        canCancelOrder(order) { if (order.deliveryStatus === 'Cancelled' || order.deliveryStatus === 'Delivered') return false; const orderDate = new Date(order.date); const now = new Date(); const hoursDiff = (now - orderDate) / (1000 * 60 * 60); return hoursDiff <= 24; },
+        canCancelOrder(order) { if (order.deliveryStatus === 'Cancelled' || order.deliveryStatus === 'Delivered') return false; const hoursDiff = (new Date() - new Date(order.date)) / (1000 * 60 * 60); return hoursDiff <= 24; },
         hasReviewed(orderId) { return this.reviews.some(r => r.orderId === orderId && r.customerEmail === this.currentUser?.email); },
 
         initApp() {
@@ -462,7 +516,6 @@
         openProductModal(product) { this.selectedProduct = product; this.$nextTick(() => { lucide.createIcons(); }); },
         addToCartFromModal(product) { this.addToCart(product); const updatedProduct = this.products.find(p => p.id === product.id); if (updatedProduct) this.selectedProduct = updatedProduct; },
 
-        // Profile functions
         updateProfile() {
           if (this.profileForm.password !== this.currentUser.password) { alert('Current password is incorrect.'); return; }
           if (this.profileForm.newPassword && this.profileForm.newPassword.length < 6) { alert('New password must be at least 6 characters.'); return; }
@@ -480,13 +533,11 @@
           }
         },
 
-        // Review functions
         openReviewModal(order) { this.reviewOrder = order; this.reviewRating = 5; this.reviewText = ''; this.showReviewModal = true; },
         submitReview() { if (!this.reviewText.trim()) { alert('Please write a review.'); return; } const review = { id: Date.now(), orderId: this.reviewOrder.id, customerName: this.currentUser.name, customerEmail: this.currentUser.email, rating: this.reviewRating, text: this.reviewText, approved: false, date: new Date().toISOString() }; this.reviews.push(review); localStorage.setItem('sip_reviews', JSON.stringify(this.reviews)); this.showReviewModal = false; alert('Review submitted!'); },
         approveReview(id) { const r = this.reviews.find(r => r.id === id); if (r) { r.approved = true; localStorage.setItem('sip_reviews', JSON.stringify(this.reviews)); } },
         deleteReview(id) { if (confirm('Delete review?')) { this.reviews = this.reviews.filter(r => r.id !== id); localStorage.setItem('sip_reviews', JSON.stringify(this.reviews)); } },
 
-        // User management functions
         openAddUserModal() { this.editingUserId = null; this.userForm = { name: '', email: '', phone: '', address: '', role: 'customer', password: '' }; this.showUserModal = true; },
         editUser(id) { const u = this.users.find(u => u.id === id); if (u) { this.editingUserId = id; this.userForm = { name: u.name, email: u.email, phone: u.phone || '', address: u.address || '', role: u.role, password: '' }; this.showUserModal = true; } },
         saveUser() {
@@ -495,16 +546,16 @@
             if (u) { u.name = this.userForm.name; u.email = this.userForm.email; u.phone = this.userForm.phone; u.address = this.userForm.address; u.role = this.userForm.role; if (this.userForm.password) u.password = this.userForm.password; }
           } else {
             if (!this.userForm.password) { alert('Password required.'); return; }
-            const nu = { id: Date.now(), name: this.userForm.name, email: this.userForm.email, phone: this.userForm.phone, address: this.userForm.address, role: this.userForm.role, password: this.userForm.password, blocked: false };
-            this.users.push(nu);
+            if (this.users.find(u => u.email === this.userForm.email)) { alert('Email already exists.'); return; }
+            this.users.push({ id: Date.now(), name: this.userForm.name, email: this.userForm.email, phone: this.userForm.phone, address: this.userForm.address, role: this.userForm.role, password: this.userForm.password, blocked: false });
           }
           localStorage.setItem('sip_users', JSON.stringify(this.users));
           if (this.currentUser && this.editingUserId === this.currentUser.id) this.currentUser = this.users.find(u => u.id === this.currentUser.id);
           this.showUserModal = false;
         },
-        deleteUser(id) { if (confirm('Delete this user permanently?')) { if (id === this.currentUser?.id) { alert('Cannot delete yourself.'); return; } this.users = this.users.filter(u => u.id !== id); localStorage.setItem('sip_users', JSON.stringify(this.users)); } },
+        deleteUser(id) { if (confirm('Delete user?')) { if (id === this.currentUser?.id) { alert('Cannot delete yourself.'); return; } this.users = this.users.filter(u => u.id !== id); localStorage.setItem('sip_users', JSON.stringify(this.users)); } },
 
-        cancelOrder(id) { if (!confirm('Cancel this order?')) return; const o = this.orders.find(o => o.id === id); if (o && this.canCancelOrder(o)) { o.deliveryStatus = 'Cancelled'; o.paymentStatus = 'Refunded'; localStorage.setItem('sip_orders', JSON.stringify(this.orders)); } },
+        cancelOrder(id) { if (!confirm('Cancel order?')) return; const o = this.orders.find(o => o.id === id); if (o && this.canCancelOrder(o)) { o.deliveryStatus = 'Cancelled'; o.paymentStatus = 'Refunded'; localStorage.setItem('sip_orders', JSON.stringify(this.orders)); } },
 
         handleAuth() {
           if (this.authMode === 'register') {
