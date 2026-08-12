@@ -166,6 +166,7 @@
 
   <!-- ==================== CUSTOMER VIEW ==================== -->
   <div x-show="!currentUser || currentUser.role !== 'admin'" x-cloak class="w-full">
+
     <!-- CUSTOMER PROFILE PAGE -->
     <div x-show="currentUser && currentUser.role === 'customer' && customerTab === 'profile'" class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800 mb-6">My Profile</h2>
@@ -230,7 +231,7 @@
         <h3 class="text-xl font-bold serif mb-4">Write a Review</h3>
         <p class="text-sm text-gray-600 mb-3">Order #<span x-text="reviewOrder?.id"></span></p>
         <div class="mb-4"><label class="input-label">Rating</label><div class="flex gap-1 text-3xl"><template x-for="i in 5"><button @click="reviewRating = i" :class="i <= reviewRating ? 'text-yellow-500' : 'text-gray-300'" class="transition hover:scale-110">★</button></template></div></div>
-        <div class="mb-4"><label class="input-label">Your Review</label><textarea x-model="reviewText" class="input-field text-sm" rows="3" placeholder="Share your experience..."></textarea></div>
+        <div class="mb-4"><label class="input-label">Your Review</label><textarea x-model="reviewText" class="input-field text-sm" rows="3" placeholder="Share your experience with this product..."></textarea></div>
         <div class="flex gap-3"><button @click="submitReview" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1">Submit Review</button><button @click="showReviewModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div>
       </div>
     </div>
@@ -429,6 +430,7 @@
     </div>
     <!-- Main Content -->
     <div class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto pb-20 md:pb-8">
+
       <!-- DASHBOARD TAB -->
       <div x-show="adminTab === 'dashboard'" class="space-y-6">
         <div class="flex items-center justify-between"><div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Dashboard</h2><p class="text-sm text-gray-500 mt-1">Welcome back, <span class="font-semibold text-[#5e4b3c]" x-text="currentUser?.name"></span></p></div><span class="text-xs text-gray-400 bg-white px-3 py-1.5 rounded-full" x-text="new Date().toLocaleDateString('en-PH', {weekday:'long', year:'numeric', month:'long', day:'numeric'})"></span></div>
@@ -521,13 +523,31 @@
             <div><label class="input-label">Description *</label><textarea required x-model="productForm.description" class="input-field text-sm" rows="3"></textarea></div>
             <div class="bg-red-50 p-4 rounded-xl border border-red-200 space-y-3">
               <div class="flex items-center gap-2"><i data-lucide="tag" class="w-4 h-4 text-red-600"></i><span class="text-sm font-bold text-red-800">Sale Settings</span></div>
-              <div class="flex items-center gap-3"><label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" x-model="productForm.onSale" class="rounded"><span class="text-sm text-gray-700">Put on sale</span></label></div>
-              <div x-show="productForm.onSale"><label class="input-label">Sale Percentage (%)</label><input type="number" x-model="productForm.salePercent" class="input-field text-sm" min="1" max="99" placeholder="e.g. 10 for 10% off"><p class="text-xs text-gray-500 mt-1">Sale price: ₱<span x-text="Math.round(productForm.price - (productForm.price * (productForm.salePercent || 0) / 100)) || 0"></span></p></div>
+              <div class="flex items-center gap-3">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" x-model="productForm.onSale" class="rounded" @change="if(!productForm.onSale) productForm.salePercent = 0">
+                  <span class="text-sm text-gray-700">Put on sale</span>
+                </label>
+              </div>
+              <div x-show="productForm.onSale">
+                <label class="input-label">Sale Percentage (%)</label>
+                <input type="number" x-model="productForm.salePercent" class="input-field text-sm" min="1" max="99" placeholder="e.g. 10 for 10% off">
+                <p class="text-xs text-gray-500 mt-1">Sale price: ₱<span x-text="Math.round(productForm.price - (productForm.price * (productForm.salePercent || 0) / 100)) || 0"></span></p>
+              </div>
             </div>
             <div class="bg-purple-50 p-4 rounded-xl border border-purple-200 space-y-3">
               <div class="flex items-center gap-2"><i data-lucide="layers" class="w-4 h-4 text-purple-600"></i><span class="text-sm font-bold text-purple-800">Mug Set Settings</span></div>
-              <div class="flex items-center gap-3"><label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" x-model="productForm.isSet" class="rounded"><span class="text-sm text-gray-700">This is a mug set</span></label></div>
-              <div x-show="productForm.isSet"><label class="input-label">Set Price (₱)</label><input type="number" x-model="productForm.setPrice" class="input-field text-sm" min="0" placeholder="Set price for bundle"><p class="text-xs text-gray-500 mt-1">Individual price remains ₱<span x-text="productForm.price || 0"></span></p></div>
+              <div class="flex items-center gap-3">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" x-model="productForm.isSet" class="rounded" @change="if(!productForm.isSet) productForm.setPrice = 0">
+                  <span class="text-sm text-gray-700">This is a mug set</span>
+                </label>
+              </div>
+              <div x-show="productForm.isSet">
+                <label class="input-label">Set Price (₱)</label>
+                <input type="number" x-model="productForm.setPrice" class="input-field text-sm" min="0" placeholder="Set price for bundle">
+                <p class="text-xs text-gray-500 mt-1">Individual price remains ₱<span x-text="productForm.price || 0"></span></p>
+              </div>
             </div>
             <div><label class="input-label">Product Image *</label><div class="drop-zone" :class="{ 'dragover': isDragging }" @dragover.prevent="isDragging = true" @dragleave.prevent="isDragging = false" @drop.prevent="handleDrop" @click="$refs.fileInput.click()"><div class="drop-zone-icon">🖼️</div><p class="text-sm text-gray-600 mb-1">Drag & drop image here</p><p class="text-xs text-gray-400">or click to browse · JPG, PNG, WebP (max 5MB)</p><input type="file" x-ref="fileInput" @change="handleFileSelect" accept="image/jpeg,image/png,image/webp" class="hidden"></div><div class="mt-3"><label class="input-label text-xs text-gray-500">Or paste image URL</label><input type="url" x-model="productForm.image" class="input-field text-sm" placeholder="https://example.com/image.jpg"></div></div>
             <div class="bg-gray-50 p-4 rounded-xl"><p class="text-xs font-semibold text-gray-600 mb-2">Image Preview</p><img :src="productForm.image || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2296%22 height=%2296%22%3E%3Crect fill=%22%23ddd%22 width=%2296%22 height=%2296%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2210%22%3ENo Image%3C/text%3E%3C/svg%3E'" class="w-24 h-24 rounded-xl object-cover border"></div>
@@ -608,10 +628,10 @@
         shippingFee: 99,
 
         getEffectivePrice(product) {
-          if (product.onSale && product.salePercent > 0) {
+          if (product && product.onSale && product.salePercent > 0) {
             return Math.round(product.price - (product.price * product.salePercent / 100));
           }
-          return product.price;
+          return product ? product.price : 0;
         },
         get filteredProducts() { return this.selectedCategory === 'All' ? this.products : this.products.filter(p => p.category === this.selectedCategory); },
         get cartItemCount() { return this.cart.reduce((sum, item) => sum + item.quantity, 0); },
@@ -637,7 +657,19 @@
         hasReviewed(orderId) { return this.reviews.some(r => r.orderId === orderId && r.customerEmail === this.currentUser?.email); },
 
         initApp() {
-          const sp = localStorage.getItem('sip_products'); if (sp) { try { const parsed = JSON.parse(sp); this.products = parsed.map(p => ({ ...p, onSale: p.onSale || false, salePercent: p.salePercent || 0, isSet: p.isSet || false, setPrice: p.setPrice || 0 })); } catch(e) {} }
+          const sp = localStorage.getItem('sip_products'); 
+          if (sp) { 
+            try { 
+              const parsed = JSON.parse(sp); 
+              this.products = parsed.map(p => ({ 
+                ...p, 
+                onSale: p.onSale === true || p.onSale === 'true' || p.onSale === 1,
+                salePercent: Number(p.salePercent) || 0, 
+                isSet: p.isSet === true || p.isSet === 'true' || p.isSet === 1,
+                setPrice: Number(p.setPrice) || 0 
+              })); 
+            } catch(e) { console.error('Error parsing products:', e); } 
+          }
           const su = localStorage.getItem('sip_users'); if (su) { try { this.users = JSON.parse(su); } catch(e) {} } else { localStorage.setItem('sip_users', JSON.stringify(this.users)); }
           const so = localStorage.getItem('sip_orders'); if (so) { try { this.orders = JSON.parse(so); } catch(e) {} }
           const sc = localStorage.getItem('sip_cart'); if (sc) { try { this.cart = JSON.parse(sc); } catch(e) {} }
@@ -726,7 +758,31 @@
 
         openAddProductModal() { this.editingProductIndex = null; this.productForm = { name: '', price: '', stock: '', category: this.categories[0], categoryShort: '', description: '', image: '', onSale: false, salePercent: 0, isSet: false, setPrice: 0 }; this.uploadStatus = null; this.showProductModal = true; },
         editProduct(idx) { this.editingProductIndex = idx; const p = this.products[idx]; this.productForm = { name: p.name, price: p.price, stock: p.stock, category: p.category, categoryShort: p.categoryShort, description: p.description, image: p.image, onSale: p.onSale || false, salePercent: p.salePercent || 0, isSet: p.isSet || false, setPrice: p.setPrice || 0 }; this.uploadStatus = null; this.showProductModal = true; },
-        saveProductForm() { if (!this.productForm.image) { alert('Image required.'); return; } const data = { id: this.editingProductIndex !== null ? this.products[this.editingProductIndex].id : Date.now(), name: this.productForm.name, price: Number(this.productForm.price), stock: Number(this.productForm.stock), category: this.productForm.category, categoryShort: this.productForm.categoryShort || this.productForm.category.split(' ')[0], description: this.productForm.description, image: this.productForm.image, onSale: this.productForm.onSale, salePercent: Number(this.productForm.salePercent) || 0, isSet: this.productForm.isSet, setPrice: Number(this.productForm.setPrice) || 0 }; if (this.editingProductIndex !== null) { this.products[this.editingProductIndex] = data; } else { this.products.push(data); } this.saveProducts(); this.showProductModal = false; this.$nextTick(() => lucide.createIcons()); },
+        saveProductForm() { 
+          if (!this.productForm.image) { alert('Image required.'); return; } 
+          const data = { 
+            id: this.editingProductIndex !== null ? this.products[this.editingProductIndex].id : Date.now(), 
+            name: this.productForm.name, 
+            price: Number(this.productForm.price), 
+            stock: Number(this.productForm.stock), 
+            category: this.productForm.category, 
+            categoryShort: this.productForm.categoryShort || this.productForm.category.split(' ')[0], 
+            description: this.productForm.description, 
+            image: this.productForm.image, 
+            onSale: this.productForm.onSale ? true : false, 
+            salePercent: this.productForm.onSale ? Number(this.productForm.salePercent) || 0 : 0, 
+            isSet: this.productForm.isSet ? true : false, 
+            setPrice: this.productForm.isSet ? Number(this.productForm.setPrice) || 0 : 0 
+          }; 
+          if (this.editingProductIndex !== null) { 
+            this.products[this.editingProductIndex] = data; 
+          } else { 
+            this.products.push(data); 
+          } 
+          this.saveProducts(); 
+          this.showProductModal = false; 
+          this.$nextTick(() => lucide.createIcons()); 
+        },
         deleteProduct(idx) { if (confirm('Delete?')) { this.products.splice(idx, 1); this.saveProducts(); } },
         handleDrop(event) { this.isDragging = false; const files = event.dataTransfer.files; if (files.length > 0) this.processFile(files[0]); },
         handleFileSelect(event) { const files = event.target.files; if (files.length > 0) this.processFile(files[0]); },
