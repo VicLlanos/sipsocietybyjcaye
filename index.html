@@ -166,8 +166,7 @@
 
   <!-- ==================== CUSTOMER VIEW ==================== -->
   <div x-show="!currentUser || currentUser.role !== 'admin'" x-cloak class="w-full">
-
-    <!-- CUSTOMER PROFILE PAGE -->
+    <!-- PROFILE -->
     <div x-show="currentUser && currentUser.role === 'customer' && customerTab === 'profile'" class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800 mb-6">My Profile</h2>
       <div class="bg-white p-6 sm:p-8 rounded-2xl rustic-card">
@@ -194,222 +193,29 @@
       </div>
       <button @click="customerTab = 'shop'" class="mt-6 btn-outline px-6 py-2 rounded-xl text-sm">← Back to Shop</button>
     </div>
-
-    <!-- CUSTOMER ORDERS PAGE -->
+    <!-- ORDERS -->
     <div x-show="currentUser && currentUser.role === 'customer' && customerTab === 'orders'" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="flex items-center justify-between mb-6"><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">My Orders</h2><span class="text-xs text-gray-400" x-text="customerOrders.length + ' order(s)'"></span></div>
-      <div class="space-y-4">
-        <template x-for="o in customerOrders" :key="o.id">
-          <div class="bg-white p-4 sm:p-6 rounded-2xl rustic-card">
-            <div class="flex flex-col sm:flex-row justify-between gap-4 mb-4">
-              <div><p class="text-xs text-gray-400">Order #<span x-text="o.id"></span></p><p class="text-xs text-gray-400 mt-1">📅 <span x-text="new Date(o.date).toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'})"></span></p></div>
-              <div class="text-left sm:text-right"><p class="text-2xl font-bold text-[#5e4b3c]">₱<span x-text="o.total?.toLocaleString() || 0"></span></p><span class="status-badge" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span></div>
-            </div>
-            <div class="bg-gray-50 p-4 rounded-xl mb-3"><p class="text-xs font-semibold text-gray-600 mb-2">📦 Order Items:</p>
-              <template x-for="item in o.items" :key="item.cartId || item.id"><div class="flex justify-between text-sm py-1.5 border-b border-gray-100 last:border-0"><span x-text="item.name + ' ×' + item.quantity"></span><span class="text-gray-600 font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template>
-            </div>
-            <div class="flex items-center gap-3 text-xs text-gray-500 mb-3"><span class="flex items-center gap-1">💳 Payment: <span class="font-semibold text-gray-700" x-text="o.paymentMethod?.toUpperCase()"></span></span><span class="px-2 py-0.5 rounded-full text-xs font-medium" :class="o.paymentStatus === 'Paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'" x-text="o.paymentStatus"></span></div>
-            <div class="flex flex-wrap gap-2 pt-3 border-t border-gray-100">
-              <button x-show="canCancelOrder(o)" @click="cancelOrder(o.id)" class="btn-danger px-4 py-2 rounded-lg text-xs">✕ Cancel Order</button>
-              <button x-show="o.deliveryStatus === 'Delivered' && !hasReviewed(o.id)" @click="openReviewModal(o)" class="btn-accent px-4 py-2 rounded-lg text-xs">⭐ Write a Review</button>
-              <span x-show="o.deliveryStatus === 'Delivered' && hasReviewed(o.id)" class="text-xs text-green-600 font-medium flex items-center gap-1">✅ Reviewed</span>
-            </div>
-          </div>
-        </template>
-        <div x-show="customerOrders.length === 0" class="text-center text-gray-400 py-16 bg-white rounded-2xl rustic-card">
-          <i data-lucide="package-open" class="w-16 h-16 mx-auto mb-4 opacity-30"></i>
-          <p class="text-lg font-medium mb-1">No orders yet</p>
-          <p class="text-sm">Start shopping to see your orders here.</p>
-        </div>
-      </div>
+      <div class="space-y-4"><template x-for="o in customerOrders" :key="o.id"><div class="bg-white p-4 sm:p-6 rounded-2xl rustic-card"><div class="flex flex-col sm:flex-row justify-between gap-4 mb-4"><div><p class="text-xs text-gray-400">Order #<span x-text="o.id"></span></p><p class="text-xs text-gray-400 mt-1">📅 <span x-text="new Date(o.date).toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'})"></span></p></div><div class="text-left sm:text-right"><p class="text-2xl font-bold text-[#5e4b3c]">₱<span x-text="o.total?.toLocaleString() || 0"></span></p><span class="status-badge" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span></div></div><div class="bg-gray-50 p-4 rounded-xl mb-3"><p class="text-xs font-semibold text-gray-600 mb-2">📦 Order Items:</p><template x-for="item in o.items" :key="item.cartId || item.id"><div class="flex justify-between text-sm py-1.5 border-b border-gray-100 last:border-0"><span x-text="item.name + ' ×' + item.quantity"></span><span class="text-gray-600 font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template></div><div class="flex items-center gap-3 text-xs text-gray-500 mb-3"><span class="flex items-center gap-1">💳 Payment: <span class="font-semibold text-gray-700" x-text="o.paymentMethod?.toUpperCase()"></span></span><span class="px-2 py-0.5 rounded-full text-xs font-medium" :class="o.paymentStatus === 'Paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'" x-text="o.paymentStatus"></span></div><div class="flex flex-wrap gap-2 pt-3 border-t border-gray-100"><button x-show="canCancelOrder(o)" @click="cancelOrder(o.id)" class="btn-danger px-4 py-2 rounded-lg text-xs">✕ Cancel Order</button><button x-show="o.deliveryStatus === 'Delivered' && !hasReviewed(o.id)" @click="openReviewModal(o)" class="btn-accent px-4 py-2 rounded-lg text-xs">⭐ Write a Review</button><span x-show="o.deliveryStatus === 'Delivered' && hasReviewed(o.id)" class="text-xs text-green-600 font-medium flex items-center gap-1">✅ Reviewed</span></div></div></template><div x-show="customerOrders.length === 0" class="text-center text-gray-400 py-16 bg-white rounded-2xl rustic-card"><i data-lucide="package-open" class="w-16 h-16 mx-auto mb-4 opacity-30"></i><p class="text-lg font-medium mb-1">No orders yet</p><p class="text-sm">Start shopping to see your orders here.</p></div></div>
       <button @click="customerTab = 'shop'" class="mt-6 btn-outline px-6 py-2 rounded-xl text-sm">← Back to Shop</button>
     </div>
-
     <!-- REVIEW MODAL -->
-    <div x-show="showReviewModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" x-cloak>
-      <div class="bg-white rounded-2xl max-w-md w-full p-6 rustic-card modal-enter">
-        <h3 class="text-xl font-bold serif mb-4">Write a Review</h3>
-        <p class="text-sm text-gray-600 mb-3">Order #<span x-text="reviewOrder?.id"></span></p>
-        <div class="mb-4"><label class="input-label">Rating</label><div class="flex gap-1 text-3xl"><template x-for="i in 5"><button @click="reviewRating = i" :class="i <= reviewRating ? 'text-yellow-500' : 'text-gray-300'" class="transition hover:scale-110">★</button></template></div></div>
-        <div class="mb-4"><label class="input-label">Your Review</label><textarea x-model="reviewText" class="input-field text-sm" rows="3" placeholder="Share your experience with this product..."></textarea></div>
-        <div class="flex gap-3"><button @click="submitReview" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1">Submit Review</button><button @click="showReviewModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div>
-      </div>
-    </div>
-
-    <!-- MAIN SHOP VIEW -->
+    <div x-show="showReviewModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" x-cloak><div class="bg-white rounded-2xl max-w-md w-full p-6 rustic-card modal-enter"><h3 class="text-xl font-bold serif mb-4">Write a Review</h3><p class="text-sm text-gray-600 mb-3">Order #<span x-text="reviewOrder?.id"></span></p><div class="mb-4"><label class="input-label">Rating</label><div class="flex gap-1 text-3xl"><template x-for="i in 5"><button @click="reviewRating = i" :class="i <= reviewRating ? 'text-yellow-500' : 'text-gray-300'" class="transition hover:scale-110">★</button></template></div></div><div class="mb-4"><label class="input-label">Your Review</label><textarea x-model="reviewText" class="input-field text-sm" rows="3" placeholder="Share your experience..."></textarea></div><div class="flex gap-3"><button @click="submitReview" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1">Submit Review</button><button @click="showReviewModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div></div></div>
+    <!-- SHOP -->
     <div x-show="!currentUser || currentUser.role !== 'customer' || customerTab === 'shop'">
-      <!-- Hero -->
-      <section class="relative hero-pattern bg-gradient-to-b from-[#faf7f2] to-[#f2ebe1] py-10 sm:py-14 md:py-20 px-4 text-center border-b border-[#d9ccbb]">
-        <div class="fade-in-up max-w-4xl mx-auto">
-          <div class="flex flex-col items-center mb-3 sm:mb-4">
-            <img src="jcayelogo1.png" alt="JCaye's Sip Society" class="logo-img-hero" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <p class="brand-text brand-text-hero mt-2">JCaye's Sip Society</p>
-          </div>
-          <h1 class="text-2xl sm:text-3xl md:text-5xl font-bold serif text-[#4a3728] leading-tight mt-1">Mugs That Tell Your Story</h1>
-          <p class="mt-3 sm:mt-4 text-sm sm:text-base text-gray-500 max-w-xl mx-auto px-2 font-light">Handcrafted ceramic companions for slow mornings, deep conversations, and creative spirits.</p>
-          <div class="mt-5 sm:mt-7 flex justify-center gap-3 sm:gap-4 flex-wrap">
-            <a href="#collection" class="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 font-semibold tracking-wide inline-block text-sm shadow-lg shadow-[#5e4b3c]/20">Explore Collection</a>
-            <a href="#reviews" class="border-2 border-[#5e4b3c] text-[#5e4b3c] px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-semibold hover:bg-[#5e4b3c] hover:text-white transition text-sm">Customer Reviews</a>
-          </div>
-        </div>
-      </section>
-
-      <!-- Categories -->
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <div class="flex flex-wrap items-center justify-center gap-1 sm:gap-2 overflow-x-auto scrollbar-hide pb-1">
-          <span class="text-xs text-gray-400 uppercase tracking-widest mr-2 sm:mr-4 font-light hidden sm:inline">Filter</span>
-          <template x-for="(cat, index) in categories" :key="cat"><div class="flex items-center"><button @click="selectedCategory = cat" class="category-pill" :class="selectedCategory === cat ? 'active' : ''" x-text="cat"></button><span class="category-divider mx-1 sm:mx-2" x-show="index < categories.length - 1">·</span></div></template>
-          <span class="category-divider mx-1 sm:mx-2">·</span><button @click="selectedCategory = 'All'" class="category-pill" :class="selectedCategory === 'All' ? 'active' : ''">All Mugs</button>
-        </div>
-      </div>
-
-      <!-- Product Grid -->
-      <div id="collection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        <h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-gray-800 mb-2 sm:mb-4">The Curated Workshop</h2>
-        <p class="text-xs sm:text-sm text-gray-400 mb-4 sm:mb-8 font-light tracking-wide uppercase" x-text="selectedCategory === 'All' ? 'All Collections' : selectedCategory"></p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
-          <template x-for="(product, index) in filteredProducts" :key="product.id">
-            <div class="rustic-card rounded-2xl flex flex-col fade-in-up mug-card cursor-pointer group overflow-hidden" :style="'animation-delay: ' + (index * 0.1) + 's'" @click="openProductModal(product)">
-              <div class="relative h-56 sm:h-64 lg:h-72 bg-gray-100 overflow-hidden">
-                <img :src="product.image" alt="mug" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105">
-                <div class="mug-overlay"><div class="mug-description text-white"><p class="text-sm sm:text-base font-semibold mb-1" x-text="product.name"></p><p class="text-xs sm:text-sm opacity-90 leading-relaxed line-clamp-2" x-text="product.description"></p><p class="text-xs mt-2 opacity-75">Click for details</p></div></div>
-                <span x-show="product.stock === 0" class="absolute top-3 left-3 bg-red-500 text-white text-xs px-2.5 py-1 rounded-full z-10 shadow">Out of stock</span>
-                <span x-show="product.stock > 0 && product.stock <= 3" class="absolute top-3 left-3 bg-amber-500 text-white text-xs px-2.5 py-1 rounded-full z-10 shadow">Only <span x-text="product.stock"></span> left</span>
-                <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-xs px-2.5 py-1 rounded-full text-gray-600 z-10 shadow font-light tracking-wide uppercase" x-text="product.categoryShort"></span>
-                <span x-show="product.onSale && product.salePercent > 0" class="sale-badge absolute bottom-3 left-3 z-10 shadow">-<span x-text="product.salePercent"></span>% SALE</span>
-                <span x-show="product.isSet && product.setPrice > 0" class="set-badge absolute bottom-3 right-3 z-10 shadow">SET</span>
-              </div>
-              <div class="p-4 sm:p-5 flex flex-col flex-1">
-                <h3 class="font-semibold text-base sm:text-lg text-gray-800" x-text="product.name"></h3>
-                <p class="text-xs sm:text-sm text-gray-400 mt-1 mb-3 flex-1 line-clamp-2 font-light" x-text="product.description"></p>
-                <div class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100">
-                  <div>
-                    <div class="flex items-center gap-2">
-                      <p class="text-lg sm:text-xl font-bold text-[#5e4b3c]">₱<span x-text="getEffectivePrice(product).toLocaleString()"></span></p>
-                      <span x-show="product.onSale && product.salePercent > 0" class="text-xs text-gray-400 line-through">₱<span x-text="product.price.toLocaleString()"></span></span>
-                    </div>
-                    <p class="text-xs text-gray-400">Stock: <span x-text="product.stock"></span></p>
-                    <p x-show="product.isSet && product.setPrice > 0" class="text-xs text-purple-600 font-medium">Set price: ₱<span x-text="product.setPrice.toLocaleString()"></span></p>
-                  </div>
-                  <button @click.stop="addToCart(product)" :disabled="product.stock === 0" class="btn-accent px-4 sm:px-5 py-2 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#b8977e]/30"><span x-show="!isInCart(product.id)">Add to cart</span><span x-show="isInCart(product.id)" class="flex items-center gap-1">✓ In Cart</span></button>
-                </div>
-              </div>
-            </div>
-          </template>
-        </div>
-      </div>
-
-      <!-- PRODUCT DETAIL MODAL -->
-      <div x-show="selectedProduct" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" x-cloak @click.self="selectedProduct = null">
-        <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto rustic-card modal-enter" @click.stop>
-          <div class="relative"><button @click="selectedProduct = null" class="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition"><i data-lucide="x" class="w-5 h-5 text-gray-700"></i></button>
-            <div class="grid grid-cols-1 md:grid-cols-2">
-              <div class="bg-gray-50 flex items-center justify-center p-8 md:p-12 rounded-l-2xl relative">
-                <img :src="selectedProduct.image" :alt="selectedProduct.name" class="w-full h-auto max-h-96 object-contain">
-                <span x-show="selectedProduct.onSale && selectedProduct.salePercent > 0" class="sale-badge absolute top-4 left-4 text-sm px-3 py-1">-<span x-text="selectedProduct.salePercent"></span>% OFF</span>
-              </div>
-              <div class="p-6 md:p-8 flex flex-col">
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 mb-3 flex-wrap">
-                    <span class="text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-medium" x-text="selectedProduct.categoryShort"></span>
-                    <span x-show="selectedProduct.stock > 0 && selectedProduct.stock <= 3" class="text-xs bg-red-100 text-red-800 px-3 py-1 rounded-full font-medium">Only <span x-text="selectedProduct.stock"></span> left</span>
-                    <span x-show="selectedProduct.stock === 0" class="text-xs bg-red-500 text-white px-3 py-1 rounded-full font-medium">Out of Stock</span>
-                    <span x-show="selectedProduct.stock > 3" class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-medium">In Stock</span>
-                    <span x-show="selectedProduct.isSet" class="set-badge text-xs px-3 py-1">MUG SET</span>
-                  </div>
-                  <h2 class="text-2xl md:text-3xl font-bold serif text-gray-800 mb-2" x-text="selectedProduct.name"></h2>
-                  <div class="flex items-center gap-3 mb-4">
-                    <p class="text-3xl font-bold text-[#5e4b3c]">₱<span x-text="getEffectivePrice(selectedProduct).toLocaleString()"></span></p>
-                    <span x-show="selectedProduct.onSale && selectedProduct.salePercent > 0" class="text-lg text-gray-400 line-through">₱<span x-text="selectedProduct.price.toLocaleString()"></span></span>
-                  </div>
-                  <div x-show="selectedProduct.isSet && selectedProduct.setPrice > 0" class="bg-purple-50 p-3 rounded-xl mb-4 border border-purple-200">
-                    <p class="text-sm font-semibold text-purple-800">📦 Mug Set Price: ₱<span x-text="selectedProduct.setPrice.toLocaleString()"></span></p>
-                    <p class="text-xs text-purple-600 mt-1">Individual price: ₱<span x-text="selectedProduct.price.toLocaleString()"></span></p>
-                  </div>
-                  <div class="border-t border-gray-100 pt-4 mb-4"><h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Description</h3><p class="text-gray-600 leading-relaxed" x-text="selectedProduct.description"></p></div>
-                  <div class="border-t border-gray-100 pt-4 mb-6"><h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Product Details</h3><ul class="space-y-2.5 text-sm text-gray-500"><li class="flex items-center gap-2"><i data-lucide="tag" class="w-4 h-4 text-[#b8977e]"></i>Category: <span class="text-gray-700 font-medium" x-text="selectedProduct.category"></span></li><li class="flex items-center gap-2"><i data-lucide="package" class="w-4 h-4 text-[#b8977e]"></i>Stock Available: <span class="text-gray-700 font-medium" x-text="selectedProduct.stock"></span></li><li class="flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4 text-[#b8977e]"></i>Free Shipping: <span class="text-green-600 font-medium">On orders over ₱1,500</span></li></ul></div>
-                </div>
-                <div class="border-t border-gray-100 pt-6"><div class="flex items-center gap-3"><button @click="addToCartFromModal(selectedProduct)" :disabled="selectedProduct.stock === 0" class="flex-1 btn-primary py-3.5 rounded-xl font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#5e4b3c]/20"><span x-show="!isInCart(selectedProduct.id)">🛒 Add to Cart</span><span x-show="isInCart(selectedProduct.id)">✓ Already in Cart</span></button><button @click="selectedProduct = null" class="btn-outline px-6 py-3.5 rounded-xl text-sm font-medium">Continue Shopping</button></div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- REVIEWS SECTION -->
-      <div id="reviews" class="bg-[#faf7f2] border-t border-b border-[#e7dfd4] py-10 sm:py-14 mt-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-gray-800 mb-8 text-center">What Our Customers Say</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            <template x-for="review in approvedReviews" :key="review.id">
-              <div class="bg-white rounded-2xl p-6 rustic-card"><div class="flex items-center gap-1 mb-3"><template x-for="i in 5"><span class="text-lg" :class="i <= review.rating ? 'text-yellow-500' : 'text-gray-200'">★</span></template></div><p class="text-sm text-gray-600 mb-4 leading-relaxed italic" x-text="'\"' + review.text + '\"'"></p><div class="flex items-center justify-between text-xs text-gray-400 pt-3 border-t border-gray-50"><span class="font-medium text-gray-600" x-text="review.customerName"></span><span x-text="new Date(review.date).toLocaleDateString('en-PH', {month:'short', day:'numeric', year:'numeric'})"></span></div></div>
-            </template>
-            <div x-show="approvedReviews.length === 0" class="col-span-full text-center text-gray-400 py-12 bg-white rounded-2xl rustic-card">
-              <i data-lucide="message-circle" class="w-12 h-12 mx-auto mb-3 opacity-30"></i>
-              <p class="text-lg font-medium mb-1">No reviews yet</p>
-              <p class="text-sm">Be the first to share your experience!</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Newsletter -->
-      <div id="newsletter" class="bg-[#f3ede7] border-b border-[#d9ccbb] py-10 sm:py-14 px-4">
-        <div class="max-w-2xl mx-auto text-center"><h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-[#4a3728]">The Morning Pour</h2><p class="text-gray-500 mt-2 text-sm sm:text-base font-light">Stories, new glazes, and exclusive discounts — delivered weekly.</p><form @submit.prevent="subscribeNewsletter" class="mt-5 sm:mt-7 flex flex-col sm:flex-row gap-3 justify-center"><input type="email" required x-model="newsletterEmail" placeholder="your@email.com" class="input-field max-w-xs mx-auto sm:mx-0 text-sm"><button type="submit" class="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 text-sm shadow-lg shadow-[#5e4b3c]/20">Subscribe</button></form><p x-show="newsletterSubscribed" class="text-green-700 mt-3 text-sm font-medium">✨ You're in! Welcome to the society.</p></div>
-      </div>
-
-      <!-- CART DRAWER -->
-      <div x-show="cartOpen" class="fixed inset-0 z-40 flex justify-end" x-cloak>
-        <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="cartOpen = false"></div>
-        <div class="relative w-full max-w-lg bg-white h-full shadow-2xl flex flex-col rustic-card border-l animate-slide-in">
-          <div class="flex justify-between items-center p-5 sm:p-6 border-b border-gray-100"><div><h3 class="text-lg sm:text-xl font-bold serif">Your Cart</h3><p class="text-xs text-gray-500 mt-0.5"><span x-text="cartItemCount"></span> item(s)</p></div><button @click="cartOpen = false" class="text-gray-400 hover:text-gray-700 p-1.5 hover:bg-gray-100 rounded-lg transition"><i data-lucide="x" class="w-5 h-5"></i></button></div>
-          <div x-show="cartTotal < 1500 && cart.length > 0" class="bg-amber-50 border-b border-amber-200 px-5 sm:px-6 py-2.5 text-xs text-amber-800 font-medium">🚚 Add ₱<span x-text="(1500 - cartTotal).toLocaleString()"></span> more for free shipping!</div>
-          <div x-show="cartTotal >= 1500 && cart.length > 0" class="bg-green-50 border-b border-green-200 px-5 sm:px-6 py-2.5 text-xs text-green-800 font-medium">✅ You've qualified for free shipping!</div>
-          <div class="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4">
-            <template x-for="(item, idx) in cart" :key="item.cartId">
-              <div class="cart-item-enter flex gap-3 sm:gap-4 border-b border-gray-100 pb-4">
-                <img :src="item.image" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover flex-shrink-0 bg-gray-50" onerror="this.style.display='none'">
-                <div class="flex-1 min-w-0"><div class="flex justify-between items-start"><div class="min-w-0 flex-1"><p class="font-semibold text-sm sm:text-base truncate" x-text="item.name"></p><p class="text-xs text-gray-400 mt-0.5" x-text="item.categoryShort"></p></div><button @click="removeFromCart(idx)" class="text-gray-300 hover:text-red-500 p-1 flex-shrink-0 ml-2 transition"><i data-lucide="x-circle" class="w-4 h-4"></i></button></div>
-                  <div class="flex items-center justify-between mt-3"><div class="flex items-center gap-2 bg-gray-50 rounded-lg p-0.5"><button @click="decrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity <= 1">−</button><span class="text-sm font-semibold w-6 text-center" x-text="item.quantity"></span><button @click="incrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity >= getProductStock(item.id)">+</button></div><p class="font-bold text-sm sm:text-base text-[#5e4b3c]">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></p></div>
-                  <p class="text-xs text-gray-400 mt-1">₱<span x-text="item.price.toLocaleString()"></span> each</p>
-                </div>
-              </div>
-            </template>
-            <div x-show="cart.length === 0" class="text-center text-gray-400 py-16"><i data-lucide="shopping-bag" class="w-16 h-16 mx-auto mb-4 opacity-30"></i><p class="text-lg font-medium mb-1">Your cart is empty</p><p class="text-sm">Discover our handcrafted mugs.</p><button @click="cartOpen = false" class="btn-outline px-6 py-2 rounded-xl text-sm mt-4">Browse Collection</button></div>
-          </div>
-          <div class="border-t border-gray-100 p-5 sm:p-6 space-y-3" x-show="cart.length > 0">
-            <div class="space-y-2 text-sm"><div class="flex justify-between"><span class="text-gray-500">Subtotal</span><span class="font-medium">₱<span x-text="cartSubtotal.toLocaleString()"></span></span></div><div class="flex justify-between"><span class="text-gray-500">Shipping</span><span class="font-medium" x-text="cartTotal >= 1500 ? 'Free' : '₱' + shippingFee.toLocaleString()"></span></div><div class="flex justify-between text-base font-bold pt-2 border-t border-gray-100"><span>Total</span><span class="text-[#5e4b3c]">₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div></div>
-            <button @click="proceedToCheckout" class="w-full btn-primary py-3 rounded-xl text-sm font-semibold shadow-lg shadow-[#5e4b3c]/20">Proceed to Checkout</button>
-            <button @click="clearCart" class="w-full text-xs text-gray-400 hover:text-red-500 transition py-1">Clear Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- CHECKOUT MODAL -->
-      <div x-show="showCheckout" class="fixed inset-0 z-50 flex items-center justify-center p-4" x-cloak>
-        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showCheckout = false"></div>
-        <div class="relative bg-white rounded-2xl max-w-lg w-full p-5 sm:p-8 rustic-card fade-in-up max-h-[90vh] overflow-y-auto">
-          <h2 class="text-xl sm:text-2xl font-bold serif mb-4">Checkout</h2>
-          <div class="bg-blue-50 p-3 rounded-xl mb-4 text-xs text-blue-800" x-show="currentUser">📋 Your profile details are pre-filled below.</div>
-          <div class="bg-[#f3ede7] p-4 rounded-xl mb-4"><p class="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Order Items</p><template x-for="item in cart" :key="item.cartId"><div class="flex justify-between text-sm py-1"><span x-text="item.name + ' ×' + item.quantity"></span><span class="font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template><div class="border-t border-[#d9ccbb] pt-2 mt-2 flex justify-between font-bold"><span>Total</span><span>₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div></div>
-          <form @submit.prevent="processOrder" class="space-y-3">
-            <div><label class="input-label">Full Name *</label><input type="text" required x-model="checkoutForm.name" class="input-field text-sm"></div>
-            <div><label class="input-label">Email *</label><input type="email" required x-model="checkoutForm.email" class="input-field text-sm"></div>
-            <div><label class="input-label">Phone Number *</label><input type="tel" required x-model="checkoutForm.phone" class="input-field text-sm"></div>
-            <div><label class="input-label">Complete Delivery Address *</label><textarea required x-model="checkoutForm.address" class="input-field text-sm" rows="3"></textarea></div>
-            <div><label class="input-label">Payment Method *</label><select x-model="checkoutForm.paymentMethod" class="input-field text-sm" required><option value="">Select</option><option value="cod">💵 Cash on Delivery</option><option value="gcash">📱 GCash</option></select></div>
-            <div x-show="checkoutForm.paymentMethod === 'gcash'" class="bg-gray-50 p-4 rounded-xl text-center border border-gray-200"><p class="text-sm font-semibold mb-2">📱 Send payment to: <span class="text-[#5e4b3c]">0912-345-6789</span></p><p class="text-xs text-amber-700">Order pending until admin verifies payment.</p></div>
-            <button type="submit" class="w-full btn-primary py-3 rounded-xl font-semibold text-sm shadow-lg shadow-[#5e4b3c]/20">Place Order</button>
-          </form>
-          <button @click="showCheckout = false" class="mt-3 text-sm text-gray-500 w-full hover:text-gray-700">Cancel</button>
-        </div>
-      </div>
+      <section class="relative hero-pattern bg-gradient-to-b from-[#faf7f2] to-[#f2ebe1] py-10 sm:py-14 md:py-20 px-4 text-center border-b border-[#d9ccbb]"><div class="fade-in-up max-w-4xl mx-auto"><div class="flex flex-col items-center mb-3 sm:mb-4"><img src="jcayelogo1.png" alt="JCaye's Sip Society" class="logo-img-hero" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><p class="brand-text brand-text-hero mt-2">JCaye's Sip Society</p></div><h1 class="text-2xl sm:text-3xl md:text-5xl font-bold serif text-[#4a3728] leading-tight mt-1">Mugs That Tell Your Story</h1><p class="mt-3 sm:mt-4 text-sm sm:text-base text-gray-500 max-w-xl mx-auto px-2 font-light">Handcrafted ceramic companions for slow mornings, deep conversations, and creative spirits.</p><div class="mt-5 sm:mt-7 flex justify-center gap-3 sm:gap-4 flex-wrap"><a href="#collection" class="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 font-semibold tracking-wide inline-block text-sm shadow-lg shadow-[#5e4b3c]/20">Explore Collection</a><a href="#reviews" class="border-2 border-[#5e4b3c] text-[#5e4b3c] px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-semibold hover:bg-[#5e4b3c] hover:text-white transition text-sm">Customer Reviews</a></div></div></section>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8"><div class="flex flex-wrap items-center justify-center gap-1 sm:gap-2 overflow-x-auto scrollbar-hide pb-1"><span class="text-xs text-gray-400 uppercase tracking-widest mr-2 sm:mr-4 font-light hidden sm:inline">Filter</span><template x-for="(cat, index) in categories" :key="cat"><div class="flex items-center"><button @click="selectedCategory = cat" class="category-pill" :class="selectedCategory === cat ? 'active' : ''" x-text="cat"></button><span class="category-divider mx-1 sm:mx-2" x-show="index < categories.length - 1">·</span></div></template><span class="category-divider mx-1 sm:mx-2">·</span><button @click="selectedCategory = 'All'" class="category-pill" :class="selectedCategory === 'All' ? 'active' : ''">All Mugs</button></div></div>
+      <div id="collection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8"><h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-gray-800 mb-2 sm:mb-4">The Curated Workshop</h2><p class="text-xs sm:text-sm text-gray-400 mb-4 sm:mb-8 font-light tracking-wide uppercase" x-text="selectedCategory === 'All' ? 'All Collections' : selectedCategory"></p><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8"><template x-for="(product, index) in filteredProducts" :key="product.id"><div class="rustic-card rounded-2xl flex flex-col fade-in-up mug-card cursor-pointer group overflow-hidden" :style="'animation-delay: ' + (index * 0.1) + 's'" @click="openProductModal(product)"><div class="relative h-56 sm:h-64 lg:h-72 bg-gray-100 overflow-hidden"><img :src="product.image" alt="mug" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"><div class="mug-overlay"><div class="mug-description text-white"><p class="text-sm sm:text-base font-semibold mb-1" x-text="product.name"></p><p class="text-xs sm:text-sm opacity-90 leading-relaxed line-clamp-2" x-text="product.description"></p><p class="text-xs mt-2 opacity-75">Click for details</p></div></div><span x-show="product.stock === 0" class="absolute top-3 left-3 bg-red-500 text-white text-xs px-2.5 py-1 rounded-full z-10 shadow">Out of stock</span><span x-show="product.stock > 0 && product.stock <= 3" class="absolute top-3 left-3 bg-amber-500 text-white text-xs px-2.5 py-1 rounded-full z-10 shadow">Only <span x-text="product.stock"></span> left</span><span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-xs px-2.5 py-1 rounded-full text-gray-600 z-10 shadow font-light tracking-wide uppercase" x-text="product.categoryShort"></span><span x-show="product.onSale && product.salePercent > 0" class="sale-badge absolute bottom-3 left-3 z-10 shadow">-<span x-text="product.salePercent"></span>% SALE</span><span x-show="product.isSet && product.setPrice > 0" class="set-badge absolute bottom-3 right-3 z-10 shadow">SET</span></div><div class="p-4 sm:p-5 flex flex-col flex-1"><h3 class="font-semibold text-base sm:text-lg text-gray-800" x-text="product.name"></h3><p class="text-xs sm:text-sm text-gray-400 mt-1 mb-3 flex-1 line-clamp-2 font-light" x-text="product.description"></p><div class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100"><div><div class="flex items-center gap-2"><p class="text-lg sm:text-xl font-bold text-[#5e4b3c]">₱<span x-text="getEffectivePrice(product).toLocaleString()"></span></p><span x-show="product.onSale && product.salePercent > 0" class="text-xs text-gray-400 line-through">₱<span x-text="product.price.toLocaleString()"></span></span></div><p class="text-xs text-gray-400">Stock: <span x-text="product.stock"></span></p><p x-show="product.isSet && product.setPrice > 0" class="text-xs text-purple-600 font-medium">Set price: ₱<span x-text="product.setPrice.toLocaleString()"></span></p></div><button @click.stop="addToCart(product)" :disabled="product.stock === 0" class="btn-accent px-4 sm:px-5 py-2 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#b8977e]/30"><span x-show="!isInCart(product.id)">Add to cart</span><span x-show="isInCart(product.id)" class="flex items-center gap-1">✓ In Cart</span></button></div></div></div></template></div></div>
+      <div x-show="selectedProduct" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" x-cloak @click.self="selectedProduct = null"><div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto rustic-card modal-enter" @click.stop><div class="relative"><button @click="selectedProduct = null" class="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition"><i data-lucide="x" class="w-5 h-5 text-gray-700"></i></button><div class="grid grid-cols-1 md:grid-cols-2"><div class="bg-gray-50 flex items-center justify-center p-8 md:p-12 rounded-l-2xl relative"><img :src="selectedProduct.image" :alt="selectedProduct.name" class="w-full h-auto max-h-96 object-contain"><span x-show="selectedProduct.onSale && selectedProduct.salePercent > 0" class="sale-badge absolute top-4 left-4 text-sm px-3 py-1">-<span x-text="selectedProduct.salePercent"></span>% OFF</span></div><div class="p-6 md:p-8 flex flex-col"><div class="flex-1"><div class="flex items-center gap-2 mb-3 flex-wrap"><span class="text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-medium" x-text="selectedProduct.categoryShort"></span><span x-show="selectedProduct.stock > 0 && selectedProduct.stock <= 3" class="text-xs bg-red-100 text-red-800 px-3 py-1 rounded-full font-medium">Only <span x-text="selectedProduct.stock"></span> left</span><span x-show="selectedProduct.stock === 0" class="text-xs bg-red-500 text-white px-3 py-1 rounded-full font-medium">Out of Stock</span><span x-show="selectedProduct.stock > 3" class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-medium">In Stock</span><span x-show="selectedProduct.isSet" class="set-badge text-xs px-3 py-1">MUG SET</span></div><h2 class="text-2xl md:text-3xl font-bold serif text-gray-800 mb-2" x-text="selectedProduct.name"></h2><div class="flex items-center gap-3 mb-4"><p class="text-3xl font-bold text-[#5e4b3c]">₱<span x-text="getEffectivePrice(selectedProduct).toLocaleString()"></span></p><span x-show="selectedProduct.onSale && selectedProduct.salePercent > 0" class="text-lg text-gray-400 line-through">₱<span x-text="selectedProduct.price.toLocaleString()"></span></span></div><div x-show="selectedProduct.isSet && selectedProduct.setPrice > 0" class="bg-purple-50 p-3 rounded-xl mb-4 border border-purple-200"><p class="text-sm font-semibold text-purple-800">📦 Mug Set Price: ₱<span x-text="selectedProduct.setPrice.toLocaleString()"></span></p><p class="text-xs text-purple-600 mt-1">Individual price: ₱<span x-text="selectedProduct.price.toLocaleString()"></span></p></div><div class="border-t border-gray-100 pt-4 mb-4"><h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Description</h3><p class="text-gray-600 leading-relaxed" x-text="selectedProduct.description"></p></div><div class="border-t border-gray-100 pt-4 mb-6"><h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Product Details</h3><ul class="space-y-2.5 text-sm text-gray-500"><li class="flex items-center gap-2"><i data-lucide="tag" class="w-4 h-4 text-[#b8977e]"></i>Category: <span class="text-gray-700 font-medium" x-text="selectedProduct.category"></span></li><li class="flex items-center gap-2"><i data-lucide="package" class="w-4 h-4 text-[#b8977e]"></i>Stock Available: <span class="text-gray-700 font-medium" x-text="selectedProduct.stock"></span></li><li class="flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4 text-[#b8977e]"></i>Free Shipping: <span class="text-green-600 font-medium">On orders over ₱1,500</span></li></ul></div></div><div class="border-t border-gray-100 pt-6"><div class="flex items-center gap-3"><button @click="addToCartFromModal(selectedProduct)" :disabled="selectedProduct.stock === 0" class="flex-1 btn-primary py-3.5 rounded-xl font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#5e4b3c]/20"><span x-show="!isInCart(selectedProduct.id)">🛒 Add to Cart</span><span x-show="isInCart(selectedProduct.id)">✓ Already in Cart</span></button><button @click="selectedProduct = null" class="btn-outline px-6 py-3.5 rounded-xl text-sm font-medium">Continue Shopping</button></div></div></div></div></div></div></div>
+      <div id="reviews" class="bg-[#faf7f2] border-t border-b border-[#e7dfd4] py-10 sm:py-14 mt-8"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-gray-800 mb-8 text-center">What Our Customers Say</h2><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"><template x-for="review in approvedReviews" :key="review.id"><div class="bg-white rounded-2xl p-6 rustic-card"><div class="flex items-center gap-1 mb-3"><template x-for="i in 5"><span class="text-lg" :class="i <= review.rating ? 'text-yellow-500' : 'text-gray-200'">★</span></template></div><p class="text-sm text-gray-600 mb-4 leading-relaxed italic" x-text="'\"' + review.text + '\"'"></p><div class="flex items-center justify-between text-xs text-gray-400 pt-3 border-t border-gray-50"><span class="font-medium text-gray-600" x-text="review.customerName"></span><span x-text="new Date(review.date).toLocaleDateString('en-PH', {month:'short', day:'numeric', year:'numeric'})"></span></div></div></template><div x-show="approvedReviews.length === 0" class="col-span-full text-center text-gray-400 py-12 bg-white rounded-2xl rustic-card"><i data-lucide="message-circle" class="w-12 h-12 mx-auto mb-3 opacity-30"></i><p class="text-lg font-medium mb-1">No reviews yet</p><p class="text-sm">Be the first to share your experience!</p></div></div></div></div>
+      <div id="newsletter" class="bg-[#f3ede7] border-b border-[#d9ccbb] py-10 sm:py-14 px-4"><div class="max-w-2xl mx-auto text-center"><h2 class="text-xl sm:text-2xl md:text-3xl serif font-bold text-[#4a3728]">The Morning Pour</h2><p class="text-gray-500 mt-2 text-sm sm:text-base font-light">Stories, new glazes, and exclusive discounts — delivered weekly.</p><form @submit.prevent="subscribeNewsletter" class="mt-5 sm:mt-7 flex flex-col sm:flex-row gap-3 justify-center"><input type="email" required x-model="newsletterEmail" placeholder="your@email.com" class="input-field max-w-xs mx-auto sm:mx-0 text-sm"><button type="submit" class="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 text-sm shadow-lg shadow-[#5e4b3c]/20">Subscribe</button></form><p x-show="newsletterSubscribed" class="text-green-700 mt-3 text-sm font-medium">✨ You're in! Welcome to the society.</p></div></div>
+      <div x-show="cartOpen" class="fixed inset-0 z-40 flex justify-end" x-cloak><div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="cartOpen = false"></div><div class="relative w-full max-w-lg bg-white h-full shadow-2xl flex flex-col rustic-card border-l animate-slide-in"><div class="flex justify-between items-center p-5 sm:p-6 border-b border-gray-100"><div><h3 class="text-lg sm:text-xl font-bold serif">Your Cart</h3><p class="text-xs text-gray-500 mt-0.5"><span x-text="cartItemCount"></span> item(s)</p></div><button @click="cartOpen = false" class="text-gray-400 hover:text-gray-700 p-1.5 hover:bg-gray-100 rounded-lg transition"><i data-lucide="x" class="w-5 h-5"></i></button></div><div x-show="cartTotal < 1500 && cart.length > 0" class="bg-amber-50 border-b border-amber-200 px-5 sm:px-6 py-2.5 text-xs text-amber-800 font-medium">🚚 Add ₱<span x-text="(1500 - cartTotal).toLocaleString()"></span> more for free shipping!</div><div x-show="cartTotal >= 1500 && cart.length > 0" class="bg-green-50 border-b border-green-200 px-5 sm:px-6 py-2.5 text-xs text-green-800 font-medium">✅ You've qualified for free shipping!</div><div class="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4"><template x-for="(item, idx) in cart" :key="item.cartId"><div class="cart-item-enter flex gap-3 sm:gap-4 border-b border-gray-100 pb-4"><img :src="item.image" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover flex-shrink-0 bg-gray-50"><div class="flex-1 min-w-0"><div class="flex justify-between items-start"><div class="min-w-0 flex-1"><p class="font-semibold text-sm sm:text-base truncate" x-text="item.name"></p><p class="text-xs text-gray-400 mt-0.5" x-text="item.categoryShort"></p></div><button @click="removeFromCart(idx)" class="text-gray-300 hover:text-red-500 p-1 flex-shrink-0 ml-2 transition"><i data-lucide="x-circle" class="w-4 h-4"></i></button></div><div class="flex items-center justify-between mt-3"><div class="flex items-center gap-2 bg-gray-50 rounded-lg p-0.5"><button @click="decrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity <= 1">−</button><span class="text-sm font-semibold w-6 text-center" x-text="item.quantity"></span><button @click="incrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity >= getProductStock(item.id)">+</button></div><p class="font-bold text-sm sm:text-base text-[#5e4b3c]">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></p></div><p class="text-xs text-gray-400 mt-1">₱<span x-text="item.price.toLocaleString()"></span> each</p></div></div></template><div x-show="cart.length === 0" class="text-center text-gray-400 py-16"><i data-lucide="shopping-bag" class="w-16 h-16 mx-auto mb-4 opacity-30"></i><p class="text-lg font-medium mb-1">Your cart is empty</p><p class="text-sm">Discover our handcrafted mugs.</p><button @click="cartOpen = false" class="btn-outline px-6 py-2 rounded-xl text-sm mt-4">Browse Collection</button></div></div><div class="border-t border-gray-100 p-5 sm:p-6 space-y-3" x-show="cart.length > 0"><div class="space-y-2 text-sm"><div class="flex justify-between"><span class="text-gray-500">Subtotal</span><span class="font-medium">₱<span x-text="cartSubtotal.toLocaleString()"></span></span></div><div class="flex justify-between"><span class="text-gray-500">Shipping</span><span class="font-medium" x-text="cartTotal >= 1500 ? 'Free' : '₱' + shippingFee.toLocaleString()"></span></div><div class="flex justify-between text-base font-bold pt-2 border-t border-gray-100"><span>Total</span><span class="text-[#5e4b3c]">₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div></div><button @click="proceedToCheckout" class="w-full btn-primary py-3 rounded-xl text-sm font-semibold shadow-lg shadow-[#5e4b3c]/20">Proceed to Checkout</button><button @click="clearCart" class="w-full text-xs text-gray-400 hover:text-red-500 transition py-1">Clear Cart</button></div></div></div>
+      <div x-show="showCheckout" class="fixed inset-0 z-50 flex items-center justify-center p-4" x-cloak><div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showCheckout = false"></div><div class="relative bg-white rounded-2xl max-w-lg w-full p-5 sm:p-8 rustic-card fade-in-up max-h-[90vh] overflow-y-auto"><h2 class="text-xl sm:text-2xl font-bold serif mb-4">Checkout</h2><div class="bg-blue-50 p-3 rounded-xl mb-4 text-xs text-blue-800" x-show="currentUser">📋 Your profile details are pre-filled below.</div><div class="bg-[#f3ede7] p-4 rounded-xl mb-4"><p class="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Order Items</p><template x-for="item in cart" :key="item.cartId"><div class="flex justify-between text-sm py-1"><span x-text="item.name + ' ×' + item.quantity"></span><span class="font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template><div class="border-t border-[#d9ccbb] pt-2 mt-2 flex justify-between font-bold"><span>Total</span><span>₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div></div><form @submit.prevent="processOrder" class="space-y-3"><div><label class="input-label">Full Name *</label><input type="text" required x-model="checkoutForm.name" class="input-field text-sm"></div><div><label class="input-label">Email *</label><input type="email" required x-model="checkoutForm.email" class="input-field text-sm"></div><div><label class="input-label">Phone Number *</label><input type="tel" required x-model="checkoutForm.phone" class="input-field text-sm"></div><div><label class="input-label">Complete Delivery Address *</label><textarea required x-model="checkoutForm.address" class="input-field text-sm" rows="3"></textarea></div><div><label class="input-label">Payment Method *</label><select x-model="checkoutForm.paymentMethod" class="input-field text-sm" required><option value="">Select</option><option value="cod">💵 Cash on Delivery</option><option value="gcash">📱 GCash</option></select></div><div x-show="checkoutForm.paymentMethod === 'gcash'" class="bg-gray-50 p-4 rounded-xl text-center border border-gray-200"><p class="text-sm font-semibold mb-2">📱 Send payment to: <span class="text-[#5e4b3c]">0912-345-6789</span></p><p class="text-xs text-amber-700">Order pending until admin verifies payment.</p></div><button type="submit" class="w-full btn-primary py-3 rounded-xl font-semibold text-sm shadow-lg shadow-[#5e4b3c]/20">Place Order</button></form><button @click="showCheckout = false" class="mt-3 text-sm text-gray-500 w-full hover:text-gray-700">Cancel</button></div></div>
     </div>
   </div>
 
   <!-- ==================== ADMIN VIEW ==================== -->
   <div x-show="currentUser && currentUser.role === 'admin'" x-cloak class="flex flex-col md:flex-row min-h-screen bg-gray-50">
-    <!-- Mobile Nav -->
     <div class="admin-mobile-nav md:hidden flex overflow-x-auto bg-[#f5efe8] border-b border-[#ddd2c4] scrollbar-hide sticky top-16 z-20">
       <button @click="adminTab = 'dashboard'" :class="adminTab === 'dashboard' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">📊 Dashboard</button>
       <button @click="adminTab = 'products'" :class="adminTab === 'products' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">📦 Products</button>
@@ -417,7 +223,6 @@
       <button @click="adminTab = 'users'" :class="adminTab === 'users' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">👥 Users</button>
       <button @click="adminTab = 'reviews'" :class="adminTab === 'reviews' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">⭐ Reviews</button>
     </div>
-    <!-- Sidebar -->
     <div class="admin-sidebar w-64 p-6 flex-shrink-0 hidden md:block min-h-screen">
       <div class="flex items-center gap-3 mb-8"><img src="jcayelogo1.png" alt="JCaye's Sip Society" class="logo-img-sm" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"><span class="brand-text text-sm">Admin Panel</span></div>
       <nav class="space-y-1 text-sm">
@@ -428,24 +233,9 @@
         <button @click="adminTab = 'reviews'" :class="adminTab === 'reviews' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-xl transition flex items-center gap-3"><i data-lucide="star" class="w-4 h-4"></i> Reviews</button>
       </nav>
     </div>
-    <!-- Main Content -->
     <div class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto pb-20 md:pb-8">
-
-      <!-- DASHBOARD TAB -->
-      <div x-show="adminTab === 'dashboard'" class="space-y-6">
-        <div class="flex items-center justify-between"><div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Dashboard</h2><p class="text-sm text-gray-500 mt-1">Welcome back, <span class="font-semibold text-[#5e4b3c]" x-text="currentUser?.name"></span></p></div><span class="text-xs text-gray-400 bg-white px-3 py-1.5 rounded-full" x-text="new Date().toLocaleDateString('en-PH', {weekday:'long', year:'numeric', month:'long', day:'numeric'})"></span></div>
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Revenue</span><i data-lucide="trending-up" class="w-4 h-4 text-green-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800">₱<span x-text="financials.grossRevenue.toLocaleString()"></span></p><p class="text-xs text-gray-400 mt-1">Total gross revenue</p></div>
-          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Orders</span><i data-lucide="shopping-bag" class="w-4 h-4 text-blue-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="orders.length"></p><p class="text-xs text-gray-400 mt-1">Total orders placed</p></div>
-          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Profit</span><i data-lucide="dollar-sign" class="w-4 h-4" :class="financials.netProfit >= 0 ? 'text-green-600' : 'text-red-600'"></i></div><p class="text-xl sm:text-2xl font-bold" :class="financials.netProfit >= 0 ? 'text-green-700' : 'text-red-700'">₱<span x-text="financials.netProfit.toLocaleString()"></span></p><p class="text-xs text-gray-400 mt-1">Net profit/loss</p></div>
-          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Products</span><i data-lucide="package" class="w-4 h-4 text-amber-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="products.length"></p><p class="text-xs text-gray-400 mt-1">Active listings</p></div>
-        </div>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          <div class="stat-card"><div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i data-lucide="clock" class="w-5 h-5 text-blue-600"></i> Active Orders</h3><span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium" x-text="activeOrders.length + ' active'"></span></div><div class="space-y-3 max-h-80 overflow-y-auto"><template x-for="o in activeOrders.slice(0, 5)" :key="o.id"><div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer" @click="adminTab='orders'"><div class="flex items-center gap-3 min-w-0"><span class="status-badge flex-shrink-0" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span><div class="min-w-0"><p class="text-sm font-semibold truncate" x-text="o.customerName"></p><p class="text-xs text-gray-400">#<span x-text="o.id"></span> · ₱<span x-text="o.total?.toLocaleString() || 0"></span></p></div></div><span class="text-xs text-gray-400 flex-shrink-0 ml-2" x-text="new Date(o.date).toLocaleDateString('en-PH', {month:'short', day:'numeric'})"></span></div></template><div x-show="activeOrders.length === 0" class="text-center text-gray-400 py-4 text-sm">No active orders</div></div><button x-show="activeOrders.length > 5" @click="adminTab='orders'" class="text-xs text-[#5e4b3c] hover:underline mt-3 w-full text-center">View all <span x-text="activeOrders.length"></span> active orders →</button></div>
-          <div class="stat-card"><div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600"></i> Low Stock Alerts</h3><span x-show="lowStockProducts.length > 0" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full font-medium" x-text="lowStockProducts.length + ' item(s)'"></span></div><div class="space-y-2 max-h-80 overflow-y-auto"><template x-for="p in lowStockProducts" :key="p.id"><div class="flex items-center justify-between p-2.5 bg-red-50 rounded-xl border border-red-100"><div class="flex items-center gap-2 min-w-0"><img :src="p.image" class="w-10 h-10 rounded-lg object-cover flex-shrink-0"><div class="min-w-0"><p class="text-sm font-semibold truncate" x-text="p.name"></p><p class="text-xs text-red-600 font-bold">Only <span x-text="p.stock"></span> left</p></div></div><div class="flex items-center gap-1.5"><button @click="openRestockModal(p.id)" class="btn-restock px-2.5 py-1.5 rounded-lg text-xs flex items-center gap-1"><i data-lucide="package-plus" class="w-3.5 h-3.5"></i> Restock</button><button @click="adminTab='products'" class="text-xs btn-outline px-2 py-1 rounded-lg flex-shrink-0">Manage</button></div></div></template><div x-show="lowStockProducts.length === 0" class="text-center text-gray-400 py-4 text-sm">✅ All products well-stocked</div></div></div>
-        </div>
-        <div class="stat-card"><div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i data-lucide="activity" class="w-5 h-5 text-green-600"></i> Recent Activity</h3><span class="text-xs text-gray-400">Last 5 orders</span></div><div class="space-y-0"><template x-for="(o, idx) in recentOrders.slice(0, 5)" :key="o.id"><div class="flex items-start gap-3 py-3" :class="idx < 4 ? 'border-b border-gray-100' : ''"><span class="timeline-dot flex-shrink-0 mt-1.5" :class="o.deliveryStatus === 'Delivered' ? 'active' : ''"></span><div class="flex-1 min-w-0"><div class="flex items-center justify-between gap-2"><p class="text-sm font-semibold truncate" x-text="o.customerName"></p><span class="status-badge flex-shrink-0 text-xs" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span></div><p class="text-xs text-gray-400 mt-0.5">Order #<span x-text="o.id"></span> · ₱<span x-text="o.total?.toLocaleString() || 0"></span> · <span x-text="o.paymentMethod?.toUpperCase()"></span></p><p class="text-xs text-gray-400"><span x-text="new Date(o.date).toLocaleDateString('en-PH', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'})"></span></p></div></div></template><div x-show="orders.length === 0" class="text-center text-gray-400 py-6 text-sm">No orders yet</div></div></div>
-      </div>
+      <!-- DASHBOARD -->
+      <div x-show="adminTab === 'dashboard'" class="space-y-6"><div class="flex items-center justify-between"><div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Dashboard</h2><p class="text-sm text-gray-500 mt-1">Welcome back, <span class="font-semibold text-[#5e4b3c]" x-text="currentUser?.name"></span></p></div><span class="text-xs text-gray-400 bg-white px-3 py-1.5 rounded-full" x-text="new Date().toLocaleDateString('en-PH', {weekday:'long', year:'numeric', month:'long', day:'numeric'})"></span></div><div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"><div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Revenue</span><i data-lucide="trending-up" class="w-4 h-4 text-green-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800">₱<span x-text="financials.grossRevenue.toLocaleString()"></span></p><p class="text-xs text-gray-400 mt-1">Total gross revenue</p></div><div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Orders</span><i data-lucide="shopping-bag" class="w-4 h-4 text-blue-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="orders.length"></p><p class="text-xs text-gray-400 mt-1">Total orders placed</p></div><div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Profit</span><i data-lucide="dollar-sign" class="w-4 h-4" :class="financials.netProfit >= 0 ? 'text-green-600' : 'text-red-600'"></i></div><p class="text-xl sm:text-2xl font-bold" :class="financials.netProfit >= 0 ? 'text-green-700' : 'text-red-700'">₱<span x-text="financials.netProfit.toLocaleString()"></span></p><p class="text-xs text-gray-400 mt-1">Net profit/loss</p></div><div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Products</span><i data-lucide="package" class="w-4 h-4 text-amber-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="products.length"></p><p class="text-xs text-gray-400 mt-1">Active listings</p></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6"><div class="stat-card"><div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i data-lucide="clock" class="w-5 h-5 text-blue-600"></i> Active Orders</h3><span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium" x-text="activeOrders.length + ' active'"></span></div><div class="space-y-3 max-h-80 overflow-y-auto"><template x-for="o in activeOrders.slice(0, 5)" :key="o.id"><div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer" @click="adminTab='orders'"><div class="flex items-center gap-3 min-w-0"><span class="status-badge flex-shrink-0" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span><div class="min-w-0"><p class="text-sm font-semibold truncate" x-text="o.customerName"></p><p class="text-xs text-gray-400">#<span x-text="o.id"></span> · ₱<span x-text="o.total?.toLocaleString() || 0"></span></p></div></div><span class="text-xs text-gray-400 flex-shrink-0 ml-2" x-text="new Date(o.date).toLocaleDateString('en-PH', {month:'short', day:'numeric'})"></span></div></template><div x-show="activeOrders.length === 0" class="text-center text-gray-400 py-4 text-sm">No active orders</div></div><button x-show="activeOrders.length > 5" @click="adminTab='orders'" class="text-xs text-[#5e4b3c] hover:underline mt-3 w-full text-center">View all <span x-text="activeOrders.length"></span> active orders →</button></div><div class="stat-card"><div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600"></i> Low Stock Alerts</h3><span x-show="lowStockProducts.length > 0" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full font-medium" x-text="lowStockProducts.length + ' item(s)'"></span></div><div class="space-y-2 max-h-80 overflow-y-auto"><template x-for="p in lowStockProducts" :key="p.id"><div class="flex items-center justify-between p-2.5 bg-red-50 rounded-xl border border-red-100"><div class="flex items-center gap-2 min-w-0"><img :src="p.image" class="w-10 h-10 rounded-lg object-cover flex-shrink-0"><div class="min-w-0"><p class="text-sm font-semibold truncate" x-text="p.name"></p><p class="text-xs text-red-600 font-bold">Only <span x-text="p.stock"></span> left</p></div></div><div class="flex items-center gap-1.5"><button @click="openRestockModal(p.id)" class="btn-restock px-2.5 py-1.5 rounded-lg text-xs flex items-center gap-1"><i data-lucide="package-plus" class="w-3.5 h-3.5"></i> Restock</button><button @click="adminTab='products'" class="text-xs btn-outline px-2 py-1 rounded-lg flex-shrink-0">Manage</button></div></div></template><div x-show="lowStockProducts.length === 0" class="text-center text-gray-400 py-4 text-sm">✅ All products well-stocked</div></div></div></div><div class="stat-card"><div class="flex items-center justify-between mb-4"><h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i data-lucide="activity" class="w-5 h-5 text-green-600"></i> Recent Activity</h3><span class="text-xs text-gray-400">Last 5 orders</span></div><div class="space-y-0"><template x-for="(o, idx) in recentOrders.slice(0, 5)" :key="o.id"><div class="flex items-start gap-3 py-3" :class="idx < 4 ? 'border-b border-gray-100' : ''"><span class="timeline-dot flex-shrink-0 mt-1.5" :class="o.deliveryStatus === 'Delivered' ? 'active' : ''"></span><div class="flex-1 min-w-0"><div class="flex items-center justify-between gap-2"><p class="text-sm font-semibold truncate" x-text="o.customerName"></p><span class="status-badge flex-shrink-0 text-xs" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span></div><p class="text-xs text-gray-400 mt-0.5">Order #<span x-text="o.id"></span> · ₱<span x-text="o.total?.toLocaleString() || 0"></span> · <span x-text="o.paymentMethod?.toUpperCase()"></span></p><p class="text-xs text-gray-400"><span x-text="new Date(o.date).toLocaleDateString('en-PH', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'})"></span></p></div></div></template><div x-show="orders.length === 0" class="text-center text-gray-400 py-6 text-sm">No orders yet</div></div></div></div>
 
       <!-- PRODUCTS TAB -->
       <div x-show="adminTab === 'products'" class="space-y-6">
@@ -455,63 +245,18 @@
       </div>
 
       <!-- ORDERS TAB -->
-      <div x-show="adminTab === 'orders'" class="space-y-6">
-        <div class="flex items-center justify-between"><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Order Management</h2><span class="text-xs text-gray-400" x-text="orders.length + ' total orders'"></span></div>
-        <div class="space-y-4">
-          <template x-for="o in orders" :key="o.id">
-            <div class="bg-white p-4 sm:p-6 rounded-2xl rustic-card">
-              <div class="flex flex-col sm:flex-row justify-between gap-4 mb-4">
-                <div><p class="font-semibold text-lg" x-text="o.customerName"></p><p class="text-sm text-gray-500" x-text="o.email"></p><p class="text-sm text-gray-500" x-text="o.phone"></p><p class="text-xs text-gray-400 mt-1">📅 <span x-text="o.date ? new Date(o.date).toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'}) : ''"></span></p></div>
-                <div class="text-left sm:text-right"><p class="text-2xl font-bold text-[#5e4b3c]">₱<span x-text="o.total?.toLocaleString() || 0"></span></p><span class="text-xs px-2 py-0.5 rounded-full font-medium" :class="o.paymentMethod === 'gcash' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'" x-text="o.paymentMethod?.toUpperCase()"></span><p class="text-xs text-gray-500 mt-1" x-text="o.paymentStatus"></p></div>
-              </div>
-              <div class="bg-gray-50 p-4 rounded-xl mb-3"><p class="text-xs font-semibold text-gray-600 mb-2">📦 Order Items:</p><template x-for="item in o.items" :key="item.cartId || item.id"><div class="flex justify-between text-sm py-1.5 border-b border-gray-100 last:border-0"><span x-text="item.name + ' ×' + item.quantity"></span><span class="text-gray-600 font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template><div class="border-t border-gray-200 pt-2 mt-2 flex justify-between font-bold text-sm"><span>Total</span><span>₱<span x-text="o.total?.toLocaleString() || 0"></span></span></div></div>
-              <div class="bg-gray-50 p-4 rounded-xl mb-4"><p class="text-xs font-semibold text-gray-600 mb-1">📍 Delivery Address:</p><p class="text-sm text-gray-700" x-text="o.address"></p></div>
-              <div class="border-t border-gray-100 pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <div class="flex items-center gap-2"><span class="text-sm font-medium text-gray-600">Status:</span><span class="status-badge" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span></div>
-                <div class="flex items-center gap-2 w-full sm:w-auto">
-                  <select @change="updateDeliveryStatus(o.id, $event.target.value)" class="input-field w-full sm:w-48 text-sm py-2"><option value="">Update Status</option><option value="Pending">📝 Pending</option><option value="Processing">⚙️ Processing</option><option value="To Ship">📦 To Ship</option><option value="Out for Delivery">🚚 Out for Delivery</option><option value="Delivered">✅ Delivered</option><option value="Cancelled">❌ Cancelled</option></select>
-                  <button x-show="o.paymentMethod === 'gcash' && o.paymentStatus === 'Pending'" @click="approvePayment(o.id)" class="btn-outline text-xs px-3 py-2 rounded-lg whitespace-nowrap">✅ Approve Payment</button>
-                </div>
-              </div>
-            </div>
-          </template>
-          <div x-show="orders.length === 0" class="text-center text-gray-400 py-16 bg-white rounded-2xl rustic-card"><i data-lucide="inbox" class="w-12 h-12 mx-auto mb-3 opacity-30"></i><p class="text-lg font-medium">No orders yet</p></div>
-        </div>
-      </div>
+      <div x-show="adminTab === 'orders'" class="space-y-6"><div class="flex items-center justify-between"><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Order Management</h2><span class="text-xs text-gray-400" x-text="orders.length + ' total orders'"></span></div><div class="space-y-4"><template x-for="o in orders" :key="o.id"><div class="bg-white p-4 sm:p-6 rounded-2xl rustic-card"><div class="flex flex-col sm:flex-row justify-between gap-4 mb-4"><div><p class="font-semibold text-lg" x-text="o.customerName"></p><p class="text-sm text-gray-500" x-text="o.email"></p><p class="text-sm text-gray-500" x-text="o.phone"></p><p class="text-xs text-gray-400 mt-1">📅 <span x-text="o.date ? new Date(o.date).toLocaleDateString('en-PH', {year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'}) : ''"></span></p></div><div class="text-left sm:text-right"><p class="text-2xl font-bold text-[#5e4b3c]">₱<span x-text="o.total?.toLocaleString() || 0"></span></p><span class="text-xs px-2 py-0.5 rounded-full font-medium" :class="o.paymentMethod === 'gcash' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'" x-text="o.paymentMethod?.toUpperCase()"></span><p class="text-xs text-gray-500 mt-1" x-text="o.paymentStatus"></p></div></div><div class="bg-gray-50 p-4 rounded-xl mb-3"><p class="text-xs font-semibold text-gray-600 mb-2">📦 Order Items:</p><template x-for="item in o.items" :key="item.cartId || item.id"><div class="flex justify-between text-sm py-1.5 border-b border-gray-100 last:border-0"><span x-text="item.name + ' ×' + item.quantity"></span><span class="text-gray-600 font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span></div></template><div class="border-t border-gray-200 pt-2 mt-2 flex justify-between font-bold text-sm"><span>Total</span><span>₱<span x-text="o.total?.toLocaleString() || 0"></span></span></div></div><div class="bg-gray-50 p-4 rounded-xl mb-4"><p class="text-xs font-semibold text-gray-600 mb-1">📍 Delivery Address:</p><p class="text-sm text-gray-700" x-text="o.address"></p></div><div class="border-t border-gray-100 pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"><div class="flex items-center gap-2"><span class="text-sm font-medium text-gray-600">Status:</span><span class="status-badge" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span></div><div class="flex items-center gap-2 w-full sm:w-auto"><select @change="updateDeliveryStatus(o.id, $event.target.value)" class="input-field w-full sm:w-48 text-sm py-2"><option value="">Update Status</option><option value="Pending">📝 Pending</option><option value="Processing">⚙️ Processing</option><option value="To Ship">📦 To Ship</option><option value="Out for Delivery">🚚 Out for Delivery</option><option value="Delivered">✅ Delivered</option><option value="Cancelled">❌ Cancelled</option></select><button x-show="o.paymentMethod === 'gcash' && o.paymentStatus === 'Pending'" @click="approvePayment(o.id)" class="btn-outline text-xs px-3 py-2 rounded-lg whitespace-nowrap">✅ Approve Payment</button></div></div></div></template><div x-show="orders.length === 0" class="text-center text-gray-400 py-16 bg-white rounded-2xl rustic-card"><i data-lucide="inbox" class="w-12 h-12 mx-auto mb-3 opacity-30"></i><p class="text-lg font-medium">No orders yet</p></div></div></div>
 
       <!-- USERS TAB -->
-      <div x-show="adminTab === 'users'" class="space-y-6">
-        <div class="flex justify-between items-center"><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">User Management</h2><button @click="openAddUserModal" class="btn-primary px-5 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow-lg shadow-[#5e4b3c]/20"><i data-lucide="plus" class="w-4 h-4"></i> Add User</button></div>
-        <div class="stat-card"><h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">Admin</span> Administrators</h3><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 px-3 font-semibold">Name</th><th class="pb-3 px-3 font-semibold">Email</th><th class="pb-3 px-3 font-semibold">Phone</th><th class="pb-3 px-3 font-semibold">Status</th><th class="pb-3 px-3 font-semibold text-right">Actions</th></tr></thead><tbody><template x-for="u in adminUsers" :key="u.id"><tr class="border-b hover:bg-gray-50/50 transition"><td class="py-3 px-3"><span class="font-semibold" x-text="u.name"></span></td><td class="py-3 px-3"><span class="text-gray-600" x-text="u.email"></span></td><td class="py-3 px-3"><span class="text-gray-600" x-text="u.phone || '—'"></span></td><td class="py-3 px-3"><span x-show="!u.blocked" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Active</span><span x-show="u.blocked" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Blocked</span></td><td class="py-3 px-3 text-right"><button @click="editUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="deleteUser(u.id)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td></tr></template></tbody></table></div></div>
-        <div class="stat-card"><h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Customer</span> Customers</h3><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 px-3 font-semibold">Name</th><th class="pb-3 px-3 font-semibold">Email</th><th class="pb-3 px-3 font-semibold">Phone</th><th class="pb-3 px-3 font-semibold">Address</th><th class="pb-3 px-3 font-semibold">Status</th><th class="pb-3 px-3 font-semibold text-right">Actions</th></tr></thead><tbody><template x-for="u in customerUsers" :key="u.id"><tr class="border-b hover:bg-gray-50/50 transition"><td class="py-3 px-3"><span class="font-semibold" x-text="u.name"></span></td><td class="py-3 px-3"><span class="text-gray-600" x-text="u.email"></span></td><td class="py-3 px-3"><span class="text-gray-600" x-text="u.phone || '—'"></span></td><td class="py-3 px-3"><span class="text-gray-600 text-xs" x-text="u.address ? u.address.substring(0, 30) + '...' : '—'"></span></td><td class="py-3 px-3"><span x-show="!u.blocked" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Active</span><span x-show="u.blocked" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Blocked</span></td><td class="py-3 px-3 text-right"><button @click="editUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="toggleBlockUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2" :class="u.blocked ? 'text-green-600 border-green-400' : 'text-red-600 border-red-400'" x-text="u.blocked ? 'Unblock' : 'Block'"></button><button @click="deleteUser(u.id)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td></tr></template></tbody></table></div></div>
-      </div>
+      <div x-show="adminTab === 'users'" class="space-y-6"><div class="flex justify-between items-center"><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">User Management</h2><button @click="openAddUserModal" class="btn-primary px-5 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow-lg shadow-[#5e4b3c]/20"><i data-lucide="plus" class="w-4 h-4"></i> Add User</button></div><div class="stat-card"><h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">Admin</span> Administrators</h3><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 px-3 font-semibold">Name</th><th class="pb-3 px-3 font-semibold">Email</th><th class="pb-3 px-3 font-semibold">Phone</th><th class="pb-3 px-3 font-semibold">Status</th><th class="pb-3 px-3 font-semibold text-right">Actions</th></tr></thead><tbody><template x-for="u in adminUsers" :key="u.id"><tr class="border-b hover:bg-gray-50/50 transition"><td class="py-3 px-3"><span class="font-semibold" x-text="u.name"></span></td><td class="py-3 px-3"><span class="text-gray-600" x-text="u.email"></span></td><td class="py-3 px-3"><span class="text-gray-600" x-text="u.phone || '—'"></span></td><td class="py-3 px-3"><span x-show="!u.blocked" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Active</span><span x-show="u.blocked" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Blocked</span></td><td class="py-3 px-3 text-right"><button @click="editUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="deleteUser(u.id)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td></tr></template></tbody></table></div></div><div class="stat-card"><h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Customer</span> Customers</h3><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 px-3 font-semibold">Name</th><th class="pb-3 px-3 font-semibold">Email</th><th class="pb-3 px-3 font-semibold">Phone</th><th class="pb-3 px-3 font-semibold">Address</th><th class="pb-3 px-3 font-semibold">Status</th><th class="pb-3 px-3 font-semibold text-right">Actions</th></tr></thead><tbody><template x-for="u in customerUsers" :key="u.id"><tr class="border-b hover:bg-gray-50/50 transition"><td class="py-3 px-3"><span class="font-semibold" x-text="u.name"></span></td><td class="py-3 px-3"><span class="text-gray-600" x-text="u.email"></span></td><td class="py-3 px-3"><span class="text-gray-600" x-text="u.phone || '—'"></span></td><td class="py-3 px-3"><span class="text-gray-600 text-xs" x-text="u.address ? u.address.substring(0, 30) + '...' : '—'"></span></td><td class="py-3 px-3"><span x-show="!u.blocked" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Active</span><span x-show="u.blocked" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Blocked</span></td><td class="py-3 px-3 text-right"><button @click="editUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="toggleBlockUser(u.id)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2" :class="u.blocked ? 'text-green-600 border-green-400' : 'text-red-600 border-red-400'" x-text="u.blocked ? 'Unblock' : 'Block'"></button><button @click="deleteUser(u.id)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td></tr></template></tbody></table></div></div></div>
 
       <!-- REVIEWS TAB -->
-      <div x-show="adminTab === 'reviews'" class="space-y-6">
-        <div class="flex items-center justify-between"><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Review Management</h2><span class="text-xs text-gray-400" x-text="reviews.length + ' total reviews'"></span></div>
-        <div class="space-y-3">
-          <template x-for="review in reviews" :key="review.id">
-            <div class="bg-white p-4 sm:p-5 rounded-2xl rustic-card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div>
-                <div class="flex text-yellow-500 mb-1"><template x-for="i in 5"><span :class="i <= review.rating ? 'text-yellow-500' : 'text-gray-200'">★</span></template></div>
-                <p class="text-sm text-gray-700 italic" x-text="'\"' + review.text + '\"'"></p>
-                <p class="text-xs text-gray-500 mt-1">By: <span class="font-medium" x-text="review.customerName"></span> · Order #<span x-text="review.orderId"></span></p>
-                <span class="text-xs px-2 py-0.5 rounded-full mt-1.5 inline-block font-medium" :class="review.approved ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'" x-text="review.approved ? '✓ Approved' : '⏳ Pending'"></span>
-              </div>
-              <div class="flex items-center gap-2">
-                <button x-show="!review.approved" @click="approveReview(review.id)" class="btn-success px-4 py-2 rounded-lg text-xs">Approve</button>
-                <button @click="deleteReview(review.id)" class="btn-danger px-4 py-2 rounded-lg text-xs">Delete</button>
-              </div>
-            </div>
-          </template>
-          <div x-show="reviews.length === 0" class="text-center text-gray-400 py-16 bg-white rounded-2xl rustic-card"><i data-lucide="star" class="w-12 h-12 mx-auto mb-3 opacity-30"></i><p class="text-lg font-medium">No reviews yet</p></div>
-        </div>
-      </div>
+      <div x-show="adminTab === 'reviews'" class="space-y-6"><div class="flex items-center justify-between"><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Review Management</h2><span class="text-xs text-gray-400" x-text="reviews.length + ' total reviews'"></span></div><div class="space-y-3"><template x-for="review in reviews" :key="review.id"><div class="bg-white p-4 sm:p-5 rounded-2xl rustic-card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"><div><div class="flex text-yellow-500 mb-1"><template x-for="i in 5"><span :class="i <= review.rating ? 'text-yellow-500' : 'text-gray-200'">★</span></template></div><p class="text-sm text-gray-700 italic" x-text="'\"' + review.text + '\"'"></p><p class="text-xs text-gray-500 mt-1">By: <span class="font-medium" x-text="review.customerName"></span> · Order #<span x-text="review.orderId"></span></p><span class="text-xs px-2 py-0.5 rounded-full mt-1.5 inline-block font-medium" :class="review.approved ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'" x-text="review.approved ? '✓ Approved' : '⏳ Pending'"></span></div><div class="flex items-center gap-2"><button x-show="!review.approved" @click="approveReview(review.id)" class="btn-success px-4 py-2 rounded-lg text-xs">Approve</button><button @click="deleteReview(review.id)" class="btn-danger px-4 py-2 rounded-lg text-xs">Delete</button></div></div></template><div x-show="reviews.length === 0" class="text-center text-gray-400 py-16 bg-white rounded-2xl rustic-card"><i data-lucide="star" class="w-12 h-12 mx-auto mb-3 opacity-30"></i><p class="text-lg font-medium">No reviews yet</p></div></div></div>
 
-      <!-- PRODUCT FORM MODAL -->
+      <!-- PRODUCT FORM MODAL (FIXED) -->
       <div x-show="showProductModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" x-cloak>
         <div class="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 rustic-card max-h-[90vh] overflow-y-auto" @click.outside="showProductModal = false">
-          <h2 class="text-xl sm:text-2xl font-bold serif mb-6" x-text="editingProductIndex === null ? 'Add New Mug' : 'Edit Mug'"></h2>
+          <h2 class="text-xl sm:text-2xl font-bold serif mb-6" x-text="editingProductIndex !== null ? 'Edit Mug' : 'Add New Mug'"></h2>
           <form @submit.prevent="saveProductForm" class="space-y-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div><label class="input-label">Product Name *</label><input type="text" required x-model="productForm.name" class="input-field text-sm"></div>
@@ -525,21 +270,21 @@
               <div class="flex items-center gap-2"><i data-lucide="tag" class="w-4 h-4 text-red-600"></i><span class="text-sm font-bold text-red-800">Sale Settings</span></div>
               <div class="flex items-center gap-3">
                 <label class="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" x-model="productForm.onSale" class="rounded" @change="if(!productForm.onSale) productForm.salePercent = 0">
+                  <input type="checkbox" x-model="productForm.onSale" class="rounded">
                   <span class="text-sm text-gray-700">Put on sale</span>
                 </label>
               </div>
               <div x-show="productForm.onSale">
                 <label class="input-label">Sale Percentage (%)</label>
-                <input type="number" x-model="productForm.salePercent" class="input-field text-sm" min="1" max="99" placeholder="e.g. 10 for 10% off">
-                <p class="text-xs text-gray-500 mt-1">Sale price: ₱<span x-text="Math.round(productForm.price - (productForm.price * (productForm.salePercent || 0) / 100)) || 0"></span></p>
+                <input type="number" x-model="productForm.salePercent" class="input-field text-sm" min="0" max="99" placeholder="e.g. 10 for 10% off">
+                <p class="text-xs text-gray-500 mt-1">Sale price: ₱<span x-text="Math.round((productForm.price || 0) - ((productForm.price || 0) * (productForm.salePercent || 0) / 100))"></span></p>
               </div>
             </div>
             <div class="bg-purple-50 p-4 rounded-xl border border-purple-200 space-y-3">
               <div class="flex items-center gap-2"><i data-lucide="layers" class="w-4 h-4 text-purple-600"></i><span class="text-sm font-bold text-purple-800">Mug Set Settings</span></div>
               <div class="flex items-center gap-3">
                 <label class="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" x-model="productForm.isSet" class="rounded" @change="if(!productForm.isSet) productForm.setPrice = 0">
+                  <input type="checkbox" x-model="productForm.isSet" class="rounded">
                   <span class="text-sm text-gray-700">This is a mug set</span>
                 </label>
               </div>
@@ -557,33 +302,13 @@
       </div>
 
       <!-- RESTOCK MODAL -->
-      <div x-show="showRestockModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" x-cloak @click.self="showRestockModal = false">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 rustic-card modal-enter">
-          <div class="flex items-center justify-between mb-5"><h2 class="text-xl font-bold serif text-gray-800">Restock Product</h2><button @click="showRestockModal = false" class="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition"><i data-lucide="x" class="w-5 h-5"></i></button></div>
-          <div class="bg-amber-50 p-4 rounded-xl mb-5 flex items-center gap-4"><img :src="restockProduct?.image" class="w-16 h-16 rounded-xl object-cover border border-amber-200"><div><p class="font-semibold text-gray-800" x-text="restockProduct?.name || 'Product'"></p><p class="text-sm text-gray-500">Current stock: <span class="font-bold text-amber-700" x-text="restockProduct?.stock || 0"></span></p></div></div>
-          <form @submit.prevent="confirmRestock" class="space-y-4"><div><label class="input-label">Quantity to Add *</label><input type="number" x-model="restockQuantity" class="input-field text-sm" min="1" required placeholder="Enter quantity"><p class="text-xs text-gray-400 mt-1">New stock: <span class="font-semibold text-green-700" x-text="(restockProduct?.stock || 0) + (restockQuantity || 0)"></span></p></div><div class="flex gap-3 pt-2"><button type="submit" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1 shadow-lg shadow-[#5e4b3c]/20"><i data-lucide="package-plus" class="w-4 h-4"></i> Confirm Restock</button><button type="button" @click="showRestockModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div></form>
-        </div>
-      </div>
+      <div x-show="showRestockModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" x-cloak @click.self="showRestockModal = false"><div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 rustic-card modal-enter"><div class="flex items-center justify-between mb-5"><h2 class="text-xl font-bold serif text-gray-800">Restock Product</h2><button @click="showRestockModal = false" class="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition"><i data-lucide="x" class="w-5 h-5"></i></button></div><div class="bg-amber-50 p-4 rounded-xl mb-5 flex items-center gap-4"><img :src="restockProduct?.image" class="w-16 h-16 rounded-xl object-cover border border-amber-200"><div><p class="font-semibold text-gray-800" x-text="restockProduct?.name || 'Product'"></p><p class="text-sm text-gray-500">Current stock: <span class="font-bold text-amber-700" x-text="restockProduct?.stock || 0"></span></p></div></div><form @submit.prevent="confirmRestock" class="space-y-4"><div><label class="input-label">Quantity to Add *</label><input type="number" x-model="restockQuantity" class="input-field text-sm" min="1" required placeholder="Enter quantity"><p class="text-xs text-gray-400 mt-1">New stock: <span class="font-semibold text-green-700" x-text="(restockProduct?.stock || 0) + (restockQuantity || 0)"></span></p></div><div class="flex gap-3 pt-2"><button type="submit" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1 shadow-lg shadow-[#5e4b3c]/20"><i data-lucide="package-plus" class="w-4 h-4"></i> Confirm Restock</button><button type="button" @click="showRestockModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div></form></div></div>
 
       <!-- USER FORM MODAL -->
-      <div x-show="showUserModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" x-cloak>
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 rustic-card modal-enter" @click.outside="showUserModal = false">
-          <h2 class="text-xl font-bold serif mb-4" x-text="editingUserId ? 'Edit User' : 'Add User'"></h2>
-          <form @submit.prevent="saveUser" class="space-y-3">
-            <div><label class="input-label">Full Name *</label><input type="text" required x-model="userForm.name" class="input-field text-sm"></div>
-            <div><label class="input-label">Email *</label><input type="email" required x-model="userForm.email" class="input-field text-sm"></div>
-            <div><label class="input-label">Phone</label><input type="tel" x-model="userForm.phone" class="input-field text-sm"></div>
-            <div><label class="input-label">Address</label><textarea x-model="userForm.address" class="input-field text-sm" rows="2"></textarea></div>
-            <div><label class="input-label">Role *</label><select x-model="userForm.role" class="input-field text-sm" required><option value="customer">Customer</option><option value="admin">Admin</option></select></div>
-            <div><label class="input-label">Password <span x-show="!editingUserId">*</span></label><input type="password" x-model="userForm.password" class="input-field text-sm" :placeholder="editingUserId ? 'Leave blank to keep current' : 'Enter password'" x-bind:required="!editingUserId"></div>
-            <div class="flex gap-3 pt-2"><button type="submit" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1 shadow-lg shadow-[#5e4b3c]/20">💾 Save</button><button type="button" @click="showUserModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div>
-          </form>
-        </div>
-      </div>
+      <div x-show="showUserModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" x-cloak><div class="bg-white rounded-2xl max-w-md w-full p-6 rustic-card modal-enter" @click.outside="showUserModal = false"><h2 class="text-xl font-bold serif mb-4" x-text="editingUserId ? 'Edit User' : 'Add User'"></h2><form @submit.prevent="saveUser" class="space-y-3"><div><label class="input-label">Full Name *</label><input type="text" required x-model="userForm.name" class="input-field text-sm"></div><div><label class="input-label">Email *</label><input type="email" required x-model="userForm.email" class="input-field text-sm"></div><div><label class="input-label">Phone</label><input type="tel" x-model="userForm.phone" class="input-field text-sm"></div><div><label class="input-label">Address</label><textarea x-model="userForm.address" class="input-field text-sm" rows="2"></textarea></div><div><label class="input-label">Role *</label><select x-model="userForm.role" class="input-field text-sm" required><option value="customer">Customer</option><option value="admin">Admin</option></select></div><div><label class="input-label">Password <span x-show="!editingUserId">*</span></label><input type="password" x-model="userForm.password" class="input-field text-sm" :placeholder="editingUserId ? 'Leave blank to keep current' : 'Enter password'" x-bind:required="!editingUserId"></div><div class="flex gap-3 pt-2"><button type="submit" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1 shadow-lg shadow-[#5e4b3c]/20">💾 Save</button><button type="button" @click="showUserModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div></form></div></div>
     </div>
   </div>
 
-  <!-- ==================== JAVASCRIPT ==================== -->
   <script>
     function app() {
       return {
@@ -594,7 +319,7 @@
         checkoutForm: { name: '', email: '', phone: '', address: '', paymentMethod: '' },
         newsletterEmail: '', newsletterSubscribed: false,
         adminTab: 'dashboard', showProductModal: false, editingProductIndex: null,
-        productForm: { name: '', price: '', stock: '', category: '', categoryShort: '', description: '', image: '', onSale: false, salePercent: 0, isSet: false, setPrice: 0 },
+        productForm: { name: '', price: 0, stock: 0, category: '', categoryShort: '', description: '', image: '', onSale: false, salePercent: 0, isSet: false, setPrice: 0 },
         selectedCategory: 'All',
         pendingCheckout: false,
         selectedProduct: null,
@@ -658,18 +383,7 @@
 
         initApp() {
           const sp = localStorage.getItem('sip_products'); 
-          if (sp) { 
-            try { 
-              const parsed = JSON.parse(sp); 
-              this.products = parsed.map(p => ({ 
-                ...p, 
-                onSale: p.onSale === true || p.onSale === 'true' || p.onSale === 1,
-                salePercent: Number(p.salePercent) || 0, 
-                isSet: p.isSet === true || p.isSet === 'true' || p.isSet === 1,
-                setPrice: Number(p.setPrice) || 0 
-              })); 
-            } catch(e) { console.error('Error parsing products:', e); } 
-          }
+          if (sp) { try { const parsed = JSON.parse(sp); this.products = parsed.map(p => ({ ...p, onSale: p.onSale || false, salePercent: p.salePercent || 0, isSet: p.isSet || false, setPrice: p.setPrice || 0 })); } catch(e) {} }
           const su = localStorage.getItem('sip_users'); if (su) { try { this.users = JSON.parse(su); } catch(e) {} } else { localStorage.setItem('sip_users', JSON.stringify(this.users)); }
           const so = localStorage.getItem('sip_orders'); if (so) { try { this.orders = JSON.parse(so); } catch(e) {} }
           const sc = localStorage.getItem('sip_cart'); if (sc) { try { this.cart = JSON.parse(sc); } catch(e) {} }
@@ -686,15 +400,9 @@
           if (this.profileForm.newPassword && this.profileForm.newPassword.length < 6) { alert('New password must be at least 6 characters.'); return; }
           const userIndex = this.users.findIndex(u => u.id === this.currentUser.id);
           if (userIndex !== -1) {
-            this.users[userIndex].name = this.profileForm.name;
-            this.users[userIndex].email = this.profileForm.email;
-            this.users[userIndex].phone = this.profileForm.phone;
-            this.users[userIndex].address = this.profileForm.address;
+            this.users[userIndex].name = this.profileForm.name; this.users[userIndex].email = this.profileForm.email; this.users[userIndex].phone = this.profileForm.phone; this.users[userIndex].address = this.profileForm.address;
             if (this.profileForm.newPassword) this.users[userIndex].password = this.profileForm.newPassword;
-            localStorage.setItem('sip_users', JSON.stringify(this.users));
-            this.currentUser = this.users[userIndex];
-            this.showProfileEdit = false;
-            alert('Profile updated successfully!');
+            localStorage.setItem('sip_users', JSON.stringify(this.users)); this.currentUser = this.users[userIndex]; this.showProfileEdit = false; alert('Profile updated successfully!');
           }
         },
 
@@ -706,42 +414,26 @@
         openAddUserModal() { this.editingUserId = null; this.userForm = { name: '', email: '', phone: '', address: '', role: 'customer', password: '' }; this.showUserModal = true; },
         editUser(id) { const u = this.users.find(u => u.id === id); if (u) { this.editingUserId = id; this.userForm = { name: u.name, email: u.email, phone: u.phone || '', address: u.address || '', role: u.role, password: '' }; this.showUserModal = true; } },
         saveUser() {
-          if (this.editingUserId) {
-            const u = this.users.find(u => u.id === this.editingUserId);
-            if (u) { u.name = this.userForm.name; u.email = this.userForm.email; u.phone = this.userForm.phone; u.address = this.userForm.address; u.role = this.userForm.role; if (this.userForm.password) u.password = this.userForm.password; }
-          } else {
-            if (!this.userForm.password) { alert('Password required.'); return; }
-            if (this.users.find(u => u.email === this.userForm.email)) { alert('Email already exists.'); return; }
-            this.users.push({ id: Date.now(), name: this.userForm.name, email: this.userForm.email, phone: this.userForm.phone, address: this.userForm.address, role: this.userForm.role, password: this.userForm.password, blocked: false });
-          }
-          localStorage.setItem('sip_users', JSON.stringify(this.users));
-          if (this.currentUser && this.editingUserId === this.currentUser.id) this.currentUser = this.users.find(u => u.id === this.currentUser.id);
-          this.showUserModal = false;
+          if (this.editingUserId) { const u = this.users.find(u => u.id === this.editingUserId); if (u) { u.name = this.userForm.name; u.email = this.userForm.email; u.phone = this.userForm.phone; u.address = this.userForm.address; u.role = this.userForm.role; if (this.userForm.password) u.password = this.userForm.password; } }
+          else { if (!this.userForm.password) { alert('Password required.'); return; } if (this.users.find(u => u.email === this.userForm.email)) { alert('Email already exists.'); return; } this.users.push({ id: Date.now(), name: this.userForm.name, email: this.userForm.email, phone: this.userForm.phone, address: this.userForm.address, role: this.userForm.role, password: this.userForm.password, blocked: false }); }
+          localStorage.setItem('sip_users', JSON.stringify(this.users)); if (this.currentUser && this.editingUserId === this.currentUser.id) this.currentUser = this.users.find(u => u.id === this.currentUser.id); this.showUserModal = false;
         },
         deleteUser(id) { if (confirm('Delete user?')) { if (id === this.currentUser?.id) { alert('Cannot delete yourself.'); return; } this.users = this.users.filter(u => u.id !== id); localStorage.setItem('sip_users', JSON.stringify(this.users)); } },
-
         cancelOrder(id) { if (!confirm('Cancel order?')) return; const o = this.orders.find(o => o.id === id); if (o && this.canCancelOrder(o)) { o.deliveryStatus = 'Cancelled'; o.paymentStatus = 'Refunded'; localStorage.setItem('sip_orders', JSON.stringify(this.orders)); } },
 
         handleAuth() {
           if (this.authMode === 'register') {
             if (!this.authForm.name || !this.authForm.email || !this.authForm.phone || !this.authForm.address || !this.authForm.password) { alert('Fill all fields.'); return; }
-            if (this.authForm.password.length < 6) { alert('Password min 6 chars.'); return; }
-            if (this.users.find(u => u.email === this.authForm.email)) { alert('Email exists.'); return; }
+            if (this.authForm.password.length < 6) { alert('Password min 6 chars.'); return; } if (this.users.find(u => u.email === this.authForm.email)) { alert('Email exists.'); return; }
             const nu = { id: Date.now(), name: this.authForm.name, email: this.authForm.email, phone: this.authForm.phone, address: this.authForm.address, password: this.authForm.password, blocked: false, role: 'customer' };
-            this.users.push(nu); localStorage.setItem('sip_users', JSON.stringify(this.users));
-            this.currentUser = nu; this.showAuth = false; this.authRedirectMessage = ''; this.customerTab = 'shop';
-            this.authForm = { name: '', email: '', phone: '', address: '', password: '' };
+            this.users.push(nu); localStorage.setItem('sip_users', JSON.stringify(this.users)); this.currentUser = nu; this.showAuth = false; this.authRedirectMessage = ''; this.customerTab = 'shop'; this.authForm = { name: '', email: '', phone: '', address: '', password: '' };
             if (this.pendingCheckout) { this.pendingCheckout = false; this.showCheckout = true; this.checkoutForm = { name: nu.name, email: nu.email, phone: nu.phone, address: nu.address, paymentMethod: '' }; }
           } else {
             const f = this.users.find(u => u.email === this.authForm.email && u.password === this.authForm.password);
-            if (f && !f.blocked) {
-              this.currentUser = f; this.showAuth = false; this.authRedirectMessage = ''; this.customerTab = 'shop';
-              this.authForm = { name: '', email: '', phone: '', address: '', password: '' };
-              if (this.pendingCheckout) { this.pendingCheckout = false; this.showCheckout = true; this.checkoutForm = { name: f.name, email: f.email, phone: f.phone || '', address: f.address || '', paymentMethod: '' }; }
-            } else { alert(f?.blocked ? 'Blocked.' : 'Invalid credentials.'); }
+            if (f && !f.blocked) { this.currentUser = f; this.showAuth = false; this.authRedirectMessage = ''; this.customerTab = 'shop'; this.authForm = { name: '', email: '', phone: '', address: '', password: '' }; if (this.pendingCheckout) { this.pendingCheckout = false; this.showCheckout = true; this.checkoutForm = { name: f.name, email: f.email, phone: f.phone || '', address: f.address || '', paymentMethod: '' }; } }
+            else { alert(f?.blocked ? 'Blocked.' : 'Invalid credentials.'); }
           }
         },
-
         logout() { this.currentUser = null; this.adminTab = 'dashboard'; this.customerTab = 'shop'; this.cartOpen = false; this.showCheckout = false; },
 
         addToCart(product) { if (product.stock <= 0) return; const existing = this.cart.find(item => item.id === product.id); const effectivePrice = this.getEffectivePrice(product); if (existing) { if (existing.quantity < product.stock + existing.quantity) { existing.quantity++; } else { alert('Stock limit.'); return; } } else { this.cart.push({ ...product, price: effectivePrice, quantity: 1, cartId: Date.now() + Math.random() }); } product.stock--; this.saveCart(); this.saveProducts(); },
@@ -756,32 +448,20 @@
         processOrder() { if (!this.checkoutForm.name || !this.checkoutForm.email || !this.checkoutForm.phone || !this.checkoutForm.address || !this.checkoutForm.paymentMethod) { alert('Fill all fields.'); return; } const order = { id: Date.now(), customerName: this.checkoutForm.name, email: this.checkoutForm.email, phone: this.checkoutForm.phone, address: this.checkoutForm.address, paymentMethod: this.checkoutForm.paymentMethod, paymentStatus: this.checkoutForm.paymentMethod === 'cod' ? 'Paid' : 'Pending', deliveryStatus: 'Pending', items: [...this.cart], total: this.cartGrandTotal, date: new Date().toISOString() }; this.orders.push(order); localStorage.setItem('sip_orders', JSON.stringify(this.orders)); this.cart = []; this.saveCart(); this.showCheckout = false; this.checkoutForm = { name: '', email: '', phone: '', address: '', paymentMethod: '' }; this.recalculateFinancials(); alert('Order placed!'); },
         subscribeNewsletter() { if (this.newsletterEmail) { this.newsletterSubscribed = true; this.newsletterEmail = ''; setTimeout(() => this.newsletterSubscribed = false, 5000); } },
 
-        openAddProductModal() { this.editingProductIndex = null; this.productForm = { name: '', price: '', stock: '', category: this.categories[0], categoryShort: '', description: '', image: '', onSale: false, salePercent: 0, isSet: false, setPrice: 0 }; this.uploadStatus = null; this.showProductModal = true; },
-        editProduct(idx) { this.editingProductIndex = idx; const p = this.products[idx]; this.productForm = { name: p.name, price: p.price, stock: p.stock, category: p.category, categoryShort: p.categoryShort, description: p.description, image: p.image, onSale: p.onSale || false, salePercent: p.salePercent || 0, isSet: p.isSet || false, setPrice: p.setPrice || 0 }; this.uploadStatus = null; this.showProductModal = true; },
+        openAddProductModal() { this.editingProductIndex = null; this.productForm = { name: '', price: 0, stock: 0, category: this.categories[0], categoryShort: '', description: '', image: '', onSale: false, salePercent: 0, isSet: false, setPrice: 0 }; this.showProductModal = true; this.$nextTick(() => lucide.createIcons()); },
+        editProduct(idx) { this.editingProductIndex = idx; const p = this.products[idx]; this.productForm = { name: p.name, price: p.price, stock: p.stock, category: p.category, categoryShort: p.categoryShort, description: p.description, image: p.image, onSale: p.onSale || false, salePercent: p.salePercent || 0, isSet: p.isSet || false, setPrice: p.setPrice || 0 }; this.showProductModal = true; this.$nextTick(() => lucide.createIcons()); },
         saveProductForm() { 
           if (!this.productForm.image) { alert('Image required.'); return; } 
           const data = { 
             id: this.editingProductIndex !== null ? this.products[this.editingProductIndex].id : Date.now(), 
-            name: this.productForm.name, 
-            price: Number(this.productForm.price), 
-            stock: Number(this.productForm.stock), 
-            category: this.productForm.category, 
-            categoryShort: this.productForm.categoryShort || this.productForm.category.split(' ')[0], 
-            description: this.productForm.description, 
-            image: this.productForm.image, 
-            onSale: this.productForm.onSale ? true : false, 
-            salePercent: this.productForm.onSale ? Number(this.productForm.salePercent) || 0 : 0, 
-            isSet: this.productForm.isSet ? true : false, 
-            setPrice: this.productForm.isSet ? Number(this.productForm.setPrice) || 0 : 0 
+            name: this.productForm.name, price: Number(this.productForm.price), stock: Number(this.productForm.stock), 
+            category: this.productForm.category, categoryShort: this.productForm.categoryShort || this.productForm.category.split(' ')[0], 
+            description: this.productForm.description, image: this.productForm.image, 
+            onSale: this.productForm.onSale ? true : false, salePercent: this.productForm.onSale ? Number(this.productForm.salePercent) || 0 : 0, 
+            isSet: this.productForm.isSet ? true : false, setPrice: this.productForm.isSet ? Number(this.productForm.setPrice) || 0 : 0 
           }; 
-          if (this.editingProductIndex !== null) { 
-            this.products[this.editingProductIndex] = data; 
-          } else { 
-            this.products.push(data); 
-          } 
-          this.saveProducts(); 
-          this.showProductModal = false; 
-          this.$nextTick(() => lucide.createIcons()); 
+          if (this.editingProductIndex !== null) { this.products[this.editingProductIndex] = data; } else { this.products.push(data); } 
+          this.saveProducts(); this.showProductModal = false; this.$nextTick(() => lucide.createIcons()); 
         },
         deleteProduct(idx) { if (confirm('Delete?')) { this.products.splice(idx, 1); this.saveProducts(); } },
         handleDrop(event) { this.isDragging = false; const files = event.dataTransfer.files; if (files.length > 0) this.processFile(files[0]); },
