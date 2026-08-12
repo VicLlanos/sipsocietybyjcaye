@@ -209,7 +209,8 @@
           </div>
           <div>
             <label class="input-label">Password *</label>
-            <input type="password" x-model="authForm.password" placeholder="Min. 6 characters" class="input-field text-sm" required minlength="6">
+            <input type="password" x-model="authForm.password" placeholder="Enter your password" class="input-field text-sm" required>
+            <p x-show="authMode === 'register'" class="text-xs text-gray-400 mt-1">Minimum 6 characters recommended</p>
           </div>
           <button type="submit" class="w-full btn-primary py-3 font-semibold tracking-wide text-sm">Continue</button>
         </div>
@@ -722,8 +723,9 @@
               alert('Please fill in all required fields: Name, Email, Phone, Address, and Password.'); 
               return; 
             }
+            // Only enforce minimum length for registration, not login
             if (this.authForm.password.length < 6) {
-              alert('Password must be at least 6 characters.');
+              alert('Password must be at least 6 characters for security.');
               return;
             }
             if (this.users.find(u => u.email === this.authForm.email)) { 
@@ -757,6 +759,7 @@
             }
             alert('Registration successful! Welcome to JCaye\'s Sip Society.');
           } else {
+            // Login mode - no minimum length check
             const f = this.users.find(u => u.email === this.authForm.email && u.password === this.authForm.password);
             if (f && !f.blocked) {
               this.currentUser = f; 
