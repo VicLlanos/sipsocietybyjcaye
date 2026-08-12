@@ -6,7 +6,7 @@
   <title>JCaye's Sip Society · Artisan Mugs Philippines</title>
   
   <!-- Favicon -->
-  <link rel="icon" type="image/jpeg" href="jcayelogo1.png">
+  <link rel="icon" type="image/png" href="jcayelogo1.png">
   <link rel="apple-touch-icon" href="jcayelogo1.png">
   
   <script src="https://cdn.tailwindcss.com"></script>
@@ -53,9 +53,9 @@
       display: flex; flex-direction: column; justify-content: flex-end;
       padding: 1.25rem; pointer-events: none;
     }
-    .mug-card:hover .mug-overlay, .mug-card.active .mug-overlay { opacity: 1; }
+    .mug-card:hover .mug-overlay { opacity: 1; }
     .mug-description { transform: translateY(20px); transition: transform 0.5s ease; }
-    .mug-card:hover .mug-description, .mug-card.active .mug-description { transform: translateY(0); }
+    .mug-card:hover .mug-description { transform: translateY(0); }
     
     .btn-primary {
       background: #5e4b3c; color: #fefaf5; transition: all 0.3s ease;
@@ -135,7 +135,6 @@
     .quantity-btn:hover { background: #f3ede7; border-color: #5e4b3c; }
     .quantity-btn:disabled { opacity: 0.3; cursor: not-allowed; }
     
-    /* Drag and Drop Styles */
     .drop-zone {
       border: 2px dashed #c9b99a;
       border-radius: 12px;
@@ -160,7 +159,6 @@
       color: #8b7355;
     }
     
-    /* Product Modal Animation */
     .modal-enter {
       animation: modalFadeIn 0.3s ease-out;
     }
@@ -190,7 +188,7 @@
 </head>
 <body class="min-h-screen text-gray-800" x-data="app()" x-init="initApp()">
 
-  <!-- AUTH OVERLAY -->
+  <!-- ==================== AUTH OVERLAY ==================== -->
   <div x-show="showAuth" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" x-cloak>
     <div class="bg-white rounded-2xl shadow-2xl p-5 sm:p-8 max-w-md w-full rustic-card border-0 fade-in-up max-h-[90vh] overflow-y-auto" @click.outside="showAuth = false">
       <div class="flex flex-col items-center mb-4 sm:mb-6">
@@ -238,7 +236,7 @@
     </div>
   </div>
 
-  <!-- HEADER -->
+  <!-- ==================== HEADER ==================== -->
   <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#e0d5c7] shadow-sm">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
       <div class="flex items-center gap-2">
@@ -266,7 +264,7 @@
     </div>
   </header>
 
-  <!-- CUSTOMER VIEW -->
+  <!-- ==================== CUSTOMER VIEW ==================== -->
   <div x-show="!currentUser || currentUser.role !== 'admin'" x-cloak class="w-full">
     <!-- Hero -->
     <section class="relative hero-pattern bg-gradient-to-b from-[#faf7f2] to-[#f2ebe1] py-8 sm:py-12 md:py-16 px-4 text-center border-b border-[#d9ccbb]">
@@ -308,8 +306,7 @@
         <template x-for="(product, index) in filteredProducts" :key="product.id">
           <div class="rustic-card rounded-2xl flex flex-col fade-in-up mug-card cursor-pointer group"
                :style="'animation-delay: ' + (index * 0.1) + 's'"
-               @click="openProductModal(product)"
-               :class="{ 'active': activeMug === product.id }">
+               @click="openProductModal(product)">
             <div class="relative h-56 sm:h-64 lg:h-72 bg-gray-100 rounded-xl overflow-hidden">
               <img :src="product.image" alt="mug" class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105">
               <div class="mug-overlay rounded-xl">
@@ -342,22 +339,17 @@
       </div>
     </div>
 
-    <!-- PRODUCT DETAIL MODAL -->
+    <!-- Product Detail Modal -->
     <div x-show="selectedProduct" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" x-cloak @click.self="selectedProduct = null">
       <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto rustic-card modal-enter" @click.stop>
         <div class="relative">
-          <!-- Close Button -->
           <button @click="selectedProduct = null" class="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition">
             <i data-lucide="x" class="w-5 h-5 text-gray-700"></i>
           </button>
-          
           <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
-            <!-- Image Section -->
             <div class="bg-gray-100 flex items-center justify-center p-8 md:p-12">
               <img :src="selectedProduct.image" :alt="selectedProduct.name" class="w-full h-auto max-h-96 object-contain rounded-xl">
             </div>
-            
-            <!-- Details Section -->
             <div class="p-6 md:p-8 flex flex-col">
               <div class="flex-1">
                 <div class="flex items-center gap-2 mb-3">
@@ -366,51 +358,29 @@
                   <span x-show="selectedProduct.stock === 0" class="text-xs bg-red-500 text-white px-3 py-1 rounded-full font-medium">Out of Stock</span>
                   <span x-show="selectedProduct.stock > 3" class="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-medium">In Stock</span>
                 </div>
-                
                 <h2 class="text-2xl md:text-3xl font-bold serif text-gray-800 mb-2" x-text="selectedProduct.name"></h2>
                 <p class="text-3xl font-bold text-[#5e4b3c] mb-4">₱<span x-text="selectedProduct.price.toLocaleString()"></span></p>
-                
                 <div class="border-t border-gray-200 pt-4 mb-4">
                   <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Description</h3>
                   <p class="text-gray-600 leading-relaxed" x-text="selectedProduct.description"></p>
                 </div>
-                
                 <div class="border-t border-gray-200 pt-4 mb-6">
                   <h3 class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2">Product Details</h3>
                   <ul class="space-y-2 text-sm text-gray-500">
-                    <li class="flex items-center gap-2">
-                      <i data-lucide="tag" class="w-4 h-4"></i>
-                      Category: <span class="text-gray-700 font-medium" x-text="selectedProduct.category"></span>
-                    </li>
-                    <li class="flex items-center gap-2">
-                      <i data-lucide="package" class="w-4 h-4"></i>
-                      Stock Available: <span class="text-gray-700 font-medium" x-text="selectedProduct.stock"></span>
-                    </li>
-                    <li class="flex items-center gap-2">
-                      <i data-lucide="truck" class="w-4 h-4"></i>
-                      Free Shipping: <span class="text-green-600 font-medium">On orders over ₱1,500</span>
-                    </li>
+                    <li class="flex items-center gap-2"><i data-lucide="tag" class="w-4 h-4"></i>Category: <span class="text-gray-700 font-medium" x-text="selectedProduct.category"></span></li>
+                    <li class="flex items-center gap-2"><i data-lucide="package" class="w-4 h-4"></i>Stock Available: <span class="text-gray-700 font-medium" x-text="selectedProduct.stock"></span></li>
+                    <li class="flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4"></i>Free Shipping: <span class="text-green-600 font-medium">On orders over ₱1,500</span></li>
                   </ul>
                 </div>
               </div>
-              
-              <!-- Add to Cart Section -->
               <div class="border-t border-gray-200 pt-6">
                 <div class="flex items-center gap-3">
-                  <button @click="addToCartFromModal(selectedProduct)" 
-                          :disabled="selectedProduct.stock === 0"
-                          class="flex-1 btn-primary py-3.5 rounded-xl font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                  <button @click="addToCartFromModal(selectedProduct)" :disabled="selectedProduct.stock === 0" class="flex-1 btn-primary py-3.5 rounded-xl font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed">
                     <span x-show="!isInCart(selectedProduct.id)">🛒 Add to Cart</span>
                     <span x-show="isInCart(selectedProduct.id)">✓ Already in Cart</span>
                   </button>
-                  <button @click="selectedProduct = null" class="btn-outline px-6 py-3.5 rounded-xl text-sm font-medium">
-                    Continue Shopping
-                  </button>
+                  <button @click="selectedProduct = null" class="btn-outline px-6 py-3.5 rounded-xl text-sm font-medium">Continue Shopping</button>
                 </div>
-                <p class="text-xs text-gray-400 text-center mt-3">
-                  <span x-show="!isInCart(selectedProduct.id)">Click to add this item to your cart</span>
-                  <span x-show="isInCart(selectedProduct.id)">View your cart to proceed to checkout</span>
-                </p>
               </div>
             </div>
           </div>
@@ -433,34 +403,22 @@
       </div>
     </div>
 
-    <!-- ==================== ENHANCED CART DRAWER ==================== -->
+    <!-- Cart Drawer -->
     <div x-show="cartOpen" class="fixed inset-0 z-40 flex justify-end" x-cloak>
       <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="cartOpen = false"></div>
       <div class="relative w-full max-w-lg bg-white h-full shadow-2xl flex flex-col rustic-card border-l animate-slide-in">
-        <!-- Cart Header -->
         <div class="flex justify-between items-center p-4 sm:p-6 border-b">
           <div>
             <h3 class="text-lg sm:text-xl font-bold serif">Your Cart</h3>
             <p class="text-xs text-gray-500 mt-0.5"><span x-text="cartItemCount"></span> item(s)</p>
           </div>
-          <button @click="cartOpen = false" class="text-gray-500 hover:text-gray-700 p-1">
-            <i data-lucide="x" class="w-5 h-5"></i>
-          </button>
+          <button @click="cartOpen = false" class="text-gray-500 hover:text-gray-700 p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
-
-        <!-- Free Shipping Banner -->
-        <div x-show="cartTotal < 1500 && cart.length > 0" class="bg-amber-50 border-b border-amber-200 px-4 sm:px-6 py-2.5 text-xs text-amber-800">
-          🚚 Add ₱<span x-text="(1500 - cartTotal).toLocaleString()"></span> more for free shipping!
-        </div>
-        <div x-show="cartTotal >= 1500 && cart.length > 0" class="bg-green-50 border-b border-green-200 px-4 sm:px-6 py-2.5 text-xs text-green-800">
-          ✅ You've qualified for free shipping!
-        </div>
-
-        <!-- Cart Items -->
+        <div x-show="cartTotal < 1500 && cart.length > 0" class="bg-amber-50 border-b border-amber-200 px-4 sm:px-6 py-2.5 text-xs text-amber-800">🚚 Add ₱<span x-text="(1500 - cartTotal).toLocaleString()"></span> more for free shipping!</div>
+        <div x-show="cartTotal >= 1500 && cart.length > 0" class="bg-green-50 border-b border-green-200 px-4 sm:px-6 py-2.5 text-xs text-green-800">✅ You've qualified for free shipping!</div>
         <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
           <template x-for="(item, idx) in cart" :key="item.cartId">
             <div class="cart-item-enter flex gap-3 sm:gap-4 border-b pb-4">
-              <!-- Product Image -->
               <img :src="item.image" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover flex-shrink-0" onerror="this.style.display='none'">
               <div class="flex-1 min-w-0">
                 <div class="flex justify-between items-start">
@@ -468,26 +426,20 @@
                     <p class="font-semibold text-sm sm:text-base truncate" x-text="item.name"></p>
                     <p class="text-xs text-gray-500 mt-0.5" x-text="item.categoryShort"></p>
                   </div>
-                  <button @click="removeFromCart(idx)" class="text-gray-400 hover:text-red-500 p-1 flex-shrink-0 ml-2">
-                    <i data-lucide="x-circle" class="w-4 h-4"></i>
-                  </button>
+                  <button @click="removeFromCart(idx)" class="text-gray-400 hover:text-red-500 p-1 flex-shrink-0 ml-2"><i data-lucide="x-circle" class="w-4 h-4"></i></button>
                 </div>
                 <div class="flex items-center justify-between mt-2">
-                  <!-- Quantity Controls -->
                   <div class="flex items-center gap-2">
                     <button @click="decrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity <= 1">−</button>
                     <span class="text-sm font-semibold w-6 text-center" x-text="item.quantity"></span>
                     <button @click="incrementQuantity(idx)" class="quantity-btn" :disabled="item.quantity >= getProductStock(item.id)">+</button>
                   </div>
-                  <!-- Item Total -->
                   <p class="font-bold text-sm sm:text-base text-[#5e4b3c]">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></p>
                 </div>
                 <p class="text-xs text-gray-400 mt-1">₱<span x-text="item.price.toLocaleString()"></span> each</p>
               </div>
             </div>
           </template>
-          
-          <!-- Empty Cart -->
           <div x-show="cart.length === 0" class="text-center text-gray-400 py-16">
             <i data-lucide="shopping-bag" class="w-16 h-16 mx-auto mb-4 opacity-30"></i>
             <p class="text-lg font-medium mb-1">Your cart is empty</p>
@@ -495,25 +447,13 @@
             <button @click="cartOpen = false" class="btn-outline px-6 py-2 rounded-xl text-sm mt-4">Browse Collection</button>
           </div>
         </div>
-
-        <!-- Cart Footer -->
         <div class="border-t p-4 sm:p-6 space-y-3" x-show="cart.length > 0">
-          <!-- Order Summary -->
           <div class="space-y-2 text-sm">
             <div class="flex justify-between"><span class="text-gray-500">Subtotal</span><span>₱<span x-text="cartSubtotal.toLocaleString()"></span></span></div>
             <div class="flex justify-between"><span class="text-gray-500">Shipping</span><span x-text="cartTotal >= 1500 ? 'Free' : '₱' + shippingFee.toLocaleString()"></span></div>
-            <div class="flex justify-between text-base font-bold pt-2 border-t">
-              <span>Total</span>
-              <span class="text-[#5e4b3c]">₱<span x-text="cartGrandTotal.toLocaleString()"></span></span>
-            </div>
+            <div class="flex justify-between text-base font-bold pt-2 border-t"><span>Total</span><span class="text-[#5e4b3c]">₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div>
           </div>
-          
-          <!-- Checkout Button -->
-          <button @click="proceedToCheckout" class="w-full btn-primary py-3 rounded-xl text-sm font-semibold">
-            Proceed to Checkout
-          </button>
-          
-          <!-- Clear Cart -->
+          <button @click="proceedToCheckout" class="w-full btn-primary py-3 rounded-xl text-sm font-semibold">Proceed to Checkout</button>
           <button @click="clearCart" class="w-full text-xs text-gray-400 hover:text-red-500 transition py-1">Clear Cart</button>
         </div>
       </div>
@@ -524,13 +464,7 @@
       <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="showCheckout = false"></div>
       <div class="relative bg-white rounded-2xl max-w-lg w-full p-5 sm:p-8 rustic-card fade-in-up max-h-[90vh] overflow-y-auto">
         <h2 class="text-xl sm:text-2xl font-bold serif mb-4">Checkout</h2>
-        
-        <!-- Pre-filled from user profile -->
-        <div class="bg-blue-50 p-3 rounded-xl mb-4 text-xs text-blue-800" x-show="currentUser">
-          📋 Your profile details are pre-filled below. You can edit them if needed.
-        </div>
-
-        <!-- Order Items Summary -->
+        <div class="bg-blue-50 p-3 rounded-xl mb-4 text-xs text-blue-800" x-show="currentUser">📋 Your profile details are pre-filled below. You can edit them if needed.</div>
         <div class="bg-[#f3ede7] p-4 rounded-xl mb-4">
           <p class="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2">Order Items</p>
           <template x-for="item in cart" :key="item.cartId">
@@ -539,12 +473,8 @@
               <span class="font-medium">₱<span x-text="(item.price * item.quantity).toLocaleString()"></span></span>
             </div>
           </template>
-          <div class="border-t pt-2 mt-2 flex justify-between font-bold">
-            <span>Total</span>
-            <span>₱<span x-text="cartGrandTotal.toLocaleString()"></span></span>
-          </div>
+          <div class="border-t pt-2 mt-2 flex justify-between font-bold"><span>Total</span><span>₱<span x-text="cartGrandTotal.toLocaleString()"></span></span></div>
         </div>
-
         <form @submit.prevent="processOrder" class="space-y-3">
           <div><label class="input-label">Full Name *</label><input type="text" required x-model="checkoutForm.name" class="input-field text-sm" placeholder="Juan Dela Cruz"></div>
           <div><label class="input-label">Email *</label><input type="email" required x-model="checkoutForm.email" class="input-field text-sm" placeholder="juan@example.com"></div>
@@ -560,8 +490,163 @@
   </div>
 
   <!-- ==================== ADMIN VIEW ==================== -->
-  <!-- [Admin view remains the same as before] -->
-  
+  <div x-show="currentUser && currentUser.role === 'admin'" x-cloak class="flex flex-col md:flex-row min-h-screen bg-gray-50">
+    <!-- Mobile Nav -->
+    <div class="admin-mobile-nav md:hidden flex overflow-x-auto bg-[#f5efe8] border-b border-[#ddd2c4] scrollbar-hide sticky top-16 z-20">
+      <button @click="adminTab = 'dashboard'" :class="adminTab === 'dashboard' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">📊 Dashboard</button>
+      <button @click="adminTab = 'products'" :class="adminTab === 'products' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">📦 Products</button>
+      <button @click="adminTab = 'orders'" :class="adminTab === 'orders' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">📋 Orders</button>
+      <button @click="adminTab = 'users'" :class="adminTab === 'users' ? 'bg-white shadow text-[#5e4b3c]' : 'text-gray-600'" class="flex-shrink-0 px-4 py-3 text-xs font-medium transition">👥 Users</button>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="admin-sidebar w-64 p-6 flex-shrink-0 hidden md:block min-h-screen">
+      <div class="flex items-center gap-3 mb-8">
+        <img src="jcayelogo1.png" alt="JCaye's Sip Society" class="logo-img-sm" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="logo-img-sm logo-placeholder" style="display:none;">Logo</div>
+        <span class="brand-text text-sm">Admin Panel</span>
+      </div>
+      <nav class="space-y-1 text-sm">
+        <button @click="adminTab = 'dashboard'" :class="adminTab === 'dashboard' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-lg transition flex items-center gap-3"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</button>
+        <button @click="adminTab = 'products'" :class="adminTab === 'products' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-lg transition flex items-center gap-3"><i data-lucide="package" class="w-4 h-4"></i> Products</button>
+        <button @click="adminTab = 'orders'" :class="adminTab === 'orders' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-lg transition flex items-center gap-3"><i data-lucide="truck" class="w-4 h-4"></i> Orders</button>
+        <button @click="adminTab = 'users'" :class="adminTab === 'users' ? 'bg-white shadow font-semibold text-[#5e4b3c]' : 'text-gray-600 hover:bg-white/50'" class="block w-full text-left py-3 px-4 rounded-lg transition flex items-center gap-3"><i data-lucide="users" class="w-4 h-4"></i> Users</button>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto pb-20 md:pb-8">
+      <!-- Dashboard -->
+      <div x-show="adminTab === 'dashboard'" class="space-y-6">
+        <div class="flex items-center justify-between">
+          <div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Dashboard</h2><p class="text-sm text-gray-500 mt-1">Welcome back, <span x-text="currentUser?.name"></span></p></div>
+          <span class="text-xs text-gray-400" x-text="new Date().toLocaleDateString('en-PH', {weekday:'long', year:'numeric', month:'long', day:'numeric'})"></span>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Revenue</span><i data-lucide="trending-up" class="w-4 h-4 text-green-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800">₱<span x-text="financials.grossRevenue.toLocaleString()"></span></p></div>
+          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Orders</span><i data-lucide="shopping-bag" class="w-4 h-4 text-blue-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="orders.length"></p></div>
+          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Profit</span><i data-lucide="dollar-sign" class="w-4 h-4" :class="financials.netProfit >= 0 ? 'text-green-600' : 'text-red-600'"></i></div><p class="text-xl sm:text-2xl font-bold" :class="financials.netProfit >= 0 ? 'text-green-700' : 'text-red-700'">₱<span x-text="financials.netProfit.toLocaleString()"></span></p></div>
+          <div class="stat-card"><div class="flex items-center justify-between mb-2"><span class="text-xs uppercase tracking-wider text-gray-500 font-semibold">Products</span><i data-lucide="package" class="w-4 h-4 text-amber-600"></i></div><p class="text-xl sm:text-2xl font-bold text-gray-800" x-text="products.length"></p></div>
+        </div>
+        <div class="stat-card" x-show="lowStockProducts.length > 0">
+          <div class="flex items-center gap-2 mb-4"><span class="alert-dot bg-red-500"></span><h3 class="text-lg font-bold text-gray-800">Low Stock Alerts</h3><span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full" x-text="lowStockProducts.length + ' item(s)'"></span></div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <template x-for="p in lowStockProducts" :key="p.id">
+              <div class="flex items-center gap-3 bg-red-50 p-3 rounded-xl border border-red-200">
+                <img :src="p.image" class="w-12 h-12 rounded-lg object-cover" onerror="this.style.display='none'">
+                <div class="flex-1 min-w-0"><p class="font-semibold text-sm truncate" x-text="p.name"></p><p class="text-xs text-red-700 font-bold">Only <span x-text="p.stock"></span> left</p></div>
+                <button @click="adminTab='products'" class="text-xs btn-outline px-2 py-1 rounded-lg whitespace-nowrap">Manage</button>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products -->
+      <div x-show="adminTab === 'products'" class="space-y-6">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Product Inventory</h2><p class="text-sm text-gray-500 mt-1">Manage your mug collection</p></div>
+          <button @click="openAddProductModal" class="btn-primary px-5 py-2.5 rounded-xl text-sm flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i> Add New Mug</button>
+        </div>
+        <div class="hidden lg:block overflow-x-auto">
+          <table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 font-semibold">Product</th><th class="pb-3 font-semibold">Category</th><th class="pb-3 font-semibold">Price</th><th class="pb-3 font-semibold">Stock</th><th class="pb-3 font-semibold">Status</th><th class="pb-3 font-semibold text-right">Actions</th></tr></thead>
+            <tbody>
+              <template x-for="(p, idx) in products" :key="p.id">
+                <tr class="border-b hover:bg-gray-50/50 transition">
+                  <td class="py-3"><div class="flex items-center gap-3"><img :src="p.image" class="product-image-preview" onerror="this.style.display='none'"><div class="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center text-xs text-gray-400" style="display:none;">No img</div><div><p class="font-semibold text-gray-800" x-text="p.name"></p><p class="text-xs text-gray-400 line-clamp-1" x-text="p.description"></p></div></div></td>
+                  <td class="py-3"><span class="text-xs bg-gray-100 px-2 py-1 rounded-full" x-text="p.categoryShort"></span></td>
+                  <td class="py-3 font-semibold">₱<span x-text="p.price.toLocaleString()"></span></td>
+                  <td class="py-3"><span :class="p.stock <= 3 ? 'text-red-600 font-bold' : 'text-gray-700'" x-text="p.stock"></span></td>
+                  <td class="py-3"><span x-show="p.stock > 3" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">In Stock</span><span x-show="p.stock > 0 && p.stock <= 3" class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">Low Stock</span><span x-show="p.stock === 0" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Out of Stock</span></td>
+                  <td class="py-3 text-right"><button @click="editProduct(idx)" class="btn-outline px-3 py-1.5 rounded-lg text-xs mr-2">Edit</button><button @click="deleteProduct(idx)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Orders -->
+      <div x-show="adminTab === 'orders'" class="space-y-6">
+        <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Order Management</h2>
+        <div class="space-y-4">
+          <template x-for="o in orders" :key="o.id">
+            <div class="bg-white p-4 sm:p-6 rounded-xl rustic-card">
+              <div class="flex flex-col sm:flex-row justify-between gap-4 mb-4">
+                <div><p class="font-semibold text-lg" x-text="o.customerName"></p><p class="text-sm text-gray-500" x-text="o.email"></p><p class="text-sm text-gray-500" x-text="o.phone"></p></div>
+                <div class="text-left sm:text-right"><p class="text-2xl font-bold text-[#5e4b3c]">₱<span x-text="o.total?.toLocaleString() || 0"></span></p><span class="text-xs px-2 py-0.5 rounded-full" :class="o.paymentMethod === 'gcash' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'" x-text="o.paymentMethod?.toUpperCase()"></span></div>
+              </div>
+              <div class="bg-gray-50 p-3 rounded-lg mb-4"><p class="text-xs font-semibold text-gray-600 mb-1">📍 Delivery Address:</p><p class="text-sm text-gray-700" x-text="o.address"></p></div>
+              <div class="border-t pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-2"><span class="text-sm font-medium text-gray-600">Status:</span><span class="status-badge" :class="getStatusClass(o.deliveryStatus)" x-text="o.deliveryStatus"></span></div>
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                  <select @change="updateDeliveryStatus(o.id, $event.target.value)" class="input-field w-full sm:w-48 text-sm py-2"><option value="">Update Status</option><option value="Pending">📝 Pending</option><option value="Processing">⚙️ Processing</option><option value="To Ship">📦 To Ship</option><option value="Out for Delivery">🚚 Out for Delivery</option><option value="Delivered">✅ Delivered</option><option value="Cancelled">❌ Cancelled</option></select>
+                  <button x-show="o.paymentMethod === 'gcash' && o.paymentStatus === 'Pending'" @click="approvePayment(o.id)" class="btn-outline text-xs px-3 py-2 rounded-lg whitespace-nowrap">✅ Approve</button>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Users -->
+      <div x-show="adminTab === 'users'" class="space-y-6">
+        <h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">User Management</h2>
+        <div class="space-y-3">
+          <template x-for="u in users" :key="u.id">
+            <div class="bg-white p-4 rounded-xl rustic-card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <p class="font-semibold" x-text="u.name"></p>
+                <p class="text-sm text-gray-500" x-text="u.email"></p>
+                <p class="text-sm text-gray-500" x-text="u.phone || 'No phone'"></p>
+                <p class="text-xs text-gray-400" x-text="u.address || 'No address'"></p>
+                <div class="flex gap-1 mt-1"><span x-show="u.role === 'admin'" class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">Admin</span><span x-show="u.role === 'customer'" class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">Customer</span><span x-show="u.blocked" class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">Blocked</span></div>
+              </div>
+              <div class="flex items-center gap-2"><button @click="toggleUserRole(u.id)" class="btn-outline text-xs px-3 py-2 rounded-lg"><span x-text="u.role === 'admin' ? 'Demote' : 'Promote'"></span></button><button @click="toggleBlockUser(u.id)" class="btn-danger text-xs px-3 py-2 rounded-lg"><span x-text="u.blocked ? 'Unblock' : 'Block'"></span></button></div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Product Form Modal -->
+      <div x-show="showProductModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" x-cloak>
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 rustic-card max-h-[90vh] overflow-y-auto" @click.outside="showProductModal = false">
+          <h2 class="text-xl sm:text-2xl font-bold serif mb-6" x-text="editingProductIndex === null ? 'Add New Mug' : 'Edit Mug'"></h2>
+          <form @submit.prevent="saveProductForm" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div><label class="input-label">Product Name *</label><input type="text" required x-model="productForm.name" class="input-field text-sm"></div>
+              <div><label class="input-label">Price (₱) *</label><input type="number" required x-model="productForm.price" class="input-field text-sm" min="0"></div>
+              <div><label class="input-label">Stock Quantity *</label><input type="number" required x-model="productForm.stock" class="input-field text-sm" min="0"></div>
+              <div><label class="input-label">Category *</label><select x-model="productForm.category" class="input-field text-sm" required><option value="">Select</option><template x-for="cat in categories"><option :value="cat" x-text="cat"></option></template></select></div>
+              <div><label class="input-label">Short Label</label><input type="text" x-model="productForm.categoryShort" class="input-field text-sm"></div>
+            </div>
+            <div><label class="input-label">Description *</label><textarea required x-model="productForm.description" class="input-field text-sm" rows="3"></textarea></div>
+            <div>
+              <label class="input-label">Product Image *</label>
+              <div class="drop-zone" :class="{ 'dragover': isDragging }" @dragover.prevent="isDragging = true" @dragleave.prevent="isDragging = false" @drop.prevent="handleDrop" @click="$refs.fileInput.click()">
+                <div class="drop-zone-icon">🖼️</div>
+                <p class="text-sm text-gray-600 mb-1">Drag & drop image here</p>
+                <p class="text-xs text-gray-400">or click to browse</p>
+                <p class="text-xs text-gray-400 mt-1">Supports: JPG, PNG, WebP (max 5MB)</p>
+                <input type="file" x-ref="fileInput" @change="handleFileSelect" accept="image/jpeg,image/png,image/webp" class="hidden">
+              </div>
+              <div class="mt-3"><label class="input-label text-xs text-gray-500">Or paste image URL</label><input type="url" x-model="productForm.image" class="input-field text-sm" placeholder="https://example.com/image.jpg"></div>
+              <div x-show="uploadStatus" class="mt-2 text-xs" :class="uploadStatus.type === 'success' ? 'text-green-600' : 'text-red-600'" x-text="uploadStatus.message"></div>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-xl">
+              <p class="text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wider">Image Preview</p>
+              <div class="flex items-center gap-4">
+                <img :src="productForm.image || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2296%22 height=%2296%22%3E%3Crect fill=%22%23ddd%22 width=%2296%22 height=%2296%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2210%22%3ENo Image%3C/text%3E%3C/svg%3E'" class="w-24 h-24 rounded-xl object-cover border" @error="productForm.image = ''">
+                <div><p class="text-xs text-gray-500">Preview will appear here</p><button type="button" @click="productForm.image = ''" class="text-xs text-red-500 hover:underline mt-1" x-show="productForm.image">Remove image</button></div>
+              </div>
+            </div>
+            <div class="flex gap-3 pt-2"><button type="submit" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1">💾 Save</button><button type="button" @click="showProductModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     function app() {
       return {
@@ -573,11 +658,9 @@
         newsletterEmail: '', newsletterSubscribed: false,
         adminTab: 'dashboard', showProductModal: false, editingProductIndex: null,
         productForm: { name: '', price: '', stock: '', category: '', categoryShort: '', description: '', image: '' },
-        selectedCategory: 'All', activeMug: null,
+        selectedCategory: 'All',
         pendingCheckout: false,
-        selectedProduct: null, // For product detail modal
-        
-        // Drag & Drop states
+        selectedProduct: null,
         isDragging: false,
         uploadStatus: null,
         
@@ -624,7 +707,6 @@
           this.$nextTick(() => { lucide.createIcons(); });
         },
 
-        // Product Modal Functions
         openProductModal(product) {
           this.selectedProduct = product;
           this.$nextTick(() => { lucide.createIcons(); });
@@ -632,331 +714,116 @@
 
         addToCartFromModal(product) {
           this.addToCart(product);
-          // Update the selectedProduct reference to reflect stock change
           const updatedProduct = this.products.find(p => p.id === product.id);
-          if (updatedProduct) {
-            this.selectedProduct = updatedProduct;
-          }
+          if (updatedProduct) this.selectedProduct = updatedProduct;
         },
 
         handleAuth() {
           if (this.authMode === 'register') {
-            if (!this.authForm.name || !this.authForm.email || !this.authForm.phone || !this.authForm.address || !this.authForm.password) { 
-              alert('Please fill in all required fields: Name, Email, Phone, Address, and Password.'); 
-              return; 
-            }
-            if (this.authForm.password.length < 6) {
-              alert('Password must be at least 6 characters for security.');
-              return;
-            }
-            if (this.users.find(u => u.email === this.authForm.email)) { 
-              alert('An account with this email already exists.'); 
-              return; 
-            }
-            const nu = { 
-              id: Date.now(), 
-              name: this.authForm.name, 
-              email: this.authForm.email, 
-              phone: this.authForm.phone,
-              address: this.authForm.address,
-              password: this.authForm.password, 
-              blocked: false, 
-              role: 'customer' 
-            };
-            this.users.push(nu); 
-            localStorage.setItem('sip_users', JSON.stringify(this.users));
-            this.currentUser = nu; 
-            this.showAuth = false; 
-            this.authRedirectMessage = '';
+            if (!this.authForm.name || !this.authForm.email || !this.authForm.phone || !this.authForm.address || !this.authForm.password) { alert('Please fill in all required fields.'); return; }
+            if (this.authForm.password.length < 6) { alert('Password must be at least 6 characters.'); return; }
+            if (this.users.find(u => u.email === this.authForm.email)) { alert('Email already exists.'); return; }
+            const nu = { id: Date.now(), name: this.authForm.name, email: this.authForm.email, phone: this.authForm.phone, address: this.authForm.address, password: this.authForm.password, blocked: false, role: 'customer' };
+            this.users.push(nu); localStorage.setItem('sip_users', JSON.stringify(this.users));
+            this.currentUser = nu; this.showAuth = false; this.authRedirectMessage = '';
             this.authForm = { name: '', email: '', phone: '', address: '', password: '' };
-            if (this.pendingCheckout) { 
-              this.pendingCheckout = false; 
-              this.showCheckout = true;
-              this.checkoutForm.name = nu.name;
-              this.checkoutForm.email = nu.email;
-              this.checkoutForm.phone = nu.phone;
-              this.checkoutForm.address = nu.address;
-            }
-            alert('Registration successful! Welcome to JCaye\'s Sip Society.');
+            if (this.pendingCheckout) { this.pendingCheckout = false; this.showCheckout = true; this.checkoutForm.name = nu.name; this.checkoutForm.email = nu.email; this.checkoutForm.phone = nu.phone; this.checkoutForm.address = nu.address; }
           } else {
             const f = this.users.find(u => u.email === this.authForm.email && u.password === this.authForm.password);
             if (f && !f.blocked) {
-              this.currentUser = f; 
-              this.showAuth = false; 
-              this.authRedirectMessage = '';
+              this.currentUser = f; this.showAuth = false; this.authRedirectMessage = '';
               this.authForm = { name: '', email: '', phone: '', address: '', password: '' };
-              if (this.pendingCheckout) { 
-                this.pendingCheckout = false; 
-                this.showCheckout = true;
-                this.checkoutForm.name = f.name;
-                this.checkoutForm.email = f.email;
-                this.checkoutForm.phone = f.phone || '';
-                this.checkoutForm.address = f.address || '';
-              }
-            } else { 
-              alert(f?.blocked ? 'Your account has been blocked. Please contact support.' : 'Invalid email or password.'); 
-            }
+              if (this.pendingCheckout) { this.pendingCheckout = false; this.showCheckout = true; this.checkoutForm.name = f.name; this.checkoutForm.email = f.email; this.checkoutForm.phone = f.phone || ''; this.checkoutForm.address = f.address || ''; }
+            } else { alert(f?.blocked ? 'Account blocked.' : 'Invalid credentials.'); }
           }
         },
 
         logout() { this.currentUser = null; this.adminTab = 'dashboard'; this.cartOpen = false; this.showCheckout = false; },
 
-        // Cart Management
         addToCart(product) {
           if (product.stock <= 0) return;
           const existing = this.cart.find(item => item.id === product.id);
           if (existing) {
-            if (existing.quantity < product.stock + existing.quantity) {
-              existing.quantity++;
-            } else {
-              alert('Cannot add more. Stock limit reached.');
-              return;
-            }
-          } else {
-            this.cart.push({ ...product, quantity: 1, cartId: Date.now() + Math.random() });
-          }
-          product.stock--;
-          this.saveCart();
-          this.saveProducts();
+            if (existing.quantity < product.stock + existing.quantity) { existing.quantity++; } else { alert('Stock limit reached.'); return; }
+          } else { this.cart.push({ ...product, quantity: 1, cartId: Date.now() + Math.random() }); }
+          product.stock--; this.saveCart(); this.saveProducts();
         },
 
         removeFromCart(idx) {
-          const item = this.cart[idx];
-          const product = this.products.find(p => p.id === item.id);
+          const item = this.cart[idx]; const product = this.products.find(p => p.id === item.id);
           if (product) product.stock += item.quantity;
-          this.cart.splice(idx, 1);
-          this.saveCart();
-          this.saveProducts();
+          this.cart.splice(idx, 1); this.saveCart(); this.saveProducts();
         },
 
         incrementQuantity(idx) {
-          const item = this.cart[idx];
-          const product = this.products.find(p => p.id === item.id);
-          if (product && product.stock > 0) {
-            item.quantity++;
-            product.stock--;
-            this.saveCart();
-            this.saveProducts();
-          }
+          const item = this.cart[idx]; const product = this.products.find(p => p.id === item.id);
+          if (product && product.stock > 0) { item.quantity++; product.stock--; this.saveCart(); this.saveProducts(); }
         },
 
         decrementQuantity(idx) {
           const item = this.cart[idx];
-          if (item.quantity > 1) {
-            const product = this.products.find(p => p.id === item.id);
-            if (product) product.stock++;
-            item.quantity--;
-            this.saveCart();
-            this.saveProducts();
-          }
+          if (item.quantity > 1) { const product = this.products.find(p => p.id === item.id); if (product) product.stock++; item.quantity--; this.saveCart(); this.saveProducts(); }
         },
 
         clearCart() {
           if (confirm('Remove all items from cart?')) {
-            this.cart.forEach(item => {
-              const product = this.products.find(p => p.id === item.id);
-              if (product) product.stock += item.quantity;
-            });
-            this.cart = [];
-            this.saveCart();
-            this.saveProducts();
+            this.cart.forEach(item => { const product = this.products.find(p => p.id === item.id); if (product) product.stock += item.quantity; });
+            this.cart = []; this.saveCart(); this.saveProducts();
           }
         },
 
         saveCart() { localStorage.setItem('sip_cart', JSON.stringify(this.cart)); },
+        saveProducts() { localStorage.setItem('sip_products', JSON.stringify(this.products)); },
 
         proceedToCheckout() {
-          if (!this.currentUser) {
-            this.cartOpen = false;
-            this.authRedirectMessage = 'Please sign in or create an account to continue with checkout.';
-            this.authMode = 'login';
-            this.pendingCheckout = true;
-            this.showAuth = true;
-            return;
-          }
+          if (!this.currentUser) { this.cartOpen = false; this.authRedirectMessage = 'Please sign in to checkout.'; this.authMode = 'login'; this.pendingCheckout = true; this.showAuth = true; return; }
           if (this.cart.length === 0) return;
-          
-          this.checkoutForm.name = this.currentUser.name || '';
-          this.checkoutForm.email = this.currentUser.email || '';
-          this.checkoutForm.phone = this.currentUser.phone || '';
-          this.checkoutForm.address = this.currentUser.address || '';
-          
-          this.cartOpen = false;
-          this.showCheckout = true;
+          this.checkoutForm.name = this.currentUser.name || ''; this.checkoutForm.email = this.currentUser.email || ''; this.checkoutForm.phone = this.currentUser.phone || ''; this.checkoutForm.address = this.currentUser.address || '';
+          this.cartOpen = false; this.showCheckout = true;
         },
 
         processOrder() {
-          if (!this.checkoutForm.name || !this.checkoutForm.email || !this.checkoutForm.phone || !this.checkoutForm.address || !this.checkoutForm.paymentMethod) { 
-            alert('Please fill in all required fields.'); 
-            return; 
-          }
-          const order = {
-            id: Date.now(), 
-            customerName: this.checkoutForm.name, 
-            email: this.checkoutForm.email,
-            phone: this.checkoutForm.phone, 
-            address: this.checkoutForm.address,
-            paymentMethod: this.checkoutForm.paymentMethod,
-            paymentStatus: this.checkoutForm.paymentMethod === 'cod' ? 'Paid' : 'Pending',
-            deliveryStatus: 'Pending', 
-            items: [...this.cart], 
-            total: this.cartGrandTotal, 
-            date: new Date().toISOString()
-          };
-          this.orders.push(order); 
-          localStorage.setItem('sip_orders', JSON.stringify(this.orders));
-          this.cart = []; 
-          this.saveCart();
-          this.showCheckout = false;
+          if (!this.checkoutForm.name || !this.checkoutForm.email || !this.checkoutForm.phone || !this.checkoutForm.address || !this.checkoutForm.paymentMethod) { alert('Fill all fields.'); return; }
+          const order = { id: Date.now(), customerName: this.checkoutForm.name, email: this.checkoutForm.email, phone: this.checkoutForm.phone, address: this.checkoutForm.address, paymentMethod: this.checkoutForm.paymentMethod, paymentStatus: this.checkoutForm.paymentMethod === 'cod' ? 'Paid' : 'Pending', deliveryStatus: 'Pending', items: [...this.cart], total: this.cartGrandTotal, date: new Date().toISOString() };
+          this.orders.push(order); localStorage.setItem('sip_orders', JSON.stringify(this.orders));
+          this.cart = []; this.saveCart(); this.showCheckout = false;
           this.checkoutForm = { name: '', email: '', phone: '', address: '', paymentMethod: '' };
-          this.recalculateFinancials();
-          alert('Order placed successfully! Thank you for your purchase.');
+          this.recalculateFinancials(); alert('Order placed successfully!');
         },
 
-        subscribeNewsletter() { 
-          if (this.newsletterEmail) { 
-            this.newsletterSubscribed = true; 
-            this.newsletterEmail = ''; 
-            setTimeout(() => this.newsletterSubscribed = false, 5000); 
-          } 
-        },
+        subscribeNewsletter() { if (this.newsletterEmail) { this.newsletterSubscribed = true; this.newsletterEmail = ''; setTimeout(() => this.newsletterSubscribed = false, 5000); } },
         
-        saveProducts() { localStorage.setItem('sip_products', JSON.stringify(this.products)); },
-        
-        openAddProductModal() { 
-          this.editingProductIndex = null; 
-          this.productForm = { name: '', price: '', stock: '', category: this.categories[0], categoryShort: '', description: '', image: '' }; 
-          this.uploadStatus = null;
-          this.showProductModal = true; 
-        },
-        
-        editProduct(idx) { 
-          this.editingProductIndex = idx; 
-          const p = this.products[idx]; 
-          this.productForm = { name: p.name, price: p.price, stock: p.stock, category: p.category, categoryShort: p.categoryShort, description: p.description, image: p.image }; 
-          this.uploadStatus = null;
-          this.showProductModal = true; 
-        },
+        openAddProductModal() { this.editingProductIndex = null; this.productForm = { name: '', price: '', stock: '', category: this.categories[0], categoryShort: '', description: '', image: '' }; this.uploadStatus = null; this.showProductModal = true; },
+        editProduct(idx) { this.editingProductIndex = idx; const p = this.products[idx]; this.productForm = { name: p.name, price: p.price, stock: p.stock, category: p.category, categoryShort: p.categoryShort, description: p.description, image: p.image }; this.uploadStatus = null; this.showProductModal = true; },
         
         saveProductForm() {
-          if (!this.productForm.image) {
-            alert('Please upload an image or provide an image URL.');
-            return;
-          }
-          const data = { 
-            id: this.editingProductIndex !== null ? this.products[this.editingProductIndex].id : Date.now(), 
-            name: this.productForm.name, 
-            price: Number(this.productForm.price), 
-            stock: Number(this.productForm.stock), 
-            category: this.productForm.category, 
-            categoryShort: this.productForm.categoryShort || this.productForm.category.split(' ')[0], 
-            description: this.productForm.description, 
-            image: this.productForm.image 
-          };
-          if (this.editingProductIndex !== null) { 
-            this.products[this.editingProductIndex] = data; 
-          } else { 
-            this.products.push(data); 
-          }
-          this.saveProducts(); 
-          this.showProductModal = false; 
-          this.$nextTick(() => lucide.createIcons());
+          if (!this.productForm.image) { alert('Please provide an image.'); return; }
+          const data = { id: this.editingProductIndex !== null ? this.products[this.editingProductIndex].id : Date.now(), name: this.productForm.name, price: Number(this.productForm.price), stock: Number(this.productForm.stock), category: this.productForm.category, categoryShort: this.productForm.categoryShort || this.productForm.category.split(' ')[0], description: this.productForm.description, image: this.productForm.image };
+          if (this.editingProductIndex !== null) { this.products[this.editingProductIndex] = data; } else { this.products.push(data); }
+          this.saveProducts(); this.showProductModal = false; this.$nextTick(() => lucide.createIcons());
         },
         
-        deleteProduct(idx) { 
-          if (confirm('Delete this product permanently? This action cannot be undone.')) { 
-            this.products.splice(idx, 1); 
-            this.saveProducts(); 
-          } 
-        },
+        deleteProduct(idx) { if (confirm('Delete permanently?')) { this.products.splice(idx, 1); this.saveProducts(); } },
         
-        // Drag & Drop Handlers
-        handleDrop(event) {
-          this.isDragging = false;
-          const files = event.dataTransfer.files;
-          if (files.length > 0) {
-            this.processFile(files[0]);
-          }
-        },
-        
-        handleFileSelect(event) {
-          const files = event.target.files;
-          if (files.length > 0) {
-            this.processFile(files[0]);
-          }
-        },
+        handleDrop(event) { this.isDragging = false; const files = event.dataTransfer.files; if (files.length > 0) this.processFile(files[0]); },
+        handleFileSelect(event) { const files = event.target.files; if (files.length > 0) this.processFile(files[0]); },
         
         processFile(file) {
           const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-          if (!validTypes.includes(file.type)) {
-            this.uploadStatus = { type: 'error', message: 'Please upload a JPG, PNG, or WebP image.' };
-            return;
-          }
-          
-          if (file.size > 5 * 1024 * 1024) {
-            this.uploadStatus = { type: 'error', message: 'Image must be less than 5MB.' };
-            return;
-          }
-          
-          this.uploadStatus = { type: 'success', message: 'Uploading image...' };
-          
+          if (!validTypes.includes(file.type)) { this.uploadStatus = { type: 'error', message: 'Invalid file type.' }; return; }
+          if (file.size > 5 * 1024 * 1024) { this.uploadStatus = { type: 'error', message: 'File too large.' }; return; }
+          this.uploadStatus = { type: 'success', message: 'Uploading...' };
           const reader = new FileReader();
-          reader.onload = (e) => {
-            this.productForm.image = e.target.result;
-            this.uploadStatus = { type: 'success', message: 'Image uploaded successfully! ✓' };
-            setTimeout(() => { this.uploadStatus = null; }, 3000);
-          };
-          reader.onerror = () => {
-            this.uploadStatus = { type: 'error', message: 'Failed to read file. Please try again.' };
-          };
+          reader.onload = (e) => { this.productForm.image = e.target.result; this.uploadStatus = { type: 'success', message: 'Uploaded!' }; setTimeout(() => this.uploadStatus = null, 3000); };
+          reader.onerror = () => { this.uploadStatus = { type: 'error', message: 'Failed.' }; };
           reader.readAsDataURL(file);
         },
         
-        recalculateFinancials() { 
-          const r = this.orders.reduce((s, o) => s + (o.total || 0), 0); 
-          this.financials.grossRevenue = r; 
-          this.financials.cogs = Math.round(r * 0.4); 
-          this.financials.netProfit = this.financials.grossRevenue - this.financials.cogs - this.financials.opex; 
-        },
-        
-        approvePayment(id) { 
-          const o = this.orders.find(o => o.id === id); 
-          if (o) { 
-            o.paymentStatus = 'Paid'; 
-            localStorage.setItem('sip_orders', JSON.stringify(this.orders)); 
-            alert('Payment approved successfully!');
-          } 
-        },
-        
-        toggleUserRole(id) { 
-          const u = this.users.find(u => u.id === id); 
-          if (u) { 
-            u.role = u.role === 'admin' ? 'customer' : 'admin'; 
-            localStorage.setItem('sip_users', JSON.stringify(this.users)); 
-            if (this.currentUser?.id === id) this.currentUser = u; 
-          } 
-        },
-        
-        toggleBlockUser(id) { 
-          const u = this.users.find(u => u.id === id); 
-          if (u) { 
-            u.blocked = !u.blocked; 
-            localStorage.setItem('sip_users', JSON.stringify(this.users)); 
-            if (this.currentUser?.id === id && u.blocked) { 
-              alert('Your account has been blocked. You will be logged out.'); 
-              this.logout(); 
-            } 
-          } 
-        },
-        
-        updateDeliveryStatus(id, s) { 
-          if (!s) return; 
-          const o = this.orders.find(o => o.id === id); 
-          if (o) { 
-            o.deliveryStatus = s; 
-            localStorage.setItem('sip_orders', JSON.stringify(this.orders)); 
-          } 
-        }
+        recalculateFinancials() { const r = this.orders.reduce((s, o) => s + (o.total || 0), 0); this.financials.grossRevenue = r; this.financials.cogs = Math.round(r * 0.4); this.financials.netProfit = this.financials.grossRevenue - this.financials.cogs - this.financials.opex; },
+        approvePayment(id) { const o = this.orders.find(o => o.id === id); if (o) { o.paymentStatus = 'Paid'; localStorage.setItem('sip_orders', JSON.stringify(this.orders)); } },
+        toggleUserRole(id) { const u = this.users.find(u => u.id === id); if (u) { u.role = u.role === 'admin' ? 'customer' : 'admin'; localStorage.setItem('sip_users', JSON.stringify(this.users)); } },
+        toggleBlockUser(id) { const u = this.users.find(u => u.id === id); if (u) { u.blocked = !u.blocked; localStorage.setItem('sip_users', JSON.stringify(this.users)); } },
+        updateDeliveryStatus(id, s) { if (!s) return; const o = this.orders.find(o => o.id === id); if (o) { o.deliveryStatus = s; localStorage.setItem('sip_orders', JSON.stringify(this.orders)); } }
       };
     }
   </script>
