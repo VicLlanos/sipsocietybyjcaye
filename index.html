@@ -95,8 +95,6 @@
     .nav-item:hover::after { width: 100%; }
     .nav-item-active { color: #5e4b3c; font-weight: 500; }
     .nav-item-active::after { width: 100%; }
-    .restock-tooltip { visibility: hidden; width: 120px; background-color: #1e293b; color: #fff; text-align: center; border-radius: 6px; padding: 4px 8px; position: absolute; z-index: 10; bottom: 125%; left: 50%; margin-left: -60px; font-size: 0.7rem; opacity: 0; transition: opacity 0.3s; }
-    .restock-wrapper:hover .restock-tooltip { visibility: visible; opacity: 1; }
   </style>
 </head>
 <body class="min-h-screen text-gray-800" x-data="app()" x-init="initApp()">
@@ -429,7 +427,7 @@
                 <div class="flex items-center justify-between p-2.5 bg-red-50 rounded-xl border border-red-100">
                   <div class="flex items-center gap-2 min-w-0"><img :src="p.image" class="w-10 h-10 rounded-lg object-cover flex-shrink-0"><div class="min-w-0"><p class="text-sm font-semibold truncate" x-text="p.name"></p><p class="text-xs text-red-600 font-bold">Only <span x-text="p.stock"></span> left</p></div></div>
                   <div class="flex items-center gap-1.5">
-                    <button @click="quickRestock(p.id)" class="btn-restock px-2.5 py-1.5 rounded-lg text-xs flex items-center gap-1"><i data-lucide="package-plus" class="w-3.5 h-3.5"></i> Restock</button>
+                    <button @click="openRestockModal(p.id)" class="btn-restock px-2.5 py-1.5 rounded-lg text-xs flex items-center gap-1"><i data-lucide="package-plus" class="w-3.5 h-3.5"></i> Restock</button>
                     <button @click="adminTab='products'" class="text-xs btn-outline px-2 py-1 rounded-lg flex-shrink-0">Manage</button>
                   </div>
                 </div>
@@ -456,11 +454,41 @@
         </div>
       </div>
 
-      <!-- PRODUCTS TAB WITH QUICK RESTOCK -->
+      <!-- PRODUCTS TAB WITH QUICK RESTOCK MODAL -->
       <div x-show="adminTab === 'products'" class="space-y-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"><div><h2 class="text-2xl sm:text-3xl serif font-bold text-gray-800">Product Inventory</h2><p class="text-sm text-gray-500 mt-1">Manage your mug collection</p></div><button @click="openAddProductModal" class="btn-primary px-5 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow-lg shadow-[#5e4b3c]/20"><i data-lucide="plus" class="w-4 h-4"></i> Add New Mug</button></div>
-        <div class="hidden lg:block overflow-x-auto bg-white rounded-2xl rustic-card"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 px-4 font-semibold">Product</th><th class="pb-3 px-4 font-semibold">Category</th><th class="pb-3 px-4 font-semibold">Price</th><th class="pb-3 px-4 font-semibold">Stock</th><th class="pb-3 px-4 font-semibold">Status</th><th class="pb-3 px-4 font-semibold text-right">Actions</th></tr></thead><tbody><template x-for="(p, idx) in products" :key="p.id"><tr class="border-b hover:bg-gray-50/50 transition"><td class="py-3 px-4"><div class="flex items-center gap-3"><img :src="p.image" class="product-image-preview" onerror="this.style.display='none'"><div><p class="font-semibold text-gray-800" x-text="p.name"></p><p class="text-xs text-gray-400 line-clamp-1" x-text="p.description"></p></div></div></td><td class="py-3 px-4"><span class="text-xs bg-gray-100 px-2 py-1 rounded-full" x-text="p.categoryShort"></span></td><td class="py-3 px-4 font-semibold">₱<span x-text="p.price.toLocaleString()"></span></td><td class="py-3 px-4"><span :class="p.stock <= 3 ? 'text-red-600 font-bold' : 'text-gray-700'" x-text="p.stock"></span></td><td class="py-3 px-4"><span x-show="p.stock > 3" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">In Stock</span><span x-show="p.stock > 0 && p.stock <= 3" class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">Low Stock</span><span x-show="p.stock === 0" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Out of Stock</span></td><td class="py-3 px-4 text-right"><div class="flex items-center justify-end gap-2"><button @click="quickRestock(p.id)" class="btn-restock px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5"><i data-lucide="package-plus" class="w-3.5 h-3.5"></i> Restock</button><button @click="editProduct(idx)" class="btn-outline px-3 py-1.5 rounded-lg text-xs">Edit</button><button @click="deleteProduct(idx)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></div></td></tr></template></tbody></table></div>
-        <div class="lg:hidden space-y-3"><template x-for="(p, idx) in products" :key="p.id"><div class="bg-white p-4 rounded-2xl rustic-card"><div class="flex gap-3 mb-3"><img :src="p.image" class="product-image-preview flex-shrink-0"><div class="flex-1 min-w-0"><p class="font-semibold text-sm" x-text="p.name"></p><p class="text-xs text-gray-400 line-clamp-2" x-text="p.description"></p><div class="flex items-center gap-2 mt-1"><span class="text-xs bg-gray-100 px-2 py-0.5 rounded-full" x-text="p.categoryShort"></span><span x-show="p.stock <= 3" class="alert-dot bg-red-500"></span></div></div></div><div class="flex items-center justify-between"><div><p class="font-bold text-[#5e4b3c]">₱<span x-text="p.price.toLocaleString()"></span></p><p class="text-xs" :class="p.stock <= 3 ? 'text-red-600' : 'text-gray-500'">Stock: <span x-text="p.stock"></span></p></div><div class="flex gap-2 flex-wrap"><button @click="quickRestock(p.id)" class="btn-restock px-3 py-1.5 rounded-lg text-xs flex items-center gap-1"><i data-lucide="package-plus" class="w-3.5 h-3.5"></i> Restock</button><button @click="editProduct(idx)" class="btn-outline px-3 py-1.5 rounded-lg text-xs">Edit</button><button @click="deleteProduct(idx)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></div></div></div></template></div>
+        <div class="hidden lg:block overflow-x-auto bg-white rounded-2xl rustic-card"><table class="w-full text-sm"><thead><tr class="border-b text-left text-xs uppercase tracking-wider text-gray-500"><th class="pb-3 px-4 font-semibold">Product</th><th class="pb-3 px-4 font-semibold">Category</th><th class="pb-3 px-4 font-semibold">Price</th><th class="pb-3 px-4 font-semibold">Stock</th><th class="pb-3 px-4 font-semibold">Status</th><th class="pb-3 px-4 font-semibold text-right">Actions</th></tr></thead><tbody><template x-for="(p, idx) in products" :key="p.id"><tr class="border-b hover:bg-gray-50/50 transition"><td class="py-3 px-4"><div class="flex items-center gap-3"><img :src="p.image" class="product-image-preview" onerror="this.style.display='none'"><div><p class="font-semibold text-gray-800" x-text="p.name"></p><p class="text-xs text-gray-400 line-clamp-1" x-text="p.description"></p></div></div></td><td class="py-3 px-4"><span class="text-xs bg-gray-100 px-2 py-1 rounded-full" x-text="p.categoryShort"></span></td><td class="py-3 px-4 font-semibold">₱<span x-text="p.price.toLocaleString()"></span></td><td class="py-3 px-4"><span :class="p.stock <= 3 ? 'text-red-600 font-bold' : 'text-gray-700'" x-text="p.stock"></span></td><td class="py-3 px-4"><span x-show="p.stock > 3" class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">In Stock</span><span x-show="p.stock > 0 && p.stock <= 3" class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">Low Stock</span><span x-show="p.stock === 0" class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">Out of Stock</span></td><td class="py-3 px-4 text-right"><div class="flex items-center justify-end gap-2"><button @click="openRestockModal(p.id)" class="btn-restock px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5"><i data-lucide="package-plus" class="w-3.5 h-3.5"></i> Restock</button><button @click="editProduct(idx)" class="btn-outline px-3 py-1.5 rounded-lg text-xs">Edit</button><button @click="deleteProduct(idx)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></div></td></tr></template></tbody></table></div>
+        <div class="lg:hidden space-y-3"><template x-for="(p, idx) in products" :key="p.id"><div class="bg-white p-4 rounded-2xl rustic-card"><div class="flex gap-3 mb-3"><img :src="p.image" class="product-image-preview flex-shrink-0"><div class="flex-1 min-w-0"><p class="font-semibold text-sm" x-text="p.name"></p><p class="text-xs text-gray-400 line-clamp-2" x-text="p.description"></p><div class="flex items-center gap-2 mt-1"><span class="text-xs bg-gray-100 px-2 py-0.5 rounded-full" x-text="p.categoryShort"></span><span x-show="p.stock <= 3" class="alert-dot bg-red-500"></span></div></div></div><div class="flex items-center justify-between"><div><p class="font-bold text-[#5e4b3c]">₱<span x-text="p.price.toLocaleString()"></span></p><p class="text-xs" :class="p.stock <= 3 ? 'text-red-600' : 'text-gray-500'">Stock: <span x-text="p.stock"></span></p></div><div class="flex gap-2 flex-wrap"><button @click="openRestockModal(p.id)" class="btn-restock px-3 py-1.5 rounded-lg text-xs flex items-center gap-1"><i data-lucide="package-plus" class="w-3.5 h-3.5"></i> Restock</button><button @click="editProduct(idx)" class="btn-outline px-3 py-1.5 rounded-lg text-xs">Edit</button><button @click="deleteProduct(idx)" class="btn-danger px-3 py-1.5 rounded-lg text-xs">Delete</button></div></div></div></template></div>
+      </div>
+
+      <!-- RESTOCK MODAL -->
+      <div x-show="showRestockModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" x-cloak @click.self="showRestockModal = false">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 rustic-card modal-enter">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="text-xl font-bold serif text-gray-800">Restock Product</h2>
+            <button @click="showRestockModal = false" class="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition"><i data-lucide="x" class="w-5 h-5"></i></button>
+          </div>
+          <div class="bg-amber-50 p-4 rounded-xl mb-5 flex items-center gap-4">
+            <img :src="restockProduct?.image" class="w-16 h-16 rounded-xl object-cover border border-amber-200" onerror="this.style.display='none'">
+            <div>
+              <p class="font-semibold text-gray-800" x-text="restockProduct?.name || 'Product'"></p>
+              <p class="text-sm text-gray-500">Current stock: <span class="font-bold text-amber-700" x-text="restockProduct?.stock || 0"></span></p>
+            </div>
+          </div>
+          <form @submit.prevent="confirmRestock" class="space-y-4">
+            <div>
+              <label class="input-label">Quantity to Add *</label>
+              <input type="number" x-model="restockQuantity" class="input-field text-sm" min="1" required placeholder="Enter quantity">
+              <p class="text-xs text-gray-400 mt-1">New stock will be: <span class="font-semibold text-green-700" x-text="(restockProduct?.stock || 0) + (restockQuantity || 0)"></span></p>
+            </div>
+            <div class="flex gap-3 pt-2">
+              <button type="submit" class="btn-primary px-6 py-2.5 rounded-xl text-sm flex-1 shadow-lg shadow-[#5e4b3c]/20 flex items-center justify-center gap-2">
+                <i data-lucide="package-plus" class="w-4 h-4"></i> Confirm Restock
+              </button>
+              <button type="button" @click="showRestockModal = false" class="btn-outline px-6 py-2.5 rounded-xl text-sm">Cancel</button>
+            </div>
+          </form>
+        </div>
       </div>
 
       <div x-show="adminTab === 'orders'" class="space-y-6">
@@ -535,6 +563,9 @@
         showUserModal: false,
         editingUserId: null,
         userForm: { name: '', email: '', phone: '', address: '', role: 'customer', password: '' },
+        showRestockModal: false,
+        restockProduct: null,
+        restockQuantity: 10,
         
         categories: ['Classic & Chic', 'Pastel Collection', 'Minimalist', 'Couple Sets', 'Limited Editions'],
         products: [
@@ -677,21 +708,19 @@
         approvePayment(id) { const o = this.orders.find(o => o.id === id); if (o) { o.paymentStatus = 'Paid'; localStorage.setItem('sip_orders', JSON.stringify(this.orders)); } },
         toggleBlockUser(id) { const u = this.users.find(u => u.id === id); if (u) { u.blocked = !u.blocked; localStorage.setItem('sip_users', JSON.stringify(this.users)); } },
         updateDeliveryStatus(id, s) { if (!s) return; const o = this.orders.find(o => o.id === id); if (o) { o.deliveryStatus = s; localStorage.setItem('sip_orders', JSON.stringify(this.orders)); } },
-        quickRestock(productId) {
-          const product = this.products.find(p => p.id === productId);
-          if (product) {
-            const qty = prompt(`Enter restock quantity for "${product.name}" (current stock: ${product.stock}):`, '10');
-            if (qty !== null) {
-              const numQty = parseInt(qty, 10);
-              if (!isNaN(numQty) && numQty > 0) {
-                product.stock += numQty;
-                this.saveProducts();
-                this.$nextTick(() => lucide.createIcons());
-                alert(`Successfully restocked ${numQty} units. New stock: ${product.stock}`);
-              } else if (qty.trim() !== '') {
-                alert('Please enter a valid positive number.');
-              }
-            }
+        openRestockModal(productId) {
+          this.restockProduct = this.products.find(p => p.id === productId);
+          this.restockQuantity = 10;
+          this.showRestockModal = true;
+          this.$nextTick(() => lucide.createIcons());
+        },
+        confirmRestock() {
+          if (this.restockProduct && this.restockQuantity && this.restockQuantity > 0) {
+            this.restockProduct.stock += parseInt(this.restockQuantity, 10);
+            this.saveProducts();
+            this.showRestockModal = false;
+            this.$nextTick(() => lucide.createIcons());
+            alert(`Successfully restocked ${this.restockQuantity} units. New stock: ${this.restockProduct.stock}`);
           }
         }
       };
